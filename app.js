@@ -1,6 +1,8 @@
-const express = require('express'),
-    app = express();
+const express = require('express');
+const app = express();
+const databaseRoutes = require('./routes');
 
+app.use('/api', databaseRoutes);
 app.use(express.static("public"));
 //all our templates will be ejs
 app.set("view engine","ejs");
@@ -47,7 +49,7 @@ app.get("/logout", function(req, res) {
 
 
 app.listen(3000, function () {
-    console.log("EHealth is runningnpm");
+    console.log("EHealth is running");
 });
 
 
