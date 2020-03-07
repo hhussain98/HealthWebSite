@@ -18,12 +18,15 @@
   "homepage": "https://gitlab.com/ehealthgroup1/ehealth#readme",
   "dependencies": {
     "body-parser": "^1.19.0",
+    "chai": "^4.2.0",
     "dotenv": "^8.2.0",
     "ejs": "^3.0.1",
     "express": "^4.17.1",
     "express-session": "^1.17.0",
     "fitbit-node": "^2.2.0",
     "mariadb": "^2.2.0",
-    "sequelize": "^5.21.4"
+    "mocha": "^7.1.0",
+    "sequelize": "^5.21.4",
+    "supertest": "^4.0.2"
   }
 }

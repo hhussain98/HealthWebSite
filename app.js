@@ -19,6 +19,10 @@ app.get("/", function (req, res) {
     res.render("home");
 });
 
+app.get("/d", function (req, res) {
+    res.render("DataEntry");
+});
+
 // redirect the user to the Fitbit authorization page
 app.get("/authorize", (req, res) => {
     // request access to the user's activity, heartrate, location, nutrion, profile, settings, sleep, social, and weight scopes
@@ -53,3 +57,4 @@ app.listen(3000, function () {
 });
 
 
+module.exports = app;
