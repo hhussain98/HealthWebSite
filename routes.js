@@ -7,13 +7,14 @@ This file has a requirement on the following;
 const express = require('express');
 const bodyParser = require('body-parser');
 const router = express.Router();
-const db = require('./database-driver');
+const _db = require('./database-driver');
+const db = new _db();
 
 // parse application/x-www-form-urlencoded
-router.use(bodyParser.urlencoded({ extended: false }))
+router.use(bodyParser.urlencoded({extended: false}));
 
 // parse application/json
-router.use(bodyParser.json())
+router.use(bodyParser.json());
 
 
 router.get('/', function (req, res) {
@@ -286,4 +287,4 @@ router.put('/Scheduler', function (req, res) {
     });
 });
 
-module.exports = router
+module.exports = router;
