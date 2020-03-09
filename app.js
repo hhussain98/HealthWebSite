@@ -4,10 +4,12 @@ const  cookieParser = require('cookie-parser');
 const session = require('express-session');
 const  bodyParser = require('body-parser');
 const databaseRoutes = require('./routes');
+const _db = require('./database-driver');
+const db = new _db();
 
 //middleware
 app.use(express.static("public"));
-app.use(bodyParser.urlencoded({extended:false}));
+app.use(bodyParser.urlencoded({extended:true}));
 app.use(bodyParser.json());
 app.use(cookieParser('secret'));
 app.use(session({cookie:{maxAge:null}}));
@@ -24,12 +26,39 @@ const client = new FitbitApiClient({
 });
 
 app.get("/", function (req, res) {
-    res.render("patient");
+    res.render("login");
 });
 
-app.get("/g", function (req, res) {
+ app.get("/patient", function (req, res) {
+     res.render("patient");
+ });
+
+app.get("/gppage", function (req, res) {
     res.render("gppage");
 });
+
+app.get("/signup", function (req, res) {
+    res.render("signup");
+})
+
+app.post("/register", function (req, res) {
+    var userName = req.body.username;
+    var password = req.body.password;
+    var emailAddress = req.body.emailAddress;
+    var phone = req.body.phone;
+    console.log(userName);
+    console.log(password);
+    db.SelectAccountByEmailAndPassword(req.body.username, req.body.password).then(data => {
+        try {
+            var data = JSON.stringify(data);
+
+            var json = JSON.parse(data);
+            console.log(json[0].email);
+            res.redirect("/patient");
+        } catch { console.log("wrong account or password"); }
+    });
+})
+
 
 // redirect the user to the Fitbit authorization page
 app.get("/authorize", (req, res) => {
