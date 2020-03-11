@@ -52,35 +52,17 @@ app.post("/login", function (req, res) {
         user = JSON.parse(data);
 
     }).then(data => {
-
         if(user.length <= 0){
         console.log("wrong account or password");
         res.redirect("/")
     }
+
     else {
+
         if(user[0].role === "Patient"){
-            var x;
-            var healthData = [];
-
-            for (x of measurementType){
-                healthData.push(getMeasurementData(user[0].accountID, x));
-            }
-
-            var h = healthData[0].then(data=>{
-                h = data;
-                console.log(h);
-            });
-
-
-            var b = healthData[1].then(data => {
-                b = data;
-                console.log(b);
-            });
-
-
-            res.render("patient");
+            res.render("patient", { userId: user[0].accountID});
         } else {
-            res.render("gppage");
+            res.render("gppage", { userId: user[0].accountID});
         }
         }
     });
@@ -96,14 +78,15 @@ async function getMeasurementData(accountId, measurementType){
 
 app.post("/register", function (req, res) {
 
-    var role = req.body.role;
-    var gpId = 2;
+    var role = req.body.isGP;
+    var gpId = req.body.gpID;
 
     if(role == "on"){
         role = "GP";
     }
     else {
         role = "Patient";
+        gpId = 0;
     }
 
     db.SelectAccountByUserOrGPID(req.body.username, gpId).then(data => {
@@ -118,9 +101,11 @@ app.post("/register", function (req, res) {
             }
             res.redirect("/signup")
         } else {
-            db.InsertAccount(req.body.username, req.body.password, req.body.emailAddress, role, gpId).then(data => {
+
+            db.InsertAccount(req.body.username, req.body.password, role, req.body.gpID,
+                req.body.fName, req.body.emailAddress, req.body.phone, req.body.birthday).then(data => {
                 try {
-                    res.redirect("/patient");
+                    res.redirect("/");
                 } catch {
                     res.send('Unable to parse json');
                 }

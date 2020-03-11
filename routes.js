@@ -208,7 +208,7 @@ router.post('/SelectMeasurementsByAccountIDBetweenDates', function (req, res) {
     });
 });
 router.post('/SelectMeasurementsByID', function (req, res) {
-    db.SelectMeasurementsByID(req.body.measurementID).then(data => {
+    db.SelectMeasurementsByID(req.body.userId, req.body.measurementType).then(data => {
         try { res.send(JSON.stringify(data)); } catch { res.send('Unable to parse json'); }
     });
 });
