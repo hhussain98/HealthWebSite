@@ -179,8 +179,8 @@ module.exports = function () {
     this.SelectRoleByAccountID = function (int_accountID) {
         return this._sequelize.query(`CALL SelectRoleByAccountID (${int_accountID})`);
     };
-    this.SelectRoleByID = function (int_roleID) {
-        return this._sequelize.query(`CALL SelectRoleByID (${int_roleID})`);
+    this.SelectAccountByID = function (int_accountID) {
+        return this._sequelize.query(`CALL SelectAccountByID (${int_accountID})`);
     };
     this.SelectProfileByID = function (int_ID) {
         return this._sequelize.query(`CALL SelectProfileByID (${int_ID})`);
@@ -192,7 +192,7 @@ module.exports = function () {
         return this._sequelize.query(`CALL SelectUnreadHealthNotificationByAccountID (${int_accountID})`);
     };
     this.UpdateProfile = function (int_updateId, str_updateEmail, str_updateName, date_updateDob, str_updateAddress, str_updatePhone, int_height, int_weight) {
-        return this._sequelize.query(`CALL UpdateAccount (${int_updateId}, '${str_updateEmail}', '${str_updateName}', '${date_updateDob}', '${str_updateAddress}', '${str_updatePhone}', '${int_height}', '${int_weight}')`);
+        return this._sequelize.query(`CALL UpdateProfile (${int_updateId}, '${str_updateEmail}', '${str_updateName}', '${date_updateDob}', '${str_updateAddress}', '${str_updatePhone}', '${int_height}', '${int_weight}')`);
     };
     this.UpdateGraph = function (int_updateID, str_updateTitle) {
         return this._sequelize.query(`CALL UpdateGraph (${int_updateID}, '${str_updateTitle}')`);
