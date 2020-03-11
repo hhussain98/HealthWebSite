@@ -103,8 +103,9 @@ module.exports = function () {
     this.DeleteScheduler = function (int_deleteID) {
         return this._sequelize.query(`CALL DeleteScheduler (${int_deleteID})`);
     };
-    this.InsertAccount = function (str_username, str_password, str_email, str_role, int_gpId) {
-        return this._sequelize.query(`CALL InsertAccount ('${str_username}', '${str_password}', '${str_email}', '${str_role}', '${int_gpId}')`);
+    this.InsertAccount = function (str_username, str_password, str_role, str_gpId, str_name, str_email, str_phone, date_dob) {
+        return this._sequelize.query(`CALL InsertAccount ('${str_username}', '${str_password}', '${str_role}', '${str_gpId}',
+         '${str_name}', '${str_email}', '${str_phone}', '${date_dob}')`);
     };
     this.InsertGraph = function (str_insertTitle, int_insertGraphTypeID, int_insertHealthNotificationID) {
         return this._sequelize.query(`CALL InsertGraph ('${str_insertTitle}', ${int_insertGraphTypeID}; ${int_insertHealthNotificationID})`);
