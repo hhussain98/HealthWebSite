@@ -2,12 +2,12 @@ const express = require('express');
 const app = express();
 const  cookieParser = require('cookie-parser');
 const session = require('express-session');
+const methodOverride = require('method-override');
 const  bodyParser = require('body-parser');
 const databaseRoutes = require('./routes');
 const _db = require('./database-driver');
 const db = new _db();
 
-var measurementType = ["Heart Rate", "Blood Pressure"];
 
 //middleware
 app.use(express.static("public"));
@@ -16,6 +16,7 @@ app.use(bodyParser.json());
 app.use(cookieParser('secret'));
 app.use(session({cookie:{maxAge:null}}));
 app.use('/api', databaseRoutes);
+app.use(methodOverride("_method"));
 //all our templates will be ejs
 app.set("view engine","ejs");
 
@@ -35,16 +36,7 @@ app.get("/signup", function (req, res) {
     res.render("signup");
 });
 
-app.get("/bp", function (req, res) {
-    console.log(req.body.name);
-});
-
-app.get("/p", function (req, res) {
-    res.render("patient")
-});
-
-
-app.post("/login", function (req, res) {
+app.post("/home", function (req, res) {
 
     var user = db.SelectAccountByUserAndPassword(req.body.username, req.body.password).then(data => {
         var data = JSON.stringify(data);
@@ -60,21 +52,13 @@ app.post("/login", function (req, res) {
     else {
 
         if(user[0].role === "Patient"){
-            res.render("patient", { userId: user[0].accountID});
+            res.render("patient", { userData: user});
         } else {
-            res.render("gppage", { userId: user[0].accountID});
+            res.render("gppage", { userData: user});
         }
         }
     });
 });
-
-async function getMeasurementData(accountId, measurementType){
-
-    let data = await db.SelectMeasurementsByID(accountId, measurementType);
-    var json = JSON.stringify(data);
-    return JSON.parse(json);
-}
-
 
 app.post("/register", function (req, res) {
 
@@ -114,6 +98,22 @@ app.post("/register", function (req, res) {
     });
 });
 
+app.put("/update/:id", function (req, res) {
+    var userid = req.params.id;
+    var email = req.body.emailAdress;
+    var phone = req.body.phone;
+    var height = req.body.height;
+    var weight = req.body.weight;
+
+    console.log(userid);
+    console.log(email);
+    console.log(phone);
+    console.log(height);
+    console.log(weight);
+
+    db.UpdateProfile(req.params.id, req.body.emailAddress, 'a', '1111-11-12','a',
+        req.body.phone, req.body.height, req.body.weight);
+})
 
 // redirect the user to the Fitbit authorization page
 app.get("/authorize", (req, res) => {
