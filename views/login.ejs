@@ -31,13 +31,13 @@
 </head>
 <body>
 <div class="login-form">
-    <form>
+    <form action="/login" method="post">
         <h2 class="text-center">Log in</h2>
         <div class="form-group">
-            <input id="username" type="text" class="form-control" placeholder="Username" required="required" maxlength="20">
+            <input id="username" name="username" type="text" class="form-control" placeholder="Username" required="required" maxlength="20">
         </div>
         <div class="form-group">
-            <input  id="password" type="password" class="form-control" placeholder="Password" required="required" maxlength="20">
+            <input  id="password" name="password" type="password" class="form-control" placeholder="Password" required="required" maxlength="20">
         </div>
         <div class="form-group">
             <button id="loginButton" type="submit" class="btn btn-primary btn-block">Log in</button>
@@ -46,7 +46,7 @@
             <label class="pull-left checkbox-inline"><input type="checkbox"> Remember me</label>
         </div>
     </form>
-    <p class="text-center"><a href="#">Create an Account</a></p>
+    <p class="text-center"><a href="/signup">Create an Account</a></p>
 </div>
 </body>
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"

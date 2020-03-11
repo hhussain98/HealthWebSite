@@ -21,31 +21,37 @@ router.get('/', function (req, res) {
     console.log('Testing for route registration: Success');
     res.send('Successfully registered Database routes\n');
 });
+
 router.delete('/HealthNotification', function (req, res) {
     db.ArchiveHealthNotification(req.body.id).then(data => {
         try { res.send(JSON.stringify(data)); } catch { res.send('Unable to parse json'); }
     });
 });
+
 router.post('/AssignPatientToGP', function (req, res) {
     db.AssignPatientToGP(req.body.patientId, req.body.gpId).then(data => {
         try { res.send(JSON.stringify(data)); } catch { res.send('Unable to parse json'); }
     });
 });
+
 router.post('/ComparePassword', function (req, res) {
     db.ComparePassword(req.body.hash, req.body.email).then(data => {
         try { res.send(JSON.stringify(data)); } catch { res.send('Unable to parse json'); }
     });
 });
+
 router.delete('/Account', function (req, res) {
     db.DeleteAccount(req.body.id).then(data => {
         try { res.send(JSON.stringify(data)); } catch { res.send('Unable to parse json'); }
     });
 });
+
 router.delete('/AccountRoles', function (req, res) {
     db.DeleteAccountRoles(req.body.accountId, req.body.roleId).then(data => {
         try { res.send(JSON.stringify(data)); } catch { res.send('Unable to parse json'); }
     });
 });
+
 router.delete('/GPRoleFromAccount', function (req, res) {
     db.DeleteGPRoleFromAccount(req.body.id).then(data => {
         try { res.send(JSON.stringify(data)); } catch { res.send('Unable to parse json'); }
@@ -141,8 +147,8 @@ router.post('/MarkHealthNotificationRead', function (req, res) {
         try { res.send(JSON.stringify(data)); } catch { res.send('Unable to parse json'); }
 });
 });
-router.post('/SelectAccountByEmailAndPassword', function (req, res) {
-    db.SelectAccountByEmailAndPassword(req.body.accountEmail, req.body.accountPasswordHash).then(data => {
+router.post('/SelectAccountByUserAndPassword', function (req, res) {
+    db.SelectAccountByUserAndPassword(req.body.accountEmail, req.body.accountPasswordHash).then(data => {
         try { res.send(JSON.stringify(data)); } catch { res.send('Unable to parse json'); }
     });
 });

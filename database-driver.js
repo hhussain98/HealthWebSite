@@ -103,8 +103,8 @@ module.exports = function () {
     this.DeleteScheduler = function (int_deleteID) {
         return this._sequelize.query(`CALL DeleteScheduler (${int_deleteID})`);
     };
-    this.InsertAccount = function (str_insertHash, str_insertEmail, str_insertName, date_insertDob, str_insertAddress, str_insertPhone) {
-        return this._sequelize.query(`CALL InsertAccount ('${str_insertHash}', '${str_insertEmail}', '${str_insertName}', '${date_insertDob}', '${str_insertAddress}', '${str_insertPhone}')`);
+    this.InsertAccount = function (str_username, str_password, str_email, str_role, int_gpId) {
+        return this._sequelize.query(`CALL InsertAccount ('${str_username}', '${str_password}', '${str_email}', '${str_role}', '${int_gpId}')`);
     };
     this.InsertGraph = function (str_insertTitle, int_insertGraphTypeID, int_insertHealthNotificationID) {
         return this._sequelize.query(`CALL InsertGraph ('${str_insertTitle}', ${int_insertGraphTypeID}; ${int_insertHealthNotificationID})`);
@@ -130,11 +130,11 @@ module.exports = function () {
     this.MarkHealthNotificationRead = function (int_updateID) {
         return this._sequelize.query(`CALL MarkHealthNotificationRead (${int_updateID})`);
     };
-    this.SelectAccountByEmailAndPassword = function (str_accountEmail, str_accountPasswordHash) {
-        return this._sequelize.query(`CALL SelectAccountByEmailAndPassword ('${str_accountEmail}', '${str_accountPasswordHash}')`);
+    this.SelectAccountByUserAndPassword = function (str_accountEmail, str_accountPasswordHash) {
+        return this._sequelize.query(`CALL SelectAccountByUserAndPassword ('${str_accountEmail}', '${str_accountPasswordHash}')`);
     };
-    this.SelectAccountByID = function (int_accountID) {
-        return this._sequelize.query(`CALL SelectAccountByID (${int_accountID})`);
+    this.SelectAccountByUserOrGPID = function (str_username, int_accountID) {
+        return this._sequelize.query(`CALL SelectAccountByUserOrGPID ('${str_username}', '${int_accountID}')`);
     };
     this.SelectGPOfPatientByID = function (int_accountID) {
         return this._sequelize.query(`CALL SelectGPOfPatientByID (${int_accountID})`);
@@ -160,14 +160,14 @@ module.exports = function () {
     this.SelectMeasurementTypeByID = function (int_measurementTypeID) {
         return this._sequelize.query(`CALL SelectMeasurementTypeByID (${int_measurementTypeID})`);
     };
-    this.SelectMeasurementsByAccountID = function (int_accountID) {
-        return this._sequelize.query(`CALL SelectMeasurementsByAccountID (${int_accountID})`);
+    this.SelectMeasurementsByAccountID = function (int_accountID, str_type) {
+        return this._sequelize.query(`CALL SelectMeasurementsByAccountID (${int_accountID}, '${str_type}')`);
     };
     this.SelectMeasurementsByAccountIDBetweenDates = function (int_accountID, date_startDatetime, date_endDatetime) {
         return this._sequelize.query(`CALL SelectMeasurementsByAccountIDBetweenDates (${int_accountID}; '${date_startDatetime}', '${date_endDatetime}')`);
     };
-    this.SelectMeasurementsByID = function (int_measurementID) {
-        return this._sequelize.query(`CALL SelectMeasurementsByID (${int_measurementID})`);
+    this.SelectMeasurementsByID = function (int_accountID, str_messurementType) {
+        return this._sequelize.query(`CALL SelectMeasurementsByID (${int_accountID}, '${str_messurementType}')`);
     };
     this.SelectMeasurementsForHealthNotification = function (int_healthNotificationID) {
         return this._sequelize.query(`CALL SelectMeasurementsForHealthNotification (${int_healthNotificationID})`);
