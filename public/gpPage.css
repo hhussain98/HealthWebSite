@@ -1,0 +1,29 @@
+body {
+    background-color: white;
+}
+h1 {
+    color: black;
+}
+
+p {
+    color: black;
+}
+#sidebar-wrapper img{
+    height: 200px;
+    padding: 30px
+}
+#sidebar-wrapper a{
+    padding:30px;
+}
+#sidebar-wrapper button {
+    margin: 20px;
+}
+#navbarSupportedContent a {
+    color: white;
+    font-weight: bold;
+}
+
+#menu-toggle {
+    color: white;
+    font-weight: bold;
+}

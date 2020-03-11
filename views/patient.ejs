@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
           crossorigin="anonymous">
     <link href="css/simple-sidebar.css" rel="stylesheet">
+    <link href="css/PatientPage.css" rel="stylesheet">
     <title id="patientTitle">Patient page</title>
 </head>
 
@@ -32,11 +33,14 @@
         </div>
     </nav>
     <div>
-        <h1 id="patientName">Patient Name</h1>
-        <button id="autosync" type="button" class="btn btn-primary" > Auto-Sync </button>
-        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter">Manual Data Entry</button>
+        <div id="top">
+            <h1 id="patientName">Patient Name</h1>
+            <button id="autosync" type="button" class="btn btn-primary" > Auto-Sync </button>
+            <button id="manualEntry" type="button" class="btn btn-primary" data-toggle="modal" data-target="#paramEntry">Manual Data Entry</button>
+        </div>
+
         <!-- Modal -->
-        <div class="modal fade bd-example-modal-sm" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+        <div class="modal fade bd-example-modal-sm" id="paramEntry" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-sm" role="document" >
                 <div    class="modal-content">
                     <div class="modal-header">
@@ -54,15 +58,17 @@
                             </ul>
                         </div>
                         <div>
-                            <label class="col-sm-6 h5">Value: <input id="paramVal" type="number"></label>
-
+                            <label >Value: </label>
+                            <input id="paramVal" class="form-control" type="number" maxlength="3">
                         </div>
 
                         <div>
-                            <input id="date" type="date">
+                            <label >Date: </label>
+                            <input type="date" id="birthday" name="birthday" class="form-control"  required="required">
                         </div>
                         <div>
-                            <input id="time" type="time">
+                            <label >Time of measurement: </label>
+                            <input id="time" class="form-control"  type="time">
                         </div>
 
                     </div>
@@ -83,6 +89,7 @@
                 <a id="patientName" class="list-group-item list-group-item-action bg-light"> Name</a>
                 <a id="patientEmail" class="list-group-item list-group-item-action bg-light"> Email</a>
                 <a id="patientPhone" class="list-group-item list-group-item-action bg-light"> Phone</a>
+                <button id="updateProfileButton" type="button" class="btn btn-primary" data-toggle="modal" data-target="#updateModal">Update Profile</button>
             </div>
         </div>
         <div class="container-fluid">
@@ -135,7 +142,46 @@
         </div>
     </div>
 </div>
+<div class="modal fade bd-example-modal-sm" id="updateModal" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-sm" role="document" >
+        <div    class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title w-100 text-center" id="exampleModalLongTitle" >Update Profile</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
 
+
+                <div class="form-group">
+                    <p>Email:</p>
+                    <input id="email" type="email" class="form-control" placeholder="example@example.com" required="required">
+                </div>
+
+                <div class="form-group">
+                    <p>Phone number:</p>
+                    <input type="tel" id="phone" class="form-control" name="phone"  required="required" placeholder="1234567890" maxlength="11">
+                </div>
+                <div class="form-group">
+                    <p>Height(cm):</p>
+                    <input  type="number" id="height" name="height" class="form-control"  required="required" min="1" max="300">
+                </div>
+                <div class="form-group">
+                    <p>Weight(Kg):</p>
+                    <input  type="number" id="weight" name="weight" class="form-control"  required="required" min="1" max="600">
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button id="close" type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button id="save" type="button" class="btn btn-primary">Save changes</button>
+            </div>
+
+        </div>
+
+    </div>
+</div>
 <!-- Optional JavaScript -->
 <!-- jQuery first, then Popper.js, then Bootstrap JS -->
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
