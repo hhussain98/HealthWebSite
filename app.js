@@ -100,20 +100,28 @@ app.post("/register", function (req, res) {
 
 app.put("/update/:id", function (req, res) {
     var userid = req.params.id;
-    var email = req.body.emailAdress;
-    var phone = req.body.phone;
-    var height = req.body.height;
-    var weight = req.body.weight;
 
-    console.log(userid);
-    console.log(email);
-    console.log(phone);
-    console.log(height);
-    console.log(weight);
+    db.UpdateProfile(userid, req.body.emailAddress, 'a', '1111-11-12','a',
+        req.body.phone, req.body.height, req.body.weight).then(
+    ).then(
+        data=>{
+            getUserById(userid).then(data=>{
+                if(data[0].role === "GP"){
+                    res.render("gppage", { userData: data});
+                }
+                else {
+                    res.render("patient", { userData: data});
+                }
+            });
+        }
+    )
+});
 
-    db.UpdateProfile(req.params.id, req.body.emailAddress, 'a', '1111-11-12','a',
-        req.body.phone, req.body.height, req.body.weight);
-})
+async function getUserById(userid){
+    let data = await db.SelectAccountByID(userid);
+    var json = JSON.stringify(data);
+    return JSON.parse(json);
+}
 
 // redirect the user to the Fitbit authorization page
 app.get("/authorize", (req, res) => {
