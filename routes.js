@@ -209,7 +209,9 @@ router.post('/SelectMeasurementsByAccountIDBetweenDates', function (req, res) {
 });
 router.post('/SelectMeasurementsByID', function (req, res) {
     db.SelectMeasurementsByID(req.body.userId, req.body.measurementType).then(data => {
-        try { res.send(JSON.stringify(data)); } catch { res.send('Unable to parse json'); }
+        try {
+            res.send(JSON.stringify(data));
+        } catch { res.send('Unable to parse json'); }
     });
 });
 router.post('/SelectMeasurementsForHealthNotification', function (req, res) {
@@ -232,8 +234,8 @@ router.post('/SelectRoleByID', function (req, res) {
         try { res.send(JSON.stringify(data)); } catch { res.send('Unable to parse json'); }
     });
 });
-router.post('/SelectSchedulerByID', function (req, res) {
-    db.SelectSchedulerByID(req.body.schedulerID).then(data => {
+router.post('/SelectProfileByID', function (req, res) {
+    db.SelectProfileByID(req.body.userID).then(data => {
         try { res.send(JSON.stringify(data)); } catch { res.send('Unable to parse json'); }
     });
 });
