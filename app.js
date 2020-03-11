@@ -37,7 +37,12 @@ app.get("/signup", function (req, res) {
 
 app.get("/bp", function (req, res) {
     console.log(req.body.name);
-})
+});
+
+app.get("/p", function (req, res) {
+    res.render("patient")
+});
+
 
 app.post("/login", function (req, res) {
 
@@ -46,7 +51,7 @@ app.post("/login", function (req, res) {
 
         user = JSON.parse(data);
 
-    }).then(data=>{
+    }).then(data => {
 
         if(user.length <= 0){
         console.log("wrong account or password");
@@ -54,32 +59,32 @@ app.post("/login", function (req, res) {
     }
     else {
         if(user[0].role === "Patient"){
-            var x ;
-            var healthData = new Array();
+            var x;
+            var healthData = [];
 
             for (x of measurementType){
                 healthData.push(getMeasurementData(user[0].accountID, x));
             }
 
             var h = healthData[0].then(data=>{
-                h = data
+                h = data;
                 console.log(h);
             });
 
 
             var b = healthData[1].then(data => {
-                b = data
+                b = data;
                 console.log(b);
             });
 
 
             res.render("patient");
-        }
-        else {
+        } else {
             res.render("gppage");
         }
-    }}   );
-})
+        }
+    });
+});
 
 async function getMeasurementData(accountId, measurementType){
 
@@ -112,16 +117,17 @@ app.post("/register", function (req, res) {
                 console.log("duplicate GP");
             }
             res.redirect("/signup")
-        }
-        else{
-            db.InsertAccount(req.body.username, req.body.password, req.body.emailAddress, role, gpId).then(data =>{
+        } else {
+            db.InsertAccount(req.body.username, req.body.password, req.body.emailAddress, role, gpId).then(data => {
                 try {
                     res.redirect("/patient");
-                } catch { res.send('Unable to parse json');}
+                } catch {
+                    res.send('Unable to parse json');
+                }
             });
         }
     });
-})
+});
 
 
 // redirect the user to the Fitbit authorization page
@@ -146,12 +152,12 @@ app.get("/callback", (req, res) => {
     });
 });
 
-app.get("/logout", function(req, res) {
+app.get("/logout", function (req, res) {
     req.session.authorized = false;
     req.session.access_token = null;
     req.session.save();
     res.redirect("/");
-})
+});
 
 
 app.listen(3000, function () {
