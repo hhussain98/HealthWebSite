@@ -7,6 +7,8 @@ const databaseRoutes = require('./routes');
 const _db = require('./database-driver');
 const db = new _db();
 
+var measurementType = ["Heart Rate", "Blood Pressure"];
+
 //middleware
 app.use(express.static("public"));
 app.use(bodyParser.urlencoded({extended:true}));
@@ -29,33 +31,95 @@ app.get("/", function (req, res) {
     res.render("login");
 });
 
- app.get("/patient", function (req, res) {
-     res.render("patient");
- });
-
-app.get("/gppage", function (req, res) {
-    res.render("gppage");
-});
-
 app.get("/signup", function (req, res) {
     res.render("signup");
+});
+
+app.get("/bp", function (req, res) {
+    console.log(req.body.name);
 })
 
-app.post("/register", function (req, res) {
-    var userName = req.body.username;
-    var password = req.body.password;
-    var emailAddress = req.body.emailAddress;
-    var phone = req.body.phone;
-    console.log(userName);
-    console.log(password);
-    db.SelectAccountByEmailAndPassword(req.body.username, req.body.password).then(data => {
-        try {
-            var data = JSON.stringify(data);
+app.post("/login", function (req, res) {
 
-            var json = JSON.parse(data);
-            console.log(json[0].email);
-            res.redirect("/patient");
-        } catch { console.log("wrong account or password"); }
+    var user = db.SelectAccountByUserAndPassword(req.body.username, req.body.password).then(data => {
+        var data = JSON.stringify(data);
+
+        user = JSON.parse(data);
+
+    }).then(data=>{
+
+        if(user.length <= 0){
+        console.log("wrong account or password");
+        res.redirect("/")
+    }
+    else {
+        if(user[0].role === "Patient"){
+            var x ;
+            var healthData = new Array();
+
+            for (x of measurementType){
+                healthData.push(getMeasurementData(user[0].accountID, x));
+            }
+
+            var h = healthData[0].then(data=>{
+                h = data
+                console.log(h);
+            });
+
+
+            var b = healthData[1].then(data => {
+                b = data
+                console.log(b);
+            });
+
+
+            res.render("patient");
+        }
+        else {
+            res.render("gppage");
+        }
+    }}   );
+})
+
+async function getMeasurementData(accountId, measurementType){
+
+    let data = await db.SelectMeasurementsByID(accountId, measurementType);
+    var json = JSON.stringify(data);
+    return JSON.parse(json);
+}
+
+
+app.post("/register", function (req, res) {
+
+    var role = req.body.role;
+    var gpId = 2;
+
+    if(role == "on"){
+        role = "GP";
+    }
+    else {
+        role = "Patient";
+    }
+
+    db.SelectAccountByUserOrGPID(req.body.username, gpId).then(data => {
+        var data = JSON.stringify(data);
+
+        var json = JSON.parse(data);
+
+        if(json.length > 0){
+            if(json[0].username === req.body.username){console.log("duplicate user");}
+            else {
+                console.log("duplicate GP");
+            }
+            res.redirect("/signup")
+        }
+        else{
+            db.InsertAccount(req.body.username, req.body.password, req.body.emailAddress, role, gpId).then(data =>{
+                try {
+                    res.redirect("/patient");
+                } catch { res.send('Unable to parse json');}
+            });
+        }
     });
 })
 

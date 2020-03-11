@@ -147,8 +147,8 @@ router.post('/MarkHealthNotificationRead', function (req, res) {
         try { res.send(JSON.stringify(data)); } catch { res.send('Unable to parse json'); }
 });
 });
-router.post('/SelectAccountByEmailAndPassword', function (req, res) {
-    db.SelectAccountByEmailAndPassword(req.body.accountEmail, req.body.accountPasswordHash).then(data => {
+router.post('/SelectAccountByUserAndPassword', function (req, res) {
+    db.SelectAccountByUserAndPassword(req.body.accountEmail, req.body.accountPasswordHash).then(data => {
         try { res.send(JSON.stringify(data)); } catch { res.send('Unable to parse json'); }
     });
 });
