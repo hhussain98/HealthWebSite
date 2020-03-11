@@ -35,36 +35,49 @@
         <h2 class="text-center">Sign up</h2>
         <div class="form-group">
             <p>Username:</p>
-            <input id="username" name="username" type="text" class="form-control" placeholder="Username" required="required" maxlength="20">
+            <input id="username" name="username" type="text" class="form-control" placeholder="Username"
+                   required="required" maxlength="20">
+        </div>
+        <div class="form-group">
+            <p>First Name:</p>
+            <input id="fName" name="fName" type="text" class="form-control" placeholder="John" required="required"
+                   maxlength="30">
+        </div>
+        <div class="form-group">
+            <p>Last Name:</p>
+            <input id="lName" name="lName" type="text" class="form-control" placeholder="Smith" required="required"
+                   maxlength="20">
         </div>
         <div class="form-group">
             <p>Password:</p>
-            <input  id="password" name="password" type="password" class="form-control" placeholder="Password" required="required" maxlength="20">
+            <input id="password" name="password" type="password" class="form-control" placeholder="Password"
+                   required="required" maxlength="20">
         </div>
         <div class="form-group">
             <p>Email:</p>
-            <input id="email" name="emailAddress" type="email" class="form-control" placeholder="example@example.com" required="required">
+            <input id="email" name="emailAddress" type="email" class="form-control" placeholder="example@example.com"
+                   required="required">
         </div>
 
         <div class="form-group">
             <p>Phone number:</p>
-            <input type="tel" id="phone" class="form-control" name="phone"  required="required" placeholder="1234567890" maxlength="11">
+            <input type="tel" id="phone" class="form-control" name="phone" required="required" placeholder="1234567890"
+                   maxlength="11">
         </div>
         <div class="form-group">
             <p>Date of Birth:</p>
-            <input type="date" id="birthday" name="birthday" class="form-control"  required="required">
+            <input type="date" id="birthday" name="birthday" class="form-control" required="required">
         </div>
         <div class="form-group">
-            <p>Height(cm):</p>
-            <input  type="number" id="height" name="height" class="form-control"  required="required" min="1" max="300">
-        </div>
-        <div class="form-group">
-            <p>Weight(Kg):</p>
-            <input  type="number" id="weight" name="weight" class="form-control"  required="required" min="1" max="600">
-        </div>
-        <div class="form-group">
-            <input type="checkbox" class="custom-control-input" id="customSwitch1">
-            <label class="custom-control-label" for="customSwitch1">Are you a GP?</label>
+            <input type="checkbox" data-toggle="collapse" data-target="#collapseExample">
+            <label for="vehicle1"> Are you a GP?</label>
+
+            <div class="collapse" id="collapseExample">
+                <div class="form-group">
+                    <p>GP ID</p>
+                    <input type="number" id="gpID" name="gpID" class="form-control">
+                </div>
+            </div>
         </div>
         <div class="form-group">
             <button id="loginButton" type="submit" class="btn btn-primary btn-block">Sign up</button>
@@ -73,9 +86,11 @@
     </form>
     <p class="text-center"><a href="/">Already have an account?</a></p>
 </div>
-<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
         crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
+        integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
         crossorigin="anonymous"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
         crossorigin="anonymous"></script>
