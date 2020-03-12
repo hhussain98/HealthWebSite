@@ -137,8 +137,8 @@ module.exports = function () {
     this.SelectAccountByUserOrGPID = function (str_username, int_accountID) {
         return this._sequelize.query(`CALL SelectAccountByUserOrGPID ('${str_username}', '${int_accountID}')`);
     };
-    this.SelectGPOfPatientByID = function (int_accountID) {
-        return this._sequelize.query(`CALL SelectGPOfPatientByID (${int_accountID})`);
+    this.SelectLatestMeasurementById = function (int_accountID, str_measurementType) {
+        return this._sequelize.query(`CALL SelectLatestMeasurementById (${int_accountID}, '${str_measurementType}')`);
     };
     this.SelectGraphByAccountID = function (int_patientID) {
         return this._sequelize.query(`CALL SelectGraphByAccountID (${int_patientID})`);
