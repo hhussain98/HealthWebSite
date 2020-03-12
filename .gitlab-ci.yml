@@ -1,16 +1,31 @@
 image: node:latest
 
 stages:
-  - production
+  -
+  - test
+  - deploy_production
 
-production:
-  type: deploy
-  stage: production
-  image: ruby:latest
+Build:
+  stage: build
   script:
+    - echo "Building"
+    - npm install
+
+
+Test:
+  stage: test
+  script:
+    - echo "Testing"
+    - npm run test
+
+Production:
+  image: ruby:latest
+  stage: deploy_production
+  script:
+    - echo "Deploying"
     - apt-get update -qy
     - apt-get install -y ruby-dev
     - gem install dpl
-    - dpl --provider=heroku --app=young-journey-50996 --api-key=$HEROKU_API_KEY
+    - dpl --provider=heroku --app=$HEROKU_APP_NAME --api-key=$HEROKU_API_KEY
   only:
     - master
