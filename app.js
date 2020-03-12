@@ -123,7 +123,7 @@ app.put("/update/:id", function (req, res) {
         weight = req.body.weight;
     }
 
-    db.UpdateProfile(userid, req.body.emailAddress, 'a', '1111-11-12','a',
+    db.UpdateProfile(userid, req.body.emailAddress, req.body.fName, req.body.selectedGP,req.body.address,
         req.body.phone, height, weight).then(
     ).then(
         data=>{

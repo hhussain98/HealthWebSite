@@ -191,8 +191,8 @@ module.exports = function () {
     this.SelectUnreadHealthNotificationByAccountID = function (int_accountID) {
         return this._sequelize.query(`CALL SelectUnreadHealthNotificationByAccountID (${int_accountID})`);
     };
-    this.UpdateProfile = function (int_updateId, str_updateEmail, str_updateName, date_updateDob, str_updateAddress, str_updatePhone, int_height, int_weight) {
-        return this._sequelize.query(`CALL UpdateProfile (${int_updateId}, '${str_updateEmail}', '${str_updateName}', '${date_updateDob}', '${str_updateAddress}', '${str_updatePhone}', '${int_height}', '${int_weight}')`);
+    this.UpdateProfile = function (int_updateId, str_updateEmail, str_updateName, str_assignGP, str_updateAddress, str_updatePhone, int_height, int_weight) {
+        return this._sequelize.query(`CALL UpdateProfile (${int_updateId}, '${str_updateEmail}', '${str_updateName}', '${str_assignGP}', '${str_updateAddress}', '${str_updatePhone}', '${int_height}', '${int_weight}')`);
     };
     this.UpdateGraph = function (int_updateID, str_updateTitle) {
         return this._sequelize.query(`CALL UpdateGraph (${int_updateID}, '${str_updateTitle}')`);

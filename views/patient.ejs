@@ -175,11 +175,12 @@
                         <input  type="text" id="fName" name="fName" class="form-control"  required="required" maxlength="30" value="<%= userData[0].name %>">
                     </div>
                     <div class="form-group">
-
+                        <div class="btn-group">
                         <a  id="gpPicker" class="btn btn-light dropdown-toggle" data-toggle="dropdown">Select a GP <span class="caret"></span></a>
-                        <ul class="dropdown-menu" id="gpMenu">
+                            <select id="selectGP" name="selectedGP">
 
-                        </ul>
+                            </select>
+                        </div>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -220,8 +221,6 @@
     });
 
 </script>
-
-
 
 <script>
     $('#heartRateTable').bootstrapTable({});
@@ -317,7 +316,7 @@
 </script>
 
 <script>
-    $('#gpMenu').ready(
+    $('#selectGP').ready(
         function () {
             var settings = {
 
@@ -340,15 +339,13 @@
                 console.log(response);
                 var gpList = JSON.parse(response);
 
-                $(this).parents('.btn-group').find('.dropdown-toggle').html(gpList[0].name+' <span class="caret"></span>');
-                $('#gpMenu').append(
-                    $('<li class="dropdown-item px-2"></li>').val().html(gpList[0].name+' <span class="caret"></span>')
-                );
+                $.each(gpList, function (index, name) {
+                    $('<option value= ' + name.gpID + '>' + name.name + '</option>').appendTo('#selectGP');
+                })
             })
         }
     )
 </script>
-
 
 </body>
 
