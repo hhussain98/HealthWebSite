@@ -10,6 +10,8 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
           integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
           crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
     <link href="/simple-sidebar.css" rel="stylesheet" type="text/css">
     <link href="/patientPage.css" rel="stylesheet" type="text/css">
     <title>Patient</title>
@@ -19,8 +21,9 @@
 <div id="page-content-wrapper">
     <nav class="navbar navbar-expand-sm navbar-dark bg-primary">
         <button class="btn btn-primary" id="menu-toggle" name="ehealthButton">Ehealth</button>
-
-        <button  id="miniMenu" class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <button id="miniMenu" class="navbar-toggler" type="button" data-toggle="collapse"
+                data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
@@ -32,18 +35,21 @@
     <div>
         <div id="top">
             <h1 id="patientName"> <%= userData[0].name %> </h1>
-            <a id="autosync" type="button" href="/authorize" class="btn btn-primary" > Auto-Sync </a>
-            <button id="manualEntry" type="button" class="btn btn-primary" data-toggle="modal" data-target="#paramEntry">Manual Data Entry</button>
+            <a id="autosync" type="button" href="/authorize" class="btn btn-primary"> Auto-Sync </a>
+            <button id="manualEntry" type="button" class="btn btn-primary" data-toggle="modal"
+                    data-target="#paramEntry">Manual Data Entry
+            </button>
         </div>
 
         <!-- Modal -->
-        <div class="modal fade bd-example-modal-sm" id="paramEntry" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-sm" role="document" >
+        <div class="modal fade bd-example-modal-sm" id="paramEntry" tabindex="-1" role="dialog"
+             aria-labelledby="mySmallModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-sm" role="document">
 
-                <div    class="modal-content">
+                <div class="modal-content">
                     <form id="formOfAdd">
                         <div class="modal-header">
-                            <h5 class="modal-title w-100 text-center" id="exampleModalLongTitle" >Enter Data</h5>
+                            <h5 class="modal-title w-100 text-center" id="exampleModalLongTitle">Enter Data</h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
@@ -51,24 +57,28 @@
 
                         <div class="modal-body">
                             <div class="btn-group">
-                                <a  id="measurement" class="btn btn-light dropdown-toggle" data-toggle="dropdown" >Blood Pressure<span class="caret"></span></a>
-                                <ul class="dropdown-menu" id="measurementType" >
+                                <a id="measurement" class="btn btn-light dropdown-toggle" data-toggle="dropdown">Blood
+                                    Pressure<span class="caret"></span></a>
+                                <ul class="dropdown-menu" id="measurementType">
                                     <li class="dropdown-item px-2"><a href="#">Blood Pressure</a></li>
                                     <li class="dropdown-item px-2"><a href="#">Heart Rate</a></li>
                                 </ul>
                             </div>
                             <div class="form-group">
-                                <label >Value: </label>
-                                <input id="paramVal" name="reading" class="form-control" type="number" maxlength="3" required="required">
+                                <label>Value: </label>
+                                <input id="paramVal" name="reading" class="form-control" type="number" maxlength="3"
+                                       required="required">
                             </div>
 
                             <div class="form-group">
-                                <label >Date: </label>
-                                <input type="Date" id="measurementDate" name="date" class="form-control"  required="required">
+                                <label>Date: </label>
+                                <input type="Date" id="measurementDate" name="date" class="form-control"
+                                       required="required">
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <button id="close" type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button id="close" type="button" class="btn btn-secondary" data-dismiss="modal">Close
+                            </button>
                             <button id="addMeasurement" type="submit" class="btn btn-primary">Save changes</button>
                         </div>
                     </form>
@@ -82,26 +92,84 @@
             <div class="list-group list-group-flush" id="profile">
                 <img id="patientImage" src="/stockPhoto.png" alt="Alternative Text">
                 <a id="pName" class="list-group-item list-group-item-action bg-light">  <%= userData[0].name %></a>
-                <a id="patientEmail" class="list-group-item list-group-item-action bg-light">  <%= userData[0].email %></a>
-                <a id="patientPhone" class="list-group-item list-group-item-action bg-light">  <%= userData[0].phone %></a>
+                <a id="patientEmail"
+                   class="list-group-item list-group-item-action bg-light">  <%= userData[0].email %></a>
+                <a id="patientPhone"
+                   class="list-group-item list-group-item-action bg-light">  <%= userData[0].phone %></a>
                 <a id="address" class="list-group-item list-group-item-action bg-light">  <%= userData[0].address %></a>
-                <button id="updateProfileButton" type="button" class="btn btn-primary" data-toggle="modal" data-target="#updateModal">Update Profile</button>
+                <button id="updateProfileButton" type="button" class="btn btn-primary" data-toggle="modal"
+                        data-target="#updateModal">Update Profile
+                </button>
                 <a id="logoutFitbit" name="logoutFitbit" href="/logout"> Logout Fitbit</a>
             </div>
         </div>
+
+
         <div class="container-fluid">
-            <ul class="nav nav-tabs" id="myTab" role="tablist" >
+
+
+            <div class="row my-2">
+                <div class="col-md-2">
+                    <div class="card text-center  border-primary h-65">
+                        <div class="card-block">
+                            <h4 class="card-title">Steps</h4>
+                            <h2><i class="fa fa-child fa-2x" style="color:blue"></i></h2>
+                        </div>
+                        <h3>100</h3>
+                    </div>
+                </div>
+
+                <div class="col-md-2">
+                    <div class="card text-center  border-success h-65">
+                        <div class="card-block">
+                            <h4 class="card-title">Calories</h4>
+                            <h2><i class="fa fa-cutlery fa-2x" style="color:#9cff25"></i></h2>
+                        </div>
+                        <h3>100</h3>
+                    </div>
+                </div>
+
+                <div class="col-md-2">
+                    <div class="card text-center  border-warning h-65">
+                        <div class="card-block">
+                            <h4 class="card-title">Heart Rate</h4>
+                            <h2><i class="fa fa-heartbeat fa-2x" style="color:#ffaf00"></i></h2>
+                        </div>
+                        <h3>100</h3>
+                    </div>
+                </div>
+
+                <div class="col-md-2">
+                    <div class="card text-center  border-info h-65">
+                        <div class="card-block">
+                            <h4 class="card-title">Blood Pressure</h4>
+                            <h2><i class="fa fa-heart fa-2x" style="color:blue"></i></h2>
+                        </div>
+                        <h3>100</h3>
+                    </div>
+                </div>
+
+
+
+
+            </div>
+
+            <ul class="nav nav-tabs" id="myTab" role="tablist">
                 <li class="nav-item">
-                    <a class="nav-link active" id="hr-tab" data-toggle="tab" href="#hr" role="tab" aria-controls="home" aria-selected="true" >Heart Rate</a>
+                    <a class="nav-link active" id="hr-tab" data-toggle="tab" href="#hr" role="tab" aria-controls="home"
+                       aria-selected="true">Heart Rate</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" id="bp-tab" data-toggle="tab" href="#bp" role="tab" aria-controls="profile" aria-selected="false">Blood Pressure</a>
+                    <a class="nav-link" id="bp-tab" data-toggle="tab" href="#bp" role="tab" aria-controls="profile"
+                       aria-selected="false">Blood Pressure</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" id="contact-tab" data-toggle="tab" href="#contact" role="tab" aria-controls="contact" aria-selected="false">----</a>
+                    <a class="nav-link" id="contact-tab" data-toggle="tab" href="#contact" role="tab"
+                       aria-controls="contact" aria-selected="false">----</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" id="contact-tab" data-toggle="tab" href="#contact" role="tab" aria-controls="contact" aria-selected="false">----</a>
+                    <a class="nav-link" id="contact-tab" data-toggle="tab" href="#contact" role="tab"
+                       aria-controls="contact" aria-selected="false">----</a>
                 </li>
             </ul>
             <div class="tab-content" id="myTabContent">
@@ -131,20 +199,23 @@
 
 
                         </tbody>
-                    </table></div>
+                    </table>
+                </div>
                 <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">...</div>
             </div>
         </div>
     </div>
 </div>
-<div class="modal fade bd-example-modal-sm" id="updateModal" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-sm" role="document" >
 
-        <div    class="modal-content">
+<div class="modal fade bd-example-modal-sm" id="updateModal" tabindex="-1" role="dialog"
+     aria-labelledby="mySmallModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-sm" role="document">
+
+        <div class="modal-content">
 
             <form action="/update/<%= userData[0].userId %>?_method=PUT" method="post">
                 <div class="modal-header">
-                    <h4 class="modal-title w-100 text-center" id="exampleModalLongTitle" >Update Profile</h4>
+                    <h4 class="modal-title w-100 text-center" id="exampleModalLongTitle">Update Profile</h4>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -152,31 +223,38 @@
                 <div class="modal-body">
                     <div class="form-group">
                         <p>Height(cm):</p>
-                        <input  type="number" id="height" name="height" class="form-control"  required="required" min="1" max="300" value="<%= userData[0].height %>">
+                        <input type="number" id="height" name="height" class="form-control" required="required" min="1"
+                               max="300" value="<%= userData[0].height %>">
                     </div>
                     <div class="form-group">
                         <p>Weight(Kg):</p>
-                        <input  type="number" id="weight" name="weight" class="form-control"  required="required" min="1" max="600" value="<%= userData[0].weight %>">
+                        <input type="number" id="weight" name="weight" class="form-control" required="required" min="1"
+                               max="600" value="<%= userData[0].weight %>">
                     </div>
                     <div class="form-group">
                         <p>Email:</p>
-                        <input id="email" type="email" name="emailAddress" class="form-control" placeholder="example@example.com" required="required" value="<%= userData[0].email %>">
+                        <input id="email" type="email" name="emailAddress" class="form-control"
+                               placeholder="example@example.com" required="required" value="<%= userData[0].email %>">
                     </div>
                     <div class="form-group">
                         <p>Phone number:</p>
-                        <input type="tel" id="phone" class="form-control" name="phone"  required="required" placeholder="1234567890" maxlength="11" value="<%= userData[0].phone %>">
+                        <input type="tel" id="phone" class="form-control" name="phone" required="required"
+                               placeholder="1234567890" maxlength="11" value="<%= userData[0].phone %>">
                     </div>
                     <div class="form-group">
                         <p>Address:</p>
-                        <input  type="text" id="address" name="address" class="form-control"  required="required" maxlength="40" value="<%= userData[0].address %>">
+                        <input type="text" id="address" name="address" class="form-control" required="required"
+                               maxlength="40" value="<%= userData[0].address %>">
                     </div>
                     <div class="form-group">
                         <p>Full Name:</p>
-                        <input  type="text" id="fName" name="fName" class="form-control"  required="required" maxlength="30" value="<%= userData[0].name %>">
+                        <input type="text" id="fName" name="fName" class="form-control" required="required"
+                               maxlength="30" value="<%= userData[0].name %>">
                     </div>
                     <div class="form-group">
 
-                        <a  id="gpPicker" class="btn btn-light dropdown-toggle" data-toggle="dropdown">Select a GP <span class="caret"></span></a>
+                        <a id="gpPicker" class="btn btn-light dropdown-toggle" data-toggle="dropdown">Select a GP <span
+                                    class="caret"></span></a>
                         <ul class="dropdown-menu" id="gpMenu">
 
                         </ul>
@@ -198,7 +276,8 @@
         integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU="
         crossorigin="anonymous"></script>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
+        integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
         crossorigin="anonymous"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
         integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
@@ -206,27 +285,26 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.8.1/bootstrap-table.js"></script>
 
 <script>
-    $("#menu-toggle").click(function(e) {
+    $("#menu-toggle").click(function (e) {
         e.preventDefault();
         $("#wrapper").toggleClass("toggled");
     });
 </script>
 
 <script>
-    $(".dropdown-menu li a").click(function(e){
+    $(".dropdown-menu li a").click(function (e) {
         e.preventDefault()
         var selText = $(this).text();
-        $(this).parents('.btn-group').find('.dropdown-toggle').html(selText+' <span class="caret"></span>');
+        $(this).parents('.btn-group').find('.dropdown-toggle').html(selText + ' <span class="caret"></span>');
     });
 
 </script>
 
 
-
 <script>
     $('#heartRateTable').bootstrapTable({});
     $('#heartRateTable').ready(
-        function(){
+        function () {
             var userID = "<%= userData[0].accountID %>";
             var settings = {
 
@@ -242,7 +320,7 @@
 
                 },
 
-                "data": JSON.stringify({"userId":userID,"measurementType":"Heart Rate"}),
+                "data": JSON.stringify({"userId": userID, "measurementType": "Heart Rate"}),
 
             };
 
@@ -254,13 +332,13 @@
 
                 $('.fixed-table-loading').hide();
             });
-    })
+        })
 </script>
 
 <script>
     $('#bloodTable').bootstrapTable({});
     $('#bloodTable').ready(
-        function(){
+        function () {
             var userID = "<%= userData[0].accountID %>";
 
             var settings = {
@@ -277,7 +355,7 @@
 
                 },
 
-                "data": JSON.stringify({"userId":userID,"measurementType":"Blood Pressure"}),
+                "data": JSON.stringify({"userId": userID, "measurementType": "Blood Pressure"}),
 
             };
 
@@ -285,7 +363,8 @@
                 var data = JSON.parse(response);
                 $('#bloodTable').bootstrapTable("load", data);
                 $('.fixed-table-loading').hide();
-            });}
+            });
+        }
     )
 </script>
 <script>
@@ -305,8 +384,12 @@
                     "Content-Type": "application/json"
                 },
 
-                "data": JSON.stringify({"userId":"<%= userData[0].accountID %>" ,
-                    "measurementType":$('#measurement').text(), "reading":$('#paramVal').val(), "date": $('#measurementDate').val()}),
+                "data": JSON.stringify({
+                    "userId": "<%= userData[0].accountID %>",
+                    "measurementType": $('#measurement').text(),
+                    "reading": $('#paramVal').val(),
+                    "date": $('#measurementDate').val()
+                }),
             };
 
             $.ajax(settings).done(function () {
@@ -340,9 +423,9 @@
                 console.log(response);
                 var gpList = JSON.parse(response);
 
-                $(this).parents('.btn-group').find('.dropdown-toggle').html(gpList[0].name+' <span class="caret"></span>');
+                $(this).parents('.btn-group').find('.dropdown-toggle').html(gpList[0].name + ' <span class="caret"></span>');
                 $('#gpMenu').append(
-                    $('<li class="dropdown-item px-2"></li>').val().html(gpList[0].name+' <span class="caret"></span>')
+                    $('<li class="dropdown-item px-2"></li>').val().html(gpList[0].name + ' <span class="caret"></span>')
                 );
             })
         }
