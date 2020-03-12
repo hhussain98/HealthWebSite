@@ -239,8 +239,8 @@ router.post('/SelectProfileByID', function (req, res) {
         try { res.send(JSON.stringify(data)); } catch { res.send('Unable to parse json'); }
     });
 });
-router.post('/SelectSchedulers', function (req, res) {
-    db.SelectSchedulers().then(data => {
+router.post('/SelectGPList', function (req, res) {
+    db.SelectGPList().then(data => {
         try { res.send(JSON.stringify(data)); } catch { res.send('Unable to parse json'); }
     });
 });

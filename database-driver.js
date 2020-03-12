@@ -119,8 +119,8 @@ module.exports = function () {
     this.InsertMeasurementType = function (str_insertType) {
         return this._sequelize.query(`CALL InsertMeasurementType ('${str_insertType}')`);
     };
-    this.InsertMeasurements = function (int_accountID, str_reading, int_measurementType) {
-        return this._sequelize.query(`CALL InsertMeasurements (${int_accountID}; '${str_reading}', ${int_measurementType})`);
+    this.InsertMeasurements = function (int_accountID, str_reading, str_measurementType, date_time) {
+        return this._sequelize.query(`CALL InsertMeasurements (${int_accountID}, '${str_reading}', '${str_measurementType}', '${date_time}')`);
     };
     this.InsertRoles = function (str_insertRoleType) {
         return this._sequelize.query(`CALL InsertRoles ('${str_insertRoleType}')`);
@@ -185,8 +185,8 @@ module.exports = function () {
     this.SelectProfileByID = function (int_ID) {
         return this._sequelize.query(`CALL SelectProfileByID (${int_ID})`);
     };
-    this.SelectSchedulers = function () {
-        return this._sequelize.query(`CALL SelectSchedulers ()`);
+    this.SelectGPList = function () {
+        return this._sequelize.query(`CALL SelectGPList ()`);
     };
     this.SelectUnreadHealthNotificationByAccountID = function (int_accountID) {
         return this._sequelize.query(`CALL SelectUnreadHealthNotificationByAccountID (${int_accountID})`);

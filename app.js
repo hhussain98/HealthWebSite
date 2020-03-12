@@ -98,11 +98,33 @@ app.post("/register", function (req, res) {
     });
 });
 
+app.post("/addMeasurement", function (req, res) {
+    db.InsertMeasurements(req.body.userId, req.body.reading, req.body.measurementType, req.body.date).then(data =>{
+        res.send("update success");
+    });
+})
+
 app.put("/update/:id", function (req, res) {
     var userid = req.params.id;
 
+    var height;
+    var weight;
+
+    if (req.body.height === undefined){
+        height = 0;
+    }else {
+        height = req.body.height;
+    }
+
+    if (req.body.weight === undefined){
+        weight = 0;
+    }
+    else {
+        weight = req.body.weight;
+    }
+
     db.UpdateProfile(userid, req.body.emailAddress, 'a', '1111-11-12','a',
-        req.body.phone, req.body.height, req.body.weight).then(
+        req.body.phone, height, weight).then(
     ).then(
         data=>{
             getUserById(userid).then(data=>{
@@ -123,6 +145,7 @@ async function getUserById(userid){
     return JSON.parse(json);
 }
 
+
 // redirect the user to the Fitbit authorization page
 app.get("/authorize", (req, res) => {
     // request access to the user's activity, heartrate, location, nutrion, profile, settings, sleep, social, and weight scopes
@@ -136,6 +159,8 @@ app.get("/callback", (req, res) => {
         // use the access token to fetch the user's profile information
         client.get("/activities/calories/date/2020-02-12/7d.json", result.access_token).then(results => {
            // res.send(results[0]);
+            console.log(results);
+            console.log(results[0]);
             res.redirect("/");
         }).catch(err => {
             res.status(err.status).send(err);

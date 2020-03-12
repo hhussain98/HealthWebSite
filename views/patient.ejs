@@ -25,9 +25,6 @@
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <div class="navbar-nav mr-auto">
-                <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
-            </div>
             <div class="navbar-nav">
                 <a id="logout" class="nav-link" href="/">Sign Out</a>
             </div>
@@ -45,42 +42,39 @@
             <div class="modal-dialog modal-sm" role="document" >
 
                 <div    class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title w-100 text-center" id="exampleModalLongTitle" >Enter Data</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="btn-group">
-                            <a  id="measurementType" class="btn btn-light dropdown-toggle" data-toggle="dropdown">Select a measurement <span class="caret"></span></a>
-                            <ul class="dropdown-menu" id="menu">
-                                <li class="dropdown-item px-2"><a href="#">Blood Pressure</a></li>
-                                <li class="dropdown-item px-2"><a href="#">Heart Rate</a></li>
-                            </ul>
-                        </div>
-                        <div>
-                            <label >Value: </label>
-                            <input id="paramVal" class="form-control" type="number" maxlength="3">
+                    <form id="formOfAdd">
+                        <div class="modal-header">
+                            <h5 class="modal-title w-100 text-center" id="exampleModalLongTitle" >Enter Data</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
                         </div>
 
-                        <div>
-                            <label >Date: </label>
-                            <input type="date" id="birthday" name="birthday" class="form-control"  required="required">
-                        </div>
-                        <div>
-                            <label >Time of measurement: </label>
-                            <input id="time" class="form-control"  type="time">
-                        </div>
+                        <div class="modal-body">
+                            <div class="btn-group">
+                                <a  id="measurement" class="btn btn-light dropdown-toggle" data-toggle="dropdown" >Blood Pressure<span class="caret"></span></a>
+                                <ul class="dropdown-menu" id="measurementType" >
+                                    <li class="dropdown-item px-2"><a href="#">Blood Pressure</a></li>
+                                    <li class="dropdown-item px-2"><a href="#">Heart Rate</a></li>
+                                </ul>
+                            </div>
+                            <div class="form-group">
+                                <label >Value: </label>
+                                <input id="paramVal" name="reading" class="form-control" type="number" maxlength="3" required="required">
+                            </div>
 
-                    </div>
-                    <div class="modal-footer">
-                        <button id="close" type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button id="save" type="button" class="btn btn-primary">Save changes</button>
-                    </div>
+                            <div class="form-group">
+                                <label >Date: </label>
+                                <input type="Date" id="measurementDate" name="date" class="form-control"  required="required">
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button id="close" type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button id="addMeasurement" type="submit" class="btn btn-primary">Save changes</button>
+                        </div>
+                    </form>
 
                 </div>
-
             </div>
         </div>
     </div>
@@ -159,11 +153,11 @@
                 <div class="modal-body">
                     <div class="form-group">
                         <p>Height(cm):</p>
-                        <input  type="number" id="height" name="height" class="form-control"  required="required" min="1" max="300">
+                        <input  type="number" id="height" name="height" class="form-control"  required="required" min="1" max="300" value="<%= userData[0].height %>">
                     </div>
                     <div class="form-group">
                         <p>Weight(Kg):</p>
-                        <input  type="number" id="weight" name="weight" class="form-control"  required="required" min="1" max="600">
+                        <input  type="number" id="weight" name="weight" class="form-control"  required="required" min="1" max="600" value="<%= userData[0].weight %>">
                     </div>
                     <div class="form-group">
                         <p>Email:</p>
@@ -175,15 +169,16 @@
                     </div>
                     <div class="form-group">
                         <p>Address:</p>
-                        <input  type="text" id="address" name="address" class="form-control"  required="required" maxlength="40">
+                        <input  type="text" id="address" name="address" class="form-control"  required="required" maxlength="40" value="<%= userData[0].address %>">
                     </div>
                     <div class="form-group">
                         <p>Full Name:</p>
-                        <input  type="text" id="fName" name="fName" class="form-control"  required="required" maxlength="30">
+                        <input  type="text" id="fName" name="fName" class="form-control"  required="required" maxlength="30" value="<%= userData[0].name %>">
                     </div>
                     <div class="form-group">
+
                         <a  id="gpPicker" class="btn btn-light dropdown-toggle" data-toggle="dropdown">Select a GP <span class="caret"></span></a>
-                        <ul class="dropdown-menu" id="menu">
+                        <ul class="dropdown-menu" id="gpMenu">
 
                         </ul>
                     </div>
@@ -217,6 +212,7 @@
         $("#wrapper").toggleClass("toggled");
     });
 </script>
+
 <script>
     $(".dropdown-menu li a").click(function(e){
         e.preventDefault()
@@ -287,13 +283,74 @@
             };
 
             $.ajax(settings).done(function (response) {
-                console.log(response);
                 var data = JSON.parse(response);
                 $('#bloodTable').bootstrapTable("load", data);
                 $('.fixed-table-loading').hide();
             });}
     )
 </script>
+<script>
+    $('#formOfAdd').submit(
+        function (e) {
+            e.preventDefault()
+            var settings = {
+
+                "url": "http://localhost:3000/addMeasurement",
+
+                "method": "POST",
+
+                "timeout": 0,
+
+                "headers": {
+
+                    "Content-Type": "application/json"
+                },
+
+                "data": JSON.stringify({"userId":"<%= userData[0].accountID %>" ,
+                    "measurementType":$('#measurement').text(), "reading":$('#paramVal').val(), "date": $('#measurementDate').val()}),
+            };
+
+            $.ajax(settings).done(function () {
+                location.reload();
+            })
+        }
+    )
+</script>
+
+<script>
+    $('#gpMenu').ready(
+        function () {
+            var settings = {
+
+                "url": "http://localhost:3000/api/SelectGPList",
+
+                "method": "POST",
+
+                "timeout": 0,
+
+                "headers": {
+
+                    "Content-Type": "application/json"
+
+                },
+
+                "data": JSON.stringify({}),
+            };
+
+            $.ajax(settings).done(function (response) {
+                console.log(response);
+                var gpList = JSON.parse(response);
+
+                $(this).parents('.btn-group').find('.dropdown-toggle').html(gpList[0].name+' <span class="caret"></span>');
+                $('#gpMenu').append(
+                    $('<li class="dropdown-item px-2"></li>').val().html(gpList[0].name+' <span class="caret"></span>')
+                );
+            })
+        }
+    )
+</script>
+
+
 </body>
 
 </html>
