@@ -3,7 +3,7 @@ image: node:latest
 stages:
   - build&test
   - deploy_production
-  -
+
 Test:
   stage: build&test
   script:
