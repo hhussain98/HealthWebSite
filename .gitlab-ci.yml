@@ -1,21 +1,14 @@
 image: node:latest
 
 stages:
-  - build
-  - test
+  - build&test
   - deploy_production
-
-Build:
-  stage: build
-  script:
-    - echo "Building"
-    - npm install
-
-
+  -
 Test:
-  stage: test
+  stage: build&test
   script:
     - echo "Testing"
+    - npm install
     - npm run test
 
 Production:
