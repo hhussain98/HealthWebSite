@@ -135,7 +135,7 @@
                             <h4 class="card-title">Heart Rate</h4>
                             <h2><i class="fa fa-heartbeat fa-2x" style="color:#ffaf00"></i></h2>
                         </div>
-                        <h3>100</h3>
+                        <h3 id="latestHeart"></h3>
                     </div>
                 </div>
 
@@ -145,11 +145,9 @@
                             <h4 class="card-title">Blood Pressure</h4>
                             <h2><i class="fa fa-heart fa-2x" style="color:blue"></i></h2>
                         </div>
-                        <h3>100</h3>
+                        <h3 id="latestBlood"></h3>
                     </div>
                 </div>
-
-
 
 
             </div>
@@ -300,7 +298,6 @@
 
 </script>
 
-
 <script>
     $('#heartRateTable').bootstrapTable({});
     $('#heartRateTable').ready(
@@ -431,6 +428,69 @@
     )
 </script>
 
+<script>
+    $('#latestHeart').ready(
+        function () {
+
+            var settings = {
+
+                "url": "http://localhost:3000/api/SelectLatestMeasurementById",
+
+                "method": "POST",
+
+                "timeout": 0,
+
+                "headers": {
+
+                    "Content-Type": "application/json"
+
+                },
+
+                "data": JSON.stringify({
+                    "accountID": "<%= userData[0].accountID %>",
+                    "measurementType": "Heart Rate"}),
+            };
+
+            $.ajax(settings).done(function (response) {
+                console.log(response);
+                var latestH = JSON.parse(response);
+                $('#latestHeart').text(latestH[0].reading) ;
+            })
+        }
+    )
+</script>
+
+<script>
+    $('#latestBlood').ready(
+        function () {
+
+            var settings = {
+
+                "url": "http://localhost:3000/api/SelectLatestMeasurementById",
+
+                "method": "POST",
+
+                "timeout": 0,
+
+                "headers": {
+
+                    "Content-Type": "application/json"
+
+                },
+
+                "data": JSON.stringify({
+                    "accountID": "<%= userData[0].accountID %>",
+                    "measurementType": "Blood Pressure"}),
+            };
+
+            $.ajax(settings).done(function (response) {
+                console.log(response);
+                var latestB = JSON.parse(response);
+                $('#latestBlood').text(latestB[0].reading) ;
+            })
+        }
+    )
+</script>
 
 </body>
 

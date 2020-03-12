@@ -157,11 +157,13 @@ router.post('/SelectAccountByID', function (req, res) {
         try { res.send(JSON.stringify(data)); } catch { res.send('Unable to parse json'); }
     });
 });
-router.post('/SelectGPOfPatientByID', function (req, res) {
-    db.SelectGPOfPatientByID(req.body.accountID).then(data => {
+
+router.post('/SelectLatestMeasurementById', function (req, res) {
+    db.SelectLatestMeasurementById(req.body.accountID, req.body.measurementType).then(data => {
         try { res.send(JSON.stringify(data)); } catch { res.send('Unable to parse json'); }
     });
 });
+
 router.post('/SelectGraphByAccountID', function (req, res) {
     db.SelectGraphByAccountID(req.body.healthNotificationID).then(data => {
         try { res.send(JSON.stringify(data)); } catch { res.send('Unable to parse json'); }
