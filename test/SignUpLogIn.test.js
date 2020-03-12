@@ -93,58 +93,58 @@ describe('User logs into the GP page', function () {
 });
 
 
-describe('The correct profile information is displayed upon sign up', function () {
-    const browser = new Browser();
-    before(function () {
-        return browser.visit('/');
-    });
-    describe('Submit log in form and check the user information', function (done) {
-        before(function () {
-            browser.fill('#username', 'ehealth')
-                .then(() => browser.fill('password', 'ehealth'))
-                .then(() => browser.pressButton('#loginButton'))
-                .then(() => browser.wait(10000).then(function () {
-                    browser.assert.status(200);
-                    browser.assert.text('h1', "John Smith");
-                    browser.assert.text('h1', "ehealth@hotmail.com");
-                    browser.assert.text('h1', "07494331122");
-                    browser.assert.text('h1', "John Smith");
+// describe('The correct profile information is displayed upon sign up', function () {
+//     const browser = new Browser();
+//     before(function () {
+//         return browser.visit('/');
+//     });
+//     describe('Submit log in form and check the user information', function (done) {
+//         before(function () {
+//             browser.fill('#username', 'ehealth')
+//                 .then(() => browser.fill('password', 'ehealth'))
+//                 .then(() => browser.pressButton('#loginButton'))
+//                 .then(() => browser.wait(10000).then(function () {
+//                     browser.assert.status(200);
+//                     browser.assert.text('h1', "John Smith");
+//                     browser.assert.text('h1', "ehealth@hotmail.com");
+//                     browser.assert.text('h1', "07494331122");
+//                     browser.assert.text('h1', "John Smith");
+//
+//
+//                 }).then(done, done));
+//         });
+//         it('Information is correct ', function () {
+//             browser.assert.success();
+//         });
+//     });
+// });
+//
 
-
-                }).then(done, done));
-        });
-        it('Information is correct ', function () {
-            browser.assert.success();
-        });
-    });
-});
-
-
-describe('Logout of the home page', function () {
-    const browser = new Browser();
-    before(function () {
-        return browser.visit('/');
-    });
-
-    describe('Submit log in form', function (done) {
-        before(function () {
-            browser.fill('#username', 'ehealth')
-                .then(() => browser.fill('password', 'ehealth'))
-                .then(() => browser.pressButton('#loginButton'))
-                .then(() => browser.wait(10000).then(function () {
-                    browser.assert.status(200);
-                    browser.assert.text('title', "Patient");
-                })).then(() => browser.pressButton('#loginButton'))
-                .then(() => browser.wait(10000).then(function () {
-                    browser.assert.status(200);
-                    browser.assert.text('title', "Patient");
-                }).then(done, done));
-        });
-        it('The user has logged into the patient page ', function () {
-            browser.assert.success();
-        });
-    });
-});
+// describe('Logout of the home page', function () {
+//     const browser = new Browser();
+//     before(function () {
+//         return browser.visit('/');
+//     });
+//
+//     describe('Submit log in form', function (done) {
+//         before(function () {
+//             browser.fill('#username', 'ehealth')
+//                 .then(() => browser.fill('password', 'ehealth'))
+//                 .then(() => browser.pressButton('#loginButton'))
+//                 .then(() => browser.wait(10000).then(function () {
+//                     browser.assert.status(200);
+//                     browser.assert.text('title', "Patient");
+//                 })).then(() => browser.pressButton('#loginButton'))
+//                 .then(() => browser.wait(10000).then(function () {
+//                     browser.assert.status(200);
+//                     browser.assert.text('title', "Patient");
+//                 }).then(done, done));
+//         });
+//         it('The user has logged into the patient page ', function () {
+//             browser.assert.success();
+//         });
+//     });
+// });
 
 
 function makeid(length) {
