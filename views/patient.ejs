@@ -18,8 +18,7 @@
 <body>
 <div id="page-content-wrapper">
     <nav class="navbar navbar-expand-sm navbar-dark bg-primary">
-        <button class="btn btn-primary" id="menu-toggle">Ehealth</button>
-
+        <button class="btn btn-primary" id="menu-toggle" name="ehealthButton">Ehealth</button>
 
         <button  id="miniMenu" class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -93,7 +92,7 @@
                 <a id="patientPhone" class="list-group-item list-group-item-action bg-light">  <%= userData[0].phone %></a>
                 <a id="address" class="list-group-item list-group-item-action bg-light">  <%= userData[0].address %></a>
                 <button id="updateProfileButton" type="button" class="btn btn-primary" data-toggle="modal" data-target="#updateModal">Update Profile</button>
-                <a id="logoutFitbit" href="/logout"> Logout Fitbit</a>
+                <a id="logoutFitbit" name="logoutFitbit" href="/logout"> Logout Fitbit</a>
             </div>
         </div>
         <div class="container-fluid">
