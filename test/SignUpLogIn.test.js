@@ -3,9 +3,6 @@ const Browser = require('zombie');
 // We're going to make requests to http://example.com/signup
 // Which will be routed to our test server localhost:3000
 Browser.localhost('example.com', 3000);
-const  app = require('../app');
-const http = require('http').createServer(app).listen(3000);
-
 var userName;
 var patientName;
 describe('Sign up as a user', function () {
