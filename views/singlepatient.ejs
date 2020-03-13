@@ -14,7 +14,7 @@
 
     <link href="/simple-sidebar.css" rel="stylesheet" type="text/css">
     <link href="/patientPage.css" rel="stylesheet" type="text/css">
-    <title>Patient</title>
+    <title>PatiSingle Patient</title>
 </head>
 
 <body>
@@ -32,60 +32,11 @@
             </div>
         </div>
     </nav>
-    <div>
         <div id="top">
             <h1 id="patientName"> <%= userData[0].name %> </h1>
-            <a id="autosync" type="button" href="/authorize" class="btn btn-primary"> Auto-Sync </a>
-            <button id="manualEntry" type="button" class="btn btn-primary" data-toggle="modal"
-                    data-target="#paramEntry">Manual Data Entry
-            </button>
         </div>
 
-        <!-- Modal -->
-        <div class="modal fade bd-example-modal-sm" id="paramEntry" tabindex="-1" role="dialog"
-             aria-labelledby="mySmallModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-sm" role="document">
 
-                <div class="modal-content">
-                    <form id="formOfAdd">
-                        <div class="modal-header">
-                            <h5 class="modal-title w-100 text-center" id="exampleModalLongTitle">Enter Data</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-
-                        <div class="modal-body">
-                            <div class="btn-group">
-                                <a id="measurement" class="btn btn-light dropdown-toggle" data-toggle="dropdown">Blood Pressure<span class="caret"></span></a>
-                                <ul class="dropdown-menu" id="measurementType">
-                                    <li class="dropdown-item px-2"><a href="#">Blood Pressure</a></li>
-                                    <li class="dropdown-item px-2"><a href="#">Heart Rate</a></li>
-                                </ul>
-                            </div>
-                            <div class="form-group">
-                                <label>Value: </label>
-                                <input id="paramVal" name="reading" class="form-control" type="number" maxlength="3"
-                                       required="required">
-                            </div>
-
-                            <div class="form-group">
-                                <label>Date: </label>
-                                <input type="Date" id="measurementDate" name="date" class="form-control"
-                                       required="required">
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button id="close" type="button" class="btn btn-secondary" data-dismiss="modal">Close
-                            </button>
-                            <button id="addMeasurement" type="submit" class="btn btn-primary">Save changes</button>
-                        </div>
-                    </form>
-
-                </div>
-            </div>
-        </div>
-    </div>
     <div class="d-flex" id="wrapper">
         <div class="bg-light border-right" id="sidebar-wrapper">
             <div class="list-group list-group-flush" id="profile">
@@ -96,10 +47,7 @@
                 <a id="patientPhone"
                    class="list-group-item list-group-item-action bg-light">  <%= userData[0].phone %></a>
                 <a id="address" class="list-group-item list-group-item-action bg-light">  <%= userData[0].address %></a>
-                <button id="updateProfileButton" type="button" class="btn btn-primary" data-toggle="modal"
-                        data-target="#updateModal">Update Profile
-                </button>
-                <a id="logoutFitbit" name="logoutFitbit" href="/logout"> Logout Fitbit</a>
+
             </div>
         </div>
 
@@ -197,74 +145,12 @@
                         </tbody>
                     </table>
                 </div>
-                <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">...</div>
             </div>
         </div>
     </div>
 </div>
 
-<div class="modal fade bd-example-modal-sm" id="updateModal" tabindex="-1" role="dialog"
-     aria-labelledby="mySmallModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-sm" role="document">
 
-        <div class="modal-content">
-
-            <form action="/update/<%= userData[0].userId %>?_method=PUT" method="post">
-                <div class="modal-header">
-                    <h4 class="modal-title w-100 text-center" id="exampleModalLongTitle">Update Profile</h4>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <div class="form-group">
-                        <p>Height(cm):</p>
-                        <input type="number" id="height" name="height" class="form-control" required="required" min="1"
-                               max="300" value="<%= userData[0].height %>">
-                    </div>
-                    <div class="form-group">
-                        <p>Weight(Kg):</p>
-                        <input type="number" id="weight" name="weight" class="form-control" required="required" min="1"
-                               max="600" value="<%= userData[0].weight %>">
-                    </div>
-                    <div class="form-group">
-                        <p>Email:</p>
-                        <input id="email" type="email" name="emailAddress" class="form-control"
-                               placeholder="example@example.com" required="required" value="<%= userData[0].email %>">
-                    </div>
-                    <div class="form-group">
-                        <p>Phone number:</p>
-                        <input type="tel" id="phone" class="form-control" name="phone" required="required"
-                               placeholder="1234567890" maxlength="11" value="<%= userData[0].phone %>">
-                    </div>
-                    <div class="form-group">
-                        <p>Address:</p>
-                        <input type="text" id="address" name="address" class="form-control" required="required"
-                               maxlength="40" value="<%= userData[0].address %>">
-                    </div>
-                    <div class="form-group">
-                        <p>Full Name:</p>
-                        <input type="text" id="fName" name="fName" class="form-control" required="required"
-                               maxlength="30" value="<%= userData[0].name %>">
-                    </div>
-                    <div class="form-group">
-                        <div class="btn-group">
-                            <a  id="gpPicker" class="btn btn-light" data-toggle="dropdown">Select a GP <span class="caret"></span></a>
-                            <select id="selectGP" name="selectedGP">
-
-                            </select>
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button id="close" type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button id="save" type="submit" class="btn btn-primary">Save changes</button>
-                </div>
-            </form>
-        </div>
-
-    </div>
-</div>
 <!-- Optional JavaScript -->
 <!-- jQuery first, then Popper.js, then Bootstrap JS -->
 <script
@@ -287,14 +173,8 @@
     });
 </script>
 
-<script>
-    $(".dropdown-menu li a").click(function (e) {
-        e.preventDefault()
-        var selText = $(this).text();
-        $(this).parents('.btn-group').find('.dropdown-toggle').html(selText + ' <span class="caret"></span>');
-    });
 
-</script>
+
 
 <script>
     $('#heartRateTable').bootstrapTable({});
