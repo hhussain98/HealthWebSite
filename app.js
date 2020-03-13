@@ -159,7 +159,6 @@ app.get("/callback", (req, res) => {
         // use the access token to fetch the user's profile information
         client.get("/activities/calories/date/2020-02-12/7d.json", result.access_token).then(results => {
            // res.send(results[0]);
-            console.log(results);
             console.log(results[0]);
             res.redirect("/");
         }).catch(err => {
@@ -170,11 +169,11 @@ app.get("/callback", (req, res) => {
     });
 });
 
-app.get("/logout", function (req, res) {
-    req.session.authorized = false;
-    req.session.access_token = null;
-    req.session.save();
-    res.redirect("/");
+    app.get("/logout", function (req, res) {
+        req.session.authorized = false;
+        req.session.access_token = null;
+        req.session.save();
+        res.redirect("/");
 });
 
 

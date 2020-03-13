@@ -222,7 +222,7 @@ router.post('/SelectMeasurementsForHealthNotification', function (req, res) {
     });
 });
 router.post('/SelectPatientsOfGPbyID', function (req, res) {
-    db.SelectPatientsOfGPbyID(req.body.accountID).then(data => {
+    db.SelectPatientsOfGPbyID(req.body.gpID).then(data => {
         try { res.send(JSON.stringify(data)); } catch { res.send('Unable to parse json'); }
     });
 });
