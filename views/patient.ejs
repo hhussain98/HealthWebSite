@@ -415,7 +415,6 @@
             };
 
             $.ajax(settings).done(function (response) {
-                console.log(response);
                 var gpList = JSON.parse(response);
 
                 $.each(gpList, function (index, name) {
@@ -450,7 +449,6 @@
             };
 
             $.ajax(settings).done(function (response) {
-                console.log(response);
                 var latestH = JSON.parse(response);
                 $('#latestHeart').text(latestH[0].reading) ;
             })
@@ -482,7 +480,6 @@
             };
 
             $.ajax(settings).done(function (response) {
-                console.log(response);
                 var latestB = JSON.parse(response);
                 $('#latestBlood').text(latestB[0].reading) ;
             })

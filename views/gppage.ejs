@@ -39,26 +39,25 @@
         <div class="bg-light border-right" id="sidebar-wrapper">
             <div class="list-group list-group-flush">
                 <img  id="gpImage" src="/stockPhoto.png" alt="No Image">
-                <a id="gpName" class="list-group-item list-group-item-action bg-light"> Name</a>
-                <a id="gpEmail" class="list-group-item list-group-item-action bg-light"> Email</a>
-                <a id="gpPhone" class="list-group-item list-group-item-action bg-light"> Phone</a>
+                <a id="gpName" class="list-group-item list-group-item-action bg-light"> <%= userData[0].name %></a>
+                <a id="gpEmail" class="list-group-item list-group-item-action bg-light"> <%= userData[0].email %></a>
+                <a id="gpPhone" class="list-group-item list-group-item-action bg-light"> <%= userData[0].phone %></a>
                 <button id="updateProfileButton" type="button" class="btn btn-primary" data-toggle="modal" data-target="#updateModal">Update Profile</button>
             </div>
         </div>
-
 
         <div class="container-fluid">
             <form class="form-inline my-2 my-lg-0">
                 <input id="searchBar" class="form-control my-5 my-sm-3 mx-5" type="search" placeholder="Search" aria-label="Search">
                 <button id="searchButton" class="btn btn-outline-primary my-5 my-sm-3" type="button">Search</button>
             </form>
-            <table class="table">
+            <table class="table" id="patientList">
                 <thead>
                 <tr>
-                    <th scope="col">Full Name</th>
-                    <th scope="col">Email</th>
-                    <th scope="col">Contact Number</th>
-                    <th scope="col">Address</th>
+                    <th data-field="name" scope="col">Full Name</th>
+                    <th data-field="email" scope="col">Email</th>
+                    <th data-field="phone" scope="col">Contact Number</th>
+                    <th data-field="address" scope="col">Address</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -108,17 +107,55 @@
 </div>
 <!-- Optional JavaScript -->
 <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+<script
+        src="https://code.jquery.com/jquery-3.4.1.js"
+        integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU="
         crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
         crossorigin="anonymous"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
         crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.8.1/bootstrap-table.js"></script>
+
 <script>
     $("#menu-toggle").click(function(e) {
         e.preventDefault();
         $("#wrapper").toggleClass("toggled");
     });
+</script>
+
+<script>
+    $('#patientList').bootstrapTable({});
+    $('#patientList').ready(
+        function () {
+
+            var settings = {
+
+                "url": "/api/SelectPatientsOfGPbyID",
+
+                "method": "POST",
+
+                "timeout": 0,
+
+                "headers": {
+
+                    "Content-Type": "application/json"
+
+                },
+
+                "data": JSON.stringify({"gpID": "<%= userData[0].gpID %>"}),
+            };
+
+            $.ajax(settings).done(function (response) {
+
+                var data = JSON.parse(response);
+
+                $('#patientList').bootstrapTable("load", data);
+
+                $('.fixed-table-loading').hide();
+            });
+        }
+    )
 </script>
 </body>
 
