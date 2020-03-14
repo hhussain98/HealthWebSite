@@ -124,8 +124,8 @@ module.exports = function () {
     this.InsertHealthNotification = function (int_accountID, date_startDatetime, date_endDatetime, int_measurementTypeID) {
         return this._sequelize.query(`CALL InsertHealthNotification (${int_accountID}; '${date_startDatetime}', '${date_endDatetime}', ${int_measurementTypeID})`);
     };
-    this.InsertMeasurementType = function (str_insertType) {
-        return this._sequelize.query(`CALL InsertMeasurementType ('${str_insertType}')`);
+    this.InsertMeasurementFromFitBit = function (int_accountID, str_reading, str_measurementType, date_time) {
+        return this._sequelize.query(`CALL InsertMeasurementFromFitBit (${int_accountID}, '${str_reading}', '${str_measurementType}', '${date_time}')`);
     };
     this.InsertMeasurements = function (int_accountID, str_reading, str_measurementType, date_time) {
         return this._sequelize.query(`CALL InsertMeasurements (${int_accountID}, '${str_reading}', '${str_measurementType}', '${date_time}')`);
@@ -163,8 +163,8 @@ module.exports = function () {
     this.SelectHealthNotificationByAccountID = function (int_accountID, bool_archived, bool_notificationRead) {
         return this._sequelize.query(`CALL SelectHealthNotificationByAccountID (${int_accountID}; ${bool_archived}; ${bool_notificationRead})`);
     };
-    this.SelectHealthNotificationByID = function (int_notificationID) {
-        return this._sequelize.query(`CALL SelectHealthNotificationByID (${int_notificationID})`);
+    this.SelectLatestMeasurementDateByID = function (int_accountId, str_measurementType) {
+        return this._sequelize.query(`CALL SelectLatestMeasurementDateByID (${int_accountId}, '${str_measurementType}')`);
     };
     this.SelectMeasurementTypeByID = function (int_measurementTypeID) {
         return this._sequelize.query(`CALL SelectMeasurementTypeByID (${int_measurementTypeID})`);
@@ -175,11 +175,11 @@ module.exports = function () {
     this.SelectMeasurementsByAccountIDBetweenDates = function (int_accountID, date_startDatetime, date_endDatetime) {
         return this._sequelize.query(`CALL SelectMeasurementsByAccountIDBetweenDates (${int_accountID}; '${date_startDatetime}', '${date_endDatetime}')`);
     };
-    this.SelectMeasurementsByID = function (int_accountID, str_messurementType) {
-        return this._sequelize.query(`CALL SelectMeasurementsByID (${int_accountID}, '${str_messurementType}')`);
+    this.SelectMeasurementsByID = function (int_accountID, str_measurementType) {
+        return this._sequelize.query(`CALL SelectMeasurementsByID (${int_accountID}, '${str_measurementType}')`);
     };
-    this.SelectMeasurementsForHealthNotification = function (int_healthNotificationID) {
-        return this._sequelize.query(`CALL SelectMeasurementsForHealthNotification (${int_healthNotificationID})`);
+    this.SelectMeasurementForToday = function (int_accountID, str_measurementType) {
+        return this._sequelize.query(`CALL SelectMeasurementForToday (${int_accountID}, '${str_measurementType}')`);
     };
     this.SelectPatientsOfGPbyID = function (int_accountID) {
         return this._sequelize.query(`CALL SelectPatientsOfGPbyID (${int_accountID})`);
