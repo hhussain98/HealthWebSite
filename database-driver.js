@@ -29,12 +29,20 @@ module.exports = function () {
         host: 'burchnall.ddns.net',
         port: 3307,
         dialect: 'mariadb',
+        dialectOptions: {
+            timezone: 'Etc/GMT-3',
+        },
         pool: {
             max: 5,
             min: 0,
             acquire: 30000,
             idle: 10000
-        }
+        },
+        define: {
+            timestamps: false
+        },
+        benchmark: false,
+        logging: false
     });
 
 // Returns a promise after creating the connection to the database

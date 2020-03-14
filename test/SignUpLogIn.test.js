@@ -5,7 +5,7 @@ const Browser = require('zombie');
 Browser.localhost('example.com', 3000);
 var userName;
 var patientName;
-
+var gpId;
 describe('Log in Processes', function () {
     const browser = new Browser();
     before(function () {
@@ -16,7 +16,7 @@ describe('Log in Processes', function () {
         browser.assert.text('title', "Create Account");
     });
 
-    it('Sign form is Submitted', function (done) {
+    it('Sign form for patient is Submitted', function (done) {
         userName = makeid(3);
         patientName = makeid(7);
         browser.fill('#username', userName)
@@ -31,7 +31,6 @@ describe('Log in Processes', function () {
                 browser.assert.text('title', "Login");
             }).then(done, done));
     });
-
 
     describe('User logs into the Patient page', function () {
         const browser = new Browser();
@@ -84,6 +83,36 @@ describe('Log in Processes', function () {
 });
 
 
+describe('Sign up for GP', function () {
+    const browser = new Browser();
+    before(function () {
+        return browser.visit('/signup');
+    });
+    it('should show the sign up form', function () {
+        browser.assert.status(200);
+        browser.assert.text('title', "Create Account");
+    });
+    it('Sign form for gp is Submitted', function (done) {
+        userName = makeid(3);
+        patientName = makeid(7);
+        gpId = makeidInt(4);
+        browser.fill('#username', userName)
+            .then(() => browser.fill('password', 'h'))
+            .then(() => browser.fill('#email', 'hamza@gmail.com'))
+            .then(() => browser.fill('phone', '011424544'))
+            .then(() => browser.fill('fName', patientName))
+            .then(() => browser.fill('birthday', '2018-07-22'))
+            .then(() => browser.selectOption('isGp'))
+            .then(() => browser.fill('#gpID', gpId))
+            .then(() => browser.pressButton('#signup'))
+            .then(() => browser.wait(10000).then(function () {
+                browser.assert.status(200);
+                browser.assert.text('title', "Login");
+            }).then(done, done));
+    });
+});
+
+
 function makeid(length) {
     var result = '';
     var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
@@ -93,5 +122,16 @@ function makeid(length) {
     }
     return result;
 }
+
+function makeidInt(length) {
+    var result = '';
+    var characters = '12344556789';
+    var charactersLength = characters.length;
+    for (var i = 0; i < length; i++) {
+        result += characters.charAt(Math.floor(Math.random() * charactersLength));
+    }
+    return result;
+}
+
 
 
