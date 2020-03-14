@@ -152,7 +152,6 @@ async function syncDataFromFitBit(userId, reading, type, time){
 // redirect the user to the Fitbit authorization page
 app.get("/authorize/:id", (req, res) => {
     // request access to the user's activity, heartrate, location, nutrion, profile, settings, sleep, social, and weight scopes
-    res.redirect(client.getAuthorizeUrl('activity heartrate location nutrition profile settings sleep social weight', 'http://localhost:3000/callback/'));
     res.redirect(client.getAuthorizeUrl('activity heartrate location nutrition profile settings sleep social weight', 'http://localhost:3000/callback/', "", req.params.id));
 });
 
@@ -224,7 +223,6 @@ app.get("/callback", (req, res) => {
             });
         });
 
-
         var fitbitData =  client.get("/activities/heart/date/2020-02-07/2020-02-12.json", result.access_token).then(results => {
             fitbitData = Object.values(results[0])[0];
         }).then(data=>{
@@ -237,8 +235,6 @@ app.get("/callback", (req, res) => {
     }).catch(err => {
         res.status(err.status).send(err);
     });
-
-
 
     getUserById(userId).then(data=>{
         if(data[0].role === "GP"){
