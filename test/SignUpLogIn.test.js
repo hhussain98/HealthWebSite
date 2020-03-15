@@ -6,6 +6,7 @@ Browser.localhost('example.com', 3000);
 var userName;
 var patientName;
 var gpId;
+
 describe('Log in Processes', function () {
     const browser = new Browser();
     before(function () {
@@ -82,6 +83,28 @@ describe('Log in Processes', function () {
 
 });
 
+describe('User logs into the GP page', function () {
+    const browser = new Browser();
+    before(function () {
+        return browser.visit('/');
+    });
+
+    it('should show the login form', function (done) {
+        browser.assert.status(200);
+        browser.assert.text('title', "Login");
+        done();
+    });
+
+    it('GP has logged in', function (done) {
+        browser.fill('#username', 'w')
+            .then(() => browser.fill('password', 'w'))
+            .then(() => browser.pressButton('#loginButton'))
+            .then(() => browser.wait(10000).then(function () {
+                browser.assert.status(200);
+                browser.assert.text('title', "GP");
+            }).then(done, done));
+    });
+});
 
 describe('Sign up for GP', function () {
     const browser = new Browser();
@@ -112,6 +135,34 @@ describe('Sign up for GP', function () {
     });
 });
 
+describe('Sign up as a duplicate user', function () {
+    const browser = new Browser();
+    before(function () {
+        return browser.visit('/signup');
+    });
+    it('should show the sign up form', function () {
+        browser.assert.status(200);
+        browser.assert.text('title', "Create Account");
+    });
+    it('Should not sign up due to duplicated user', function (done) {
+        userName = makeid(3);
+        patientName = makeid(7);
+        gpId = makeidInt(4);
+        browser.fill('#username', 's')
+            .then(() => browser.fill('password', 'h'))
+            .then(() => browser.fill('#email', 'hamza@gmail.com'))
+            .then(() => browser.fill('phone', '011424544'))
+            .then(() => browser.fill('fName', patientName))
+            .then(() => browser.fill('birthday', '2018-07-22'))
+            .then(() => browser.selectOption('isGp'))
+            .then(() => browser.fill('#gpID', gpId))
+            .then(() => browser.pressButton('#signup'))
+            .then(() => browser.wait(10000).then(function () {
+                browser.assert.status(200);
+                browser.assert.text('title', "Create Account");
+            }).then(done, done));
+    });
+});
 
 function makeid(length) {
     var result = '';
