@@ -45,8 +45,8 @@ describe('Log in Processes', function () {
         });
 
         it('Patient has logged in', function (done) {
-            browser.fill('#username', 's')
-                .then(() => browser.fill('password', 's'))
+            browser.fill('#username', 'Hamza')
+                .then(() => browser.fill('password', 'hamza'))
                 .then(() => browser.pressButton('#loginButton'))
                 .then(() => browser.wait(10000).then(function () {
                     browser.assert.status(200);
@@ -69,8 +69,8 @@ describe('Log in Processes', function () {
         });
 
         it('GP has logged in', function (done) {
-            browser.fill('#username', 'w')
-                .then(() => browser.fill('password', 'w'))
+            browser.fill('#username', 'GPHamza')
+                .then(() => browser.fill('password', 'gp'))
                 .then(() => browser.pressButton('#loginButton'))
                 .then(() => browser.wait(10000).then(function () {
                     browser.assert.status(200);

@@ -13,7 +13,7 @@ describe('Profile Information Check', function () {
         });
 
         it('Patient Details Verified', function (done) {
-            browser.fill('#username', 'hamza')
+            browser.fill('#username', 'hamza12')
                 .then(() => browser.fill('password', 'hamza'))
                 .then(() => browser.pressButton('#loginButton'))
                 .then(() => browser.wait(10000).then(function () {
