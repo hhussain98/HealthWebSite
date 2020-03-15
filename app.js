@@ -179,7 +179,7 @@ async function syncDataFromFitBit(userId, reading, type, time){
 // redirect the user to the Fitbit authorization page
 app.get("/authorize/:id", (req, res) => {
     // request access to the user's activity, heartrate, location, nutrion, profile, settings, sleep, social, and weight scopes
-    res.redirect(client.getAuthorizeUrl('activity heartrate location nutrition profile settings sleep social weight', 'http://localhost:3000/callback/', "", req.params.id));
+    res.redirect(client.getAuthorizeUrl('activity heartrate location nutrition profile settings sleep social weight', 'https://young-journey-50996.herokuapp.com/callback/', "", req.params.id));
 });
 
 // handle the callback from the Fitbit authorization flow
@@ -188,7 +188,7 @@ app.get("/callback", (req, res) => {
     var userId = req.query.state
 
     // exchange the authorization code we just received for an access token
-    client.getAccessToken(req.query.code, 'http://localhost:3000/callback/').then(result => {
+    client.getAccessToken(req.query.code, 'https://young-journey-50996.herokuapp.com/callback/').then(result => {
         // use the access token to fetch the user's profile information
 
         var endDate = new Date().toISOString().slice(0,10);
