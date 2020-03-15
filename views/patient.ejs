@@ -20,22 +20,25 @@
 <body>
 <div id="page-content-wrapper">
     <nav class="navbar navbar-expand-sm navbar-dark bg-primary">
-        <button class="btn btn-primary" id="menu-toggle" name="ehealthButton">Ehealth</button>
+        <button class="btn btn-primary" id="menu-toggle" name="ehealthButton">Profile</button>
         <button id="miniMenu" class="navbar-toggler" type="button" data-toggle="collapse"
                 data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
                 aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <div class="navbar-nav mr-auto">
+
+            </div>
             <div class="navbar-nav">
-                <a id="logout" class="nav-link" href="/">Sign Out</a>
+                <a id="logout" class="nav-link" onclick="location.href = '/'" >Sign Out</a>
             </div>
         </div>
     </nav>
     <div>
         <div id="top">
             <h1 id="patientName"> <%= userData[0].name %> </h1>
-            <a id="autosync" type="button" href="/authorize/<%= userData[0].userId %>" class="btn btn-primary"> Auto-Sync </a>
+            <a id="autosync" type="button" href="/authorize/<%= userData[0].userId %>" class="btn btn-primary"> Connect Fitbit </a>
             <button id="manualEntry" type="button" class="btn btn-primary" data-toggle="modal"
                     data-target="#paramEntry">Manual Data Entry
             </button>
@@ -61,6 +64,8 @@
                                 <ul class="dropdown-menu" id="measurementType">
                                     <li class="dropdown-item px-2"><a href="#">Blood Pressure</a></li>
                                     <li class="dropdown-item px-2"><a href="#">Heart Rate</a></li>
+                                    <li class="dropdown-item px-2"><a href="#">Calories Burnt</a></li>
+                                    <li class="dropdown-item px-2"><a href="#">Calories Intake</a></li>
                                 </ul>
                             </div>
                             <div class="form-group">
@@ -108,25 +113,7 @@
 
 
             <div class="row my-2">
-                <div class="col-md-2">
-                    <div class="card text-center  border-primary h-65">
-                        <div class="card-block">
-                            <h4 class="card-title">Steps</h4>
-                            <h2><i class="fa fa-child fa-2x" style="color:blue"></i></h2>
-                        </div>
-                        <h3>100</h3>
-                    </div>
-                </div>
 
-                <div class="col-md-2">
-                    <div class="card text-center  border-success h-65">
-                        <div class="card-block">
-                            <h4 class="card-title">Calories</h4>
-                            <h2><i class="fa fa-cutlery fa-2x" style="color:#9cff25"></i></h2>
-                        </div>
-                        <h3 id="cal"></h3>
-                    </div>
-                </div>
 
                 <div class="col-md-2">
                     <div class="card text-center  border-warning h-65">
@@ -148,6 +135,27 @@
                     </div>
                 </div>
 
+                <div class="col-md-2">
+                    <div class="card text-center  border-primary h-65">
+                        <div class="card-block">
+                            <h4 class="card-title">Calories Burnt</h4>
+                            <h2><i class="fa fa-child fa-2x" style="color:blue"></i></h2>
+                        </div>
+                        <h3>100</h3>
+                    </div>
+                </div>
+
+
+                <div class="col-md-2">
+                    <div class="card text-center  border-success h-65">
+                        <div class="card-block">
+                            <h4 class="card-title">Calories Intake</h4>
+                            <h2><i class="fa fa-cutlery fa-2x" style="color:#9cff25"></i></h2>
+                        </div>
+                        <h3 id="cal"></h3>
+                    </div>
+                </div>
+
             </div>
 
             <ul class="nav nav-tabs" id="myTab" role="tablist">
@@ -161,11 +169,11 @@
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" id="caloriesBurned-tab" data-toggle="tab" href="#caloriesBurned" role="tab"
-                       aria-controls="caloriesBurned" aria-selected="false">Calories Burned</a>
+                       aria-controls="caloriesBurned" aria-selected="false">Calories Burnt</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" id="calories-tab" data-toggle="tab" href="#calories" role="tab"
-                       aria-controls="calories" aria-selected="false">Calories</a>
+                       aria-controls="calories" aria-selected="false">Calories Intake</a>
                 </li>
             </ul>
             <div class="tab-content" id="myTabContent">
@@ -175,6 +183,7 @@
                         <tr>
                             <th data-field="DATE(timeStamp)" scope="col">Date</th>
                             <th data-field="reading" scope="col">Value</th>
+                            <th data-field="reading" scope="col">Data Source</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -188,6 +197,7 @@
                         <tr>
                             <th data-field="DATE(timeStamp)" scope="col">Date</th>
                             <th data-field="reading" scope="col">Value</th>
+                            <th data-field="reading" scope="col">Data Source</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -200,6 +210,7 @@
                         <tr>
                             <th data-field="DATE(timeStamp)" scope="col">Date</th>
                             <th data-field="reading" scope="col">Value</th>
+                            <th data-field="reading" scope="col">Data Source</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -212,6 +223,7 @@
                         <tr>
                             <th data-field="DATE(timeStamp)" scope="col">Date</th>
                             <th data-field="reading" scope="col">Value</th>
+                            <th data-field="reading" scope="col">Data Source</th>
                         </tr>
                         </thead>
                         <tbody>
