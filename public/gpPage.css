@@ -27,3 +27,7 @@ p {
     color: white;
     font-weight: bold;
 }
+.active-cyan-2 input[type=search]:focus:not([readonly]) {
+    border-bottom: 1px solid #4dd0e1;
+    box-shadow: 0 1px 0 0 #4dd0e1;
+}

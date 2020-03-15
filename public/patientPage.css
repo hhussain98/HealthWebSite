@@ -53,3 +53,12 @@ p {
 h3 {
     text-align: center;
 }
+.tab-pane{
+    height:600px;
+    overflow-y:scroll;
+    width:100%;
+}
+.active-cyan-2 input[type=search]:focus:not([readonly]) {
+    border-bottom: 1px solid #4dd0e1;
+    box-shadow: 0 1px 0 0 #4dd0e1;
+}
