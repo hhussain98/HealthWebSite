@@ -56,7 +56,6 @@
         <div class="container-fluid">
             <form class="form-inline my-2 my-lg-0">
                 <input id="searchBar" class="form-control my-5 my-sm-3 mx-5" type="search" placeholder="Search" aria-label="Search">
-                <button id="searchButton" class="btn btn-outline-primary my-5 my-sm-3" type="button">Search</button>
             </form>
             <table class="table" id="patientList">
                 <thead>
@@ -174,6 +173,17 @@
             });
         }
     )
+</script>
+
+<script>
+    $(document).ready(function(){
+        $("#searchBar").on("keyup", function() {
+            var value = $(this).val().toLowerCase();
+            $("#patientList tr").filter(function() {
+                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+            });
+        });
+    });
 </script>
 
 <script>
