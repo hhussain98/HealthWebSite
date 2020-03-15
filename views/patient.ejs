@@ -138,7 +138,7 @@
                             <h4 class="card-title">Calories Burnt</h4>
                             <h2><i class="fa fa-child fa-2x" style="color:blue"></i></h2>
                         </div>
-                        <h3>100</h3>
+                        <h3 id="calb"></h3>
                     </div>
                 </div>
 
@@ -181,7 +181,7 @@
                         <tr>
                             <th data-field="DATE(timeStamp)" scope="col">Date</th>
                             <th data-field="reading" scope="col">Value</th>
-                            <th data-field="reading" scope="col">Data Source</th>
+                            <th data-field="dataFrom" scope="col">Data Source</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -195,7 +195,7 @@
                         <tr>
                             <th data-field="DATE(timeStamp)" scope="col">Date</th>
                             <th data-field="reading" scope="col">Value</th>
-                            <th data-field="reading" scope="col">Data Source</th>
+                            <th data-field="dataFrom" scope="col">Data Source</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -208,7 +208,7 @@
                         <tr>
                             <th data-field="DATE(timeStamp)" scope="col">Date</th>
                             <th data-field="reading" scope="col">Value</th>
-                            <th data-field="reading" scope="col">Data Source</th>
+                            <th data-field="dataFrom" scope="col">Data Source</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -221,7 +221,7 @@
                         <tr>
                             <th data-field="DATE(timeStamp)" scope="col">Date</th>
                             <th data-field="reading" scope="col">Value</th>
-                            <th data-field="reading" scope="col">Data Source</th>
+                            <th data-field="dataFrom" scope="col">Data Source</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -413,7 +413,7 @@
 
                 },
 
-                "data": JSON.stringify({"userId": userID, "measurementType": "Calories Burned"}),
+                "data": JSON.stringify({"userId": userID, "measurementType": "Calories Burnt"}),
 
             };
 
@@ -446,7 +446,7 @@
 
                 },
 
-                "data": JSON.stringify({"userId": userID, "measurementType": "Calories"}),
+                "data": JSON.stringify({"userId": userID, "measurementType": "Calories Intake"}),
 
             };
 
@@ -485,7 +485,7 @@
             };
 
             $.ajax(settings).done(function () {
-                location.reload();
+                location.href = "/patient/" + "<%= userData[0].accountID%>";
             })
         }
     )
@@ -561,8 +561,8 @@
                 var latestH = JSON.parse(response);
                 if(latestH.length < 1){
                     $('#latestHeart').text(0);
-                }else { $('#latestHeart').text(latestH[0].reading)}
-
+                }
+                else { $('#latestHeart').text(latestH[0].reading)}
                 ;
             })
         }
@@ -597,7 +597,8 @@
 
                 if(latestB.length < 1){
                     $('#latestBlood').text(0)
-                }else {$('#latestBlood').text(latestB[0].reading)}
+                }
+                else {$('#latestBlood').text(latestB[0].reading)}
                 ;
             })
         }
@@ -624,14 +625,49 @@
 
                 "data": JSON.stringify({
                     "userId": "<%= userData[0].accountID %>",
-                    "type": "Calories"}),
+                    "type": "Calories Intake"}),
             };
 
             $.ajax(settings).done(function (response) {
                 var latestB = JSON.parse(response);
                 if(latestB.length < 1 || latestB[0].reading === null){
                     $('#cal').text("0")
-                }else {$('#cal').text(latestB[0].reading)}
+                }
+                else {$('#cal').text(latestB[0].reading)}
+                ;
+            })
+        }
+    )
+</script>
+
+<script>
+    $('#calb').ready(
+        function () {
+
+            var settings = {
+
+                "url": "/api/SelectMeasurementForToday",
+
+                "method": "POST",
+
+                "timeout": 0,
+
+                "headers": {
+
+                    "Content-Type": "application/json"
+
+                },
+
+                "data": JSON.stringify({
+                    "userId": "<%= userData[0].accountID %>",
+                    "type": "Calories Burnt"}),
+            };
+
+            $.ajax(settings).done(function (response) {
+                var latestB = JSON.parse(response);
+                if(latestB.length < 1 || latestB[0].reading === null){
+                    $('#calb').text("0")
+                }else {$('#calb').text(latestB[0].reading)}
                 ;
             })
         }

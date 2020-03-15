@@ -171,7 +171,7 @@
                 $("#patientList tr").each(function(){
                     console.log();
                     $(this).attr('class','clickable-row')
-                        .attr("data-href", '/singlePatient/'+ data[$(this).index()].accountID);
+                        .attr("data-href", '/singlePatient/'+ data[$(this).index()].accountID +'/' + "<%= userData[0].accountID %>" ) ;
                 });
             });
         }

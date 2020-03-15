@@ -111,8 +111,8 @@ module.exports = function () {
     // this.DeleteScheduler = function (int_deleteID) {
     //     return this._sequelize.query(`CALL DeleteScheduler (${int_deleteID})`);
     // };
-    this.InsertAccount = function (str_username, str_password, str_role, str_gpId, str_name, str_email, str_phone, date_dob) {
-        return this._sequelize.query(`CALL InsertAccount ('${str_username}', '${str_password}', '${str_role}', '${str_gpId}',
+    this.InsertAccount = async function (str_username, str_password, str_role, str_gpId, str_name, str_email, str_phone, date_dob) {
+        return await this._sequelize.query(`CALL InsertAccount ('${str_username}', '${str_password}', '${str_role}', '${str_gpId}',
          '${str_name}', '${str_email}', '${str_phone}', '${date_dob}')`);
     };
     // this.InsertGraph = function (str_insertTitle, int_insertGraphTypeID, int_insertHealthNotificationID) {
@@ -124,29 +124,29 @@ module.exports = function () {
     // this.InsertHealthNotification = function (int_accountID, date_startDatetime, date_endDatetime, int_measurementTypeID) {
     //     return this._sequelize.query(`CALL InsertHealthNotification (${int_accountID}; '${date_startDatetime}', '${date_endDatetime}', ${int_measurementTypeID})`);
     // };
-    this.InsertMeasurementFromFitBit = function (int_accountID, str_reading, str_measurementType, date_time) {
-        return this._sequelize.query(`CALL InsertMeasurementFromFitBit (${int_accountID}, '${str_reading}', '${str_measurementType}', '${date_time}')`);
+    this.InsertMeasurementFromFitBit = async function (int_accountID, str_reading, str_measurementType, date_time) {
+        return await this._sequelize.query(`CALL InsertMeasurementFromFitBit (${int_accountID}, '${str_reading}', '${str_measurementType}', '${date_time}')`);
     };
-    this.InsertMeasurements = function (int_accountID, str_reading, str_measurementType, date_time) {
-        return this._sequelize.query(`CALL InsertMeasurements (${int_accountID}, '${str_reading}', '${str_measurementType}', '${date_time}')`);
+    this.InsertMeasurements = async function (int_accountID, str_reading, str_measurementType, date_time) {
+        return await this._sequelize.query(`CALL InsertMeasurements (${int_accountID}, '${str_reading}', '${str_measurementType}', '${date_time}')`);
     };
-    // this.InsertRoles = function (str_insertRoleType) {
-    //     return this._sequelize.query(`CALL InsertRoles ('${str_insertRoleType}')`);
-    // };
+    this.InsertRoles = async function (int_accountID, str_reading, str_measurementType, date_time) {
+        return await this._sequelize.query(`CALL InsertRoles (${int_accountID}, '${str_reading}', '${str_measurementType}', '${date_time}')`);
+    };
     // this.InsertScheduler = function (date_insertPredictionTimePeriodtime, date_insertSyncTimePeriodtime) {
     //     return this._sequelize.query(`CALL InsertScheduler ('${date_insertPredictionTimePeriodtime}', '${date_insertSyncTimePeriodtime}')`);
     // };
     // this.MarkHealthNotificationRead = function (int_updateID) {
     //     return this._sequelize.query(`CALL MarkHealthNotificationRead (${int_updateID})`);
     // };
-    this.SelectAccountByUserAndPassword = function (str_accountEmail, str_accountPasswordHash) {
-        return this._sequelize.query(`CALL SelectAccountByUserAndPassword ('${str_accountEmail}', '${str_accountPasswordHash}')`);
+    this.SelectAccountByUserAndPassword = async function (str_accountEmail, str_accountPasswordHash) {
+        return await this._sequelize.query(`CALL SelectAccountByUserAndPassword ('${str_accountEmail}', '${str_accountPasswordHash}')`);
     };
-    this.SelectAccountByUserOrGPID = function (str_username, int_accountID) {
-        return this._sequelize.query(`CALL SelectAccountByUserOrGPID ('${str_username}', '${int_accountID}')`);
+    this.SelectAccountByUserOrGPID = async function (str_username, int_accountID) {
+        return await this._sequelize.query(`CALL SelectAccountByUserOrGPID ('${str_username}', '${int_accountID}')`);
     };
-    this.SelectLatestMeasurementById = function (int_accountID, str_measurementType) {
-        return this._sequelize.query(`CALL SelectLatestMeasurementById (${int_accountID}, '${str_measurementType}')`);
+    this.SelectLatestMeasurementById = async function (int_accountID, str_measurementType) {
+        return await this._sequelize.query(`CALL SelectLatestMeasurementById (${int_accountID}, '${str_measurementType}')`);
     };
     // this.SelectGraphByAccountID = function (int_patientID) {
     //     return this._sequelize.query(`CALL SelectGraphByAccountID (${int_patientID})`);
@@ -163,44 +163,44 @@ module.exports = function () {
     // this.SelectHealthNotificationByAccountID = function (int_accountID, bool_archived, bool_notificationRead) {
     //     return this._sequelize.query(`CALL SelectHealthNotificationByAccountID (${int_accountID}; ${bool_archived}; ${bool_notificationRead})`);
     // };
-    this.SelectLatestMeasurementDateByID = function (int_accountId, str_measurementType) {
-        return this._sequelize.query(`CALL SelectLatestMeasurementDateByID (${int_accountId}, '${str_measurementType}')`);
+    this.SelectLatestMeasurementDateByID = async function (int_accountId, str_measurementType) {
+        return await this._sequelize.query(`CALL SelectLatestMeasurementDateByID (${int_accountId}, '${str_measurementType}')`);
     };
     // this.SelectMeasurementTypeByID = function (int_measurementTypeID) {
     //     return this._sequelize.query(`CALL SelectMeasurementTypeByID (${int_measurementTypeID})`);
     // };
-    this.SelectMeasurementsByAccountID = function (int_accountID, str_type) {
-        return this._sequelize.query(`CALL SelectMeasurementsByAccountID (${int_accountID}, '${str_type}')`);
+    this.SelectMeasurementsByAccountID = async function (int_accountID, str_type) {
+        return await this._sequelize.query(`CALL SelectMeasurementsByAccountID (${int_accountID}, '${str_type}')`);
     };
     // this.SelectMeasurementsByAccountIDBetweenDates = function (int_accountID, date_startDatetime, date_endDatetime) {
     //     return this._sequelize.query(`CALL SelectMeasurementsByAccountIDBetweenDates (${int_accountID}; '${date_startDatetime}', '${date_endDatetime}')`);
     // };
-    this.SelectMeasurementsByID = function (int_accountID, str_measurementType) {
-        return this._sequelize.query(`CALL SelectMeasurementsByID (${int_accountID}, '${str_measurementType}')`);
+    this.SelectMeasurementsByID = async function (int_accountID, str_measurementType) {
+        return await this._sequelize.query(`CALL SelectMeasurementsByID (${int_accountID}, '${str_measurementType}')`);
     };
-    this.SelectMeasurementForToday = function (int_accountID, str_measurementType) {
-        return this._sequelize.query(`CALL SelectMeasurementForToday (${int_accountID}, '${str_measurementType}')`);
+    this.SelectMeasurementForToday = async function (int_accountID, str_measurementType) {
+        return await this._sequelize.query(`CALL SelectMeasurementForToday (${int_accountID}, '${str_measurementType}')`);
     };
-    this.SelectPatientsOfGPbyID = function (int_accountID) {
-        return this._sequelize.query(`CALL SelectPatientsOfGPbyID (${int_accountID})`);
+    this.SelectPatientsOfGPbyID = async function (int_accountID) {
+        return await this._sequelize.query(`CALL SelectPatientsOfGPbyID (${int_accountID})`);
     };
     // this.SelectRoleByAccountID = function (int_accountID) {
     //     return this._sequelize.query(`CALL SelectRoleByAccountID (${int_accountID})`);
     // };
-    this.SelectAccountByID = function (int_accountID) {
-        return this._sequelize.query(`CALL SelectAccountByID (${int_accountID})`);
+    this.SelectAccountByID = async function (int_accountID) {
+        return await this._sequelize.query(`CALL SelectAccountByID (${int_accountID})`);
     };
-    this.SelectProfileByID = function (int_ID) {
-        return this._sequelize.query(`CALL SelectProfileByID (${int_ID})`);
+    this.SelectProfileByID = async function (int_ID) {
+        return await this._sequelize.query(`CALL SelectProfileByID (${int_ID})`);
     };
-    this.SelectGPList = function () {
-        return this._sequelize.query(`CALL SelectGPList ()`);
+    this.SelectGPList = async function () {
+        return await this._sequelize.query(`CALL SelectGPList ()`);
     };
     // this.SelectUnreadHealthNotificationByAccountID = function (int_accountID) {
     //     return this._sequelize.query(`CALL SelectUnreadHealthNotificationByAccountID (${int_accountID})`);
     // };
-    this.UpdateProfile = function (int_updateId, str_updateEmail, str_updateName, str_assignGP, str_updateAddress, str_updatePhone, int_height, int_weight) {
-        return this._sequelize.query(`CALL UpdateProfile (${int_updateId}, '${str_updateEmail}', '${str_updateName}', '${str_assignGP}', '${str_updateAddress}', '${str_updatePhone}', '${int_height}', '${int_weight}')`);
+    this.UpdateProfile = async function (int_updateId, str_updateEmail, str_updateName, str_assignGP, str_updateAddress, str_updatePhone, int_height, int_weight) {
+        return await this._sequelize.query(`CALL UpdateProfile (${int_updateId}, '${str_updateEmail}', '${str_updateName}', '${str_assignGP}', '${str_updateAddress}', '${str_updatePhone}', '${int_height}', '${int_weight}')`);
     };
     // this.UpdateGraph = function (int_updateID, str_updateTitle) {
     //     return this._sequelize.query(`CALL UpdateGraph (${int_updateID}, '${str_updateTitle}')`);
@@ -214,8 +214,8 @@ module.exports = function () {
     // this.UpdateMeasurementType = function (int_updateID, str_updateType) {
     //     return this._sequelize.query(`CALL UpdateMeasurementType (${int_updateID}, '${str_updateType}')`);
     // };
-    this.UpdateMeasurements = function (int_updateID, int_updateReading) {
-        return this._sequelize.query(`CALL UpdateMeasurements (${int_updateID}, ${int_updateReading})`);
+    this.UpdateMeasurements = async function (int_updateID, int_updateReading) {
+        return await this._sequelize.query(`CALL UpdateMeasurements (${int_updateID}, ${int_updateReading})`);
     };
     // this.UpdatePassword = function (int_updateID, str_updateHash) {
     //     return this._sequelize.query(`CALL UpdatePassword (${int_updateID}, '${str_updateHash}')`);

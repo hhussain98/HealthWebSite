@@ -99,9 +99,21 @@ app.post("/register", function (req, res) {
 });
 
 app.post("/addMeasurement", function (req, res) {
-    db.InsertMeasurements(req.body.userId, req.body.reading, req.body.measurementType, req.body.date).then(data =>{
-        res.send("update success");
+    db.InsertMeasurements(req.body.userId, req.body.reading, req.body.measurementType, req.body.date).then(data=>{
+        res.send("Success Updated");
     });
+});
+
+app.get("/patient/:id", function (req, res) {
+    getUserById(req.params.id).then(data=>{
+        res.render("patient", {userData: data});
+    })
+})
+
+app.get("/gp/:id", function (req, res) {
+    getUserById(req.params.id).then(data=>{
+        res.render("gppage", {userData: data});
+    })
 })
 
 app.put("/update/:id", function (req, res) {
@@ -147,10 +159,10 @@ app.put("/update/:id", function (req, res) {
     )
 });
 
-app.get("/singlePatient/:id", function (req, res) {
+app.get("/singlePatient/:id/:gpId", function (req, res) {
     var userid = req.params.id;
     getUserById(userid).then(data =>{
-        res.render("singlepatient", {userData : data});
+        res.render("singlepatient", {userData : data, gpId : req.params.gpId});
     })
 })
 
@@ -180,8 +192,9 @@ app.get("/callback", (req, res) => {
         // use the access token to fetch the user's profile information
 
         var endDate = new Date().toISOString().slice(0,10);
-
-        db.SelectLatestMeasurementDateByID(userId, "Calories").then(data =>{
+        var fitbitCalories;
+        var fitbitBurnt;
+        db.SelectLatestMeasurementDateByID(userId, "Calories Intake").then(data=>{
             var json = JSON.stringify(data);
             var time = JSON.parse(json);
 
@@ -198,61 +211,120 @@ app.get("/callback", (req, res) => {
 
             var path = "/activities/calories/date/" + date.toISOString().slice(0,10) + "/" + endDate + ".json";
 
-            var fitbitCalories = client.get(path, result.access_token).then(results => {
+             fitbitCalories = client.get(path, result.access_token).then(results => {
                 fitbitCalories = Object.values(results[0])[0];
-            }).then(data=>{
-
-                for (let i = 0, p = Promise.resolve(); i < fitbitCalories.length; i++) {
-                    p = p.then(_ => syncDataFromFitBit(userId,fitbitCalories[i].value,'Calories', fitbitCalories[i].dateTime));
-                }
-            });
-        });
-
-        db.SelectLatestMeasurementDateByID(userId, "Calories Burned").then(data =>{
-            var json = JSON.stringify(data);
-            var time = JSON.parse(json);
-
-            var date = new Date();
-            date.setDate(date.getDate()-30);
-
-            if(Object.keys(time).length > 0){
-                var d = new Date(time[0].timeStamp);
-                if(date < d){
-                    date = d;
-                }
-            }
-
-            var path = "/activities/activityCalories/date/" + date.toISOString().slice(0,10) + "/" + endDate + ".json";
-
-            var fitbitBurnt = client.get(path, result.access_token).then(results => {
-                fitbitBurnt = Object.values(results[0])[0];
-            }).then(data=>{
-                for (let i = 0, p = Promise.resolve(); i < fitbitBurnt.length; i++) {
-                    p = p.then(_ => syncDataFromFitBit(userId,fitbitBurnt[i].value,'Calories Burned', fitbitBurnt[i].dateTime));
-                }
-            });
-        });
-
-        var fitbitData =  client.get("/activities/heart/date/2020-02-07/2020-02-12.json", result.access_token).then(results => {
-            fitbitData = Object.values(results[0])[0];
+            })
         }).then(data=>{
+            db.SelectLatestMeasurementDateByID(userId,"Calories Burnt").then(data=>{
+                var json = JSON.stringify(data);
+                var time = JSON.parse(json);
 
-            fitbitData.forEach(element=>{
-                console.log(element);
+                var date = new Date();
+                date.setDate(date.getDate()-30);
+
+                if(Object.keys(time).length > 0){
+                    var d = new Date(time[0].timeStamp);
+                    if(date < d){
+                        date = d;
+                    }
+                }
+
+                var path = "/activities/activityCalories/date/" + date.toISOString().slice(0,10) + "/" + endDate + ".json";
+
+                 fitbitBurnt = client.get(path, result.access_token).then(results => {
+                    fitbitBurnt = Object.values(results[0])[0];
+                     [...Array(fitbitCalories.length)].reduce( (p, _, i) =>
+                             p.then(_ => syncDataFromFitBit(userId,fitbitCalories[i].value,'Calories Intake', fitbitCalories[i].dateTime))
+                         , Promise.resolve()).then(data=>{
+                         [...Array(fitbitBurnt.length)].reduce( (p, _, i) =>
+                                 p.then(_ => syncDataFromFitBit(userId,fitbitBurnt[i].value,'Calories Burnt', fitbitBurnt[i].dateTime))
+                             , Promise.resolve()).then(data=>{
+                             getUserById(userId).then(data=>{
+                                 if(data[0].role === "GP"){
+                                     res.render("gppage", { userData: data});
+                                 }
+                                 else {
+                                     res.render("patient", { userData: data});
+                                 }
+                             })
+                         })
+                         }
+                     );
+                })
             })
         });
 
+        // db.SelectLatestMeasurementDateByID(userId, "Calories Intake").then(data =>{
+        //     var json = JSON.stringify(data);
+        //     var time = JSON.parse(json);
+        //
+        //     var date = new Date();
+        //     date.setDate(date.getDate()-29);
+        //
+        //     if(Object.keys(time).length > 0){
+        //
+        //         var d = new Date(time[0].timeStamp);
+        //         if(date < d){
+        //             date = d;
+        //         }
+        //     }
+        //
+        //     var path = "/activities/calories/date/" + date.toISOString().slice(0,10) + "/" + endDate + ".json";
+        //
+        //     var fitbitCalories = client.get(path, result.access_token).then(results => {
+        //         fitbitCalories = Object.values(results[0])[0];
+        //     }).then(data=>{
+        //
+        //         [...Array(fitbitCalories.length)].reduce( (p, _, i) =>
+        //                 p.then(_ => syncDataFromFitBit(userId,fitbitCalories[i].value,'Calories Intake', fitbitCalories[i].dateTime))
+        //             , Promise.resolve());
+        //
+        //         // for (let i = 0, p = Promise.resolve(); i < fitbitCalories.length; i++) {
+        //         //     p = p.then(_ => syncDataFromFitBit(userId,fitbitCalories[i].value,'Calories Intake', fitbitCalories[i].dateTime));
+        //         // }
+        //     }).then(
+        //         data=>{
+        //             db.SelectLatestMeasurementDateByID(userId, "Calories Burnt").then(data =>{
+        //                 var json = JSON.stringify(data);
+        //                 var time = JSON.parse(json);
+        //
+        //                 var date = new Date();
+        //                 date.setDate(date.getDate()-30);
+        //
+        //                 if(Object.keys(time).length > 0){
+        //                     var d = new Date(time[0].timeStamp);
+        //                     if(date < d){
+        //                         date = d;
+        //                     }
+        //                 }
+        //
+        //                 var path = "/activities/activityCalories/date/" + date.toISOString().slice(0,10) + "/" + endDate + ".json";
+        //
+        //                 var fitbitBurnt = client.get(path, result.access_token).then(results => {
+        //                     fitbitBurnt = Object.values(results[0])[0];
+        //                 }).then(data=>{
+        //                     [...Array(fitbitBurnt.length)].reduce( (p, _, i) =>
+        //                             p.then(_ => syncDataFromFitBit(userId,fitbitBurnt[i].value,'Calories Burnt', fitbitBurnt[i].dateTime))
+        //                         , Promise.resolve());
+        //                     // for (let i = 0, p = Promise.resolve(); i < fitbitBurnt.length; i++) {
+        //                     //     p = p.then(_ => db.InsertRoles(userId,fitbitBurnt[i].value,'Calories Burnt', fitbitBurnt[i].dateTime));
+        //                     // }
+        //                 }).then(data=>{
+        //                     getUserById(userId).then(data=>{
+        //                         if(data[0].role === "GP"){
+        //                             res.render("gppage", { userData: data});
+        //                         }
+        //                         else {
+        //                             res.render("patient", { userData: data});
+        //                         }
+        //                     })
+        //                 });
+        //             })
+        //         }
+        //     );
+        // });
     }).catch(err => {
         res.status(err.status).send(err);
-    });
-
-    getUserById(userId).then(data=>{
-        if(data[0].role === "GP"){
-            res.render("gppage", { userData: data});
-        }
-        else {
-            res.render("patient", { userData: data});
-        }
     });
 });
 
