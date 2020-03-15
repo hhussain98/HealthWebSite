@@ -109,6 +109,7 @@ app.put("/update/:id", function (req, res) {
 
     var height;
     var weight;
+    var gp;
 
     if (req.body.height === undefined){
         height = 0;
@@ -123,7 +124,14 @@ app.put("/update/:id", function (req, res) {
         weight = req.body.weight;
     }
 
-    db.UpdateProfile(userid, req.body.emailAddress, req.body.fName, req.body.selectedGP,req.body.address,
+    if(req.body.selectedGP === undefined){
+        gp = 0;
+    }
+    else {
+        gp = req.body.selectedGP;
+    }
+
+    db.UpdateProfile(userid, req.body.emailAddress, req.body.fName, gp,req.body.address,
         req.body.phone, height, weight).then(
     ).then(
         data=>{
@@ -139,37 +147,121 @@ app.put("/update/:id", function (req, res) {
     )
 });
 
+app.get("/singlePatient/:id", function (req, res) {
+    var userid = req.params.id;
+    getUserById(userid).then(data =>{
+        res.render("singlepatient", {userData : data});
+    })
+})
+
 async function getUserById(userid){
     let data = await db.SelectAccountByID(userid);
     var json = JSON.stringify(data);
     return JSON.parse(json);
 }
 
+async function syncDataFromFitBit(userId, reading, type, time){
+    let data = await db.InsertMeasurementFromFitBit(userId, reading,type, time);
+}
 
 // redirect the user to the Fitbit authorization page
-app.get("/authorize", (req, res) => {
+app.get("/authorize/:id", (req, res) => {
     // request access to the user's activity, heartrate, location, nutrion, profile, settings, sleep, social, and weight scopes
-    res.redirect(client.getAuthorizeUrl('activity heartrate location nutrition profile settings sleep social weight', 'http://localhost:3000/callback/'));
+    res.redirect(client.getAuthorizeUrl('activity heartrate location nutrition profile settings sleep social weight', 'http://localhost:3000/callback/', "", req.params.id));
 });
 
 // handle the callback from the Fitbit authorization flow
 app.get("/callback", (req, res) => {
+
+    var userId = req.query.state
+
     // exchange the authorization code we just received for an access token
     client.getAccessToken(req.query.code, 'http://localhost:3000/callback/').then(result => {
         // use the access token to fetch the user's profile information
-        client.get("/activities/calories/date/2020-02-12/7d.json", result.access_token).then(results => {
-           // res.send(results[0]);
-            console.log(results[0]);
-            res.redirect("/");
-        }).catch(err => {
-            res.status(err.status).send(err);
+
+        var endDate = new Date().toISOString().slice(0,10);
+
+        db.SelectLatestMeasurementDateByID(userId, "Calories").then(data =>{
+            var json = JSON.stringify(data);
+            var time = JSON.parse(json);
+
+            var date = new Date();
+            date.setDate(date.getDate()-15);
+
+            var d = new Date(time[0].timeStamp);
+
+            if(Object.keys(time).length > 0){
+                if(date < d){
+                    date = d;
+                }
+            }
+
+            var path = "/activities/calories/date/" + date.toISOString().slice(0,10) + "/" + endDate + ".json";
+
+            var fitbitCalories = client.get(path, result.access_token).then(results => {
+                fitbitCalories = Object.values(results[0])[0];
+            }).then(data=>{
+
+                fitbitCalories.forEach(element=>{
+                    syncDataFromFitBit(userId,element.value,'Calories', element.dateTime).then(data =>{
+                        console.log("Success sync");
+                    });
+                })
+            });
         });
+
+        db.SelectLatestMeasurementDateByID(userId, "Calories Burned").then(data =>{
+            var json = JSON.stringify(data);
+            var time = JSON.parse(json);
+
+            var date = new Date();
+            date.setDate(date.getDate()-30);
+
+            if(Object.keys(time).length > 0){
+                var d = new Date(time[0].timeStamp);
+                if(date < d){
+                    date = d;
+                }
+            }
+
+            var path = "/activities/activityCalories/date/" + date.toISOString().slice(0,10) + "/" + endDate + ".json";
+
+            var fitbitCalories = client.get(path, result.access_token).then(results => {
+                fitbitCalories = Object.values(results[0])[0];
+            }).then(data=>{
+
+                fitbitCalories.forEach(element=>{
+                    syncDataFromFitBit(userId,element.value,'Calories Burned', element.dateTime).then(data=>{
+                        console.log("Success sync");
+                    });
+                })
+            });
+        });
+
+        var fitbitData =  client.get("/activities/heart/date/2020-02-07/2020-02-12.json", result.access_token).then(results => {
+            fitbitData = Object.values(results[0])[0];
+        }).then(data=>{
+
+            fitbitData.forEach(element=>{
+                console.log(element);
+            })
+        });
+
     }).catch(err => {
         res.status(err.status).send(err);
     });
+
+    getUserById(userId).then(data=>{
+        if(data[0].role === "GP"){
+            res.render("gppage", { userData: data});
+        }
+        else {
+            res.render("patient", { userData: data});
+        }
+    });
 });
 
-    app.get("/logout", function (req, res) {
+app.get("/logout", function (req, res) {
         req.session.authorized = false;
         req.session.access_token = null;
         req.session.save();

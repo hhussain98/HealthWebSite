@@ -35,7 +35,7 @@
     <div>
         <div id="top">
             <h1 id="patientName"> <%= userData[0].name %> </h1>
-            <a id="autosync" type="button" href="/authorize" class="btn btn-primary"> Auto-Sync </a>
+            <a id="autosync" type="button" href="/authorize/<%= userData[0].userId %>" class="btn btn-primary"> Auto-Sync </a>
             <button id="manualEntry" type="button" class="btn btn-primary" data-toggle="modal"
                     data-target="#paramEntry">Manual Data Entry
             </button>
@@ -124,7 +124,7 @@
                             <h4 class="card-title">Calories</h4>
                             <h2><i class="fa fa-cutlery fa-2x" style="color:#9cff25"></i></h2>
                         </div>
-                        <h3>100</h3>
+                        <h3 id="cal"></h3>
                     </div>
                 </div>
 
@@ -152,20 +152,20 @@
 
             <ul class="nav nav-tabs" id="myTab" role="tablist">
                 <li class="nav-item">
-                    <a class="nav-link active" id="hr-tab" data-toggle="tab" href="#hr" role="tab" aria-controls="home"
+                    <a class="nav-link active" id="hr-tab" data-toggle="tab" href="#hr" role="tab" aria-controls="heartRate"
                        aria-selected="true">Heart Rate</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" id="bp-tab" data-toggle="tab" href="#bp" role="tab" aria-controls="profile"
+                    <a class="nav-link" id="bp-tab" data-toggle="tab" href="#bp" role="tab" aria-controls="blood"
                        aria-selected="false">Blood Pressure</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" id="contact-tab" data-toggle="tab" href="#contact" role="tab"
-                       aria-controls="contact" aria-selected="false">----</a>
+                    <a class="nav-link" id="caloriesBurned-tab" data-toggle="tab" href="#caloriesBurned" role="tab"
+                       aria-controls="caloriesBurned" aria-selected="false">Calories Burned</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" id="contact-tab" data-toggle="tab" href="#contact" role="tab"
-                       aria-controls="contact" aria-selected="false">----</a>
+                    <a class="nav-link" id="calories-tab" data-toggle="tab" href="#calories" role="tab"
+                       aria-controls="calories" aria-selected="false">Calories</a>
                 </li>
             </ul>
             <div class="tab-content" id="myTabContent">
@@ -179,7 +179,6 @@
                         </thead>
                         <tbody>
 
-
                         </tbody>
                     </table>
                 </div>
@@ -192,12 +191,33 @@
                         </tr>
                         </thead>
                         <tbody>
-
-
                         </tbody>
                     </table>
                 </div>
-                <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">...</div>
+                <div class="tab-pane fade" id="caloriesBurned" role="tabpanel" aria-labelledby="caloriesBurned-tab">
+                    <table class="table" id="caloriesBurnTable">
+                        <thead>
+                        <tr>
+                            <th data-field="DATE(timeStamp)" scope="col">Date</th>
+                            <th data-field="reading" scope="col">Value</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="tab-pane fade" id="calories" role="tabpanel" aria-labelledby="calories-tab">
+                    <table class="table" id="caloriesTable">
+                        <thead>
+                        <tr>
+                            <th data-field="DATE(timeStamp)" scope="col">Date</th>
+                            <th data-field="reading" scope="col">Value</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
@@ -249,7 +269,7 @@
                     </div>
                     <div class="form-group">
                         <div class="btn-group">
-                        <a  id="gpPicker" class="btn btn-light" data-toggle="dropdown">Select a GP <span class="caret"></span></a>
+                            <a  id="gpPicker" class="btn btn-light" data-toggle="dropdown">Select a GP <span class="caret"></span></a>
                             <select id="selectGP" name="selectedGP">
 
                             </select>
@@ -362,6 +382,73 @@
         }
     )
 </script>
+
+<script>
+    $('#caloriesBurnTable').bootstrapTable({});
+    $('#caloriesBurnTable').ready(
+        function () {
+            var userID = "<%= userData[0].accountID %>";
+
+            var settings = {
+
+                "url": "/api/SelectMeasurementsByID",
+
+                "method": "POST",
+
+                "timeout": 0,
+
+                "headers": {
+
+                    "Content-Type": "application/json"
+
+                },
+
+                "data": JSON.stringify({"userId": userID, "measurementType": "Calories Burned"}),
+
+            };
+
+            $.ajax(settings).done(function (response) {
+                var data = JSON.parse(response);
+                $('#caloriesBurnTable').bootstrapTable("load", data);
+                $('.fixed-table-loading').hide();
+            });
+        }
+    )
+</script>
+
+<script>
+    $('#caloriesTable').bootstrapTable({});
+    $('#caloriesTable').ready(
+        function () {
+            var userID = "<%= userData[0].accountID %>";
+
+            var settings = {
+
+                "url": "/api/SelectMeasurementsByID",
+
+                "method": "POST",
+
+                "timeout": 0,
+
+                "headers": {
+
+                    "Content-Type": "application/json"
+
+                },
+
+                "data": JSON.stringify({"userId": userID, "measurementType": "Calories"}),
+
+            };
+
+            $.ajax(settings).done(function (response) {
+                var data = JSON.parse(response);
+                $('#caloriesTable').bootstrapTable("load", data);
+                $('.fixed-table-loading').hide();
+            });
+        }
+    )
+</script>
+
 <script>
     $('#formOfAdd').submit(
         function (e) {
@@ -450,7 +537,11 @@
 
             $.ajax(settings).done(function (response) {
                 var latestH = JSON.parse(response);
-                $('#latestHeart').text(latestH[0].reading) ;
+                if(latestH[0].reading === undefined){
+                    $('#latestHeart').text(0);
+                }else { $('#latestHeart').text(latestH[0].reading)}
+
+                ;
             })
         }
     )
@@ -481,7 +572,45 @@
 
             $.ajax(settings).done(function (response) {
                 var latestB = JSON.parse(response);
-                $('#latestBlood').text(latestB[0].reading) ;
+                if(latestB[0].reading===undefined){
+                    $('#latestBlood').text(0)
+                }else {$('#latestBlood').text(latestB[0].reading)}
+                ;
+            })
+        }
+    )
+</script>
+
+<script>
+    $('#cal').ready(
+        function () {
+
+            var settings = {
+
+                "url": "/api/SelectMeasurementForToday",
+
+                "method": "POST",
+
+                "timeout": 0,
+
+                "headers": {
+
+                    "Content-Type": "application/json"
+
+                },
+
+                "data": JSON.stringify({
+                    "userId": "<%= userData[0].accountID %>",
+                    "type": "Calories"}),
+            };
+
+            $.ajax(settings).done(function (response) {
+                var latestB = JSON.parse(response);
+                console.log(latestB[0].reading);
+                if(latestB[0].reading === undefined || latestB[0].reading === null){
+                    $('#cal').text("0")
+                }else {$('#calories').text(latestB[0].reading)}
+                ;
             })
         }
     )

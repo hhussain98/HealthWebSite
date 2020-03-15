@@ -189,8 +189,8 @@ router.post('/SelectHealthNotificationByAccountID', function (req, res) {
         try { res.send(JSON.stringify(data)); } catch { res.send('Unable to parse json'); }
     });
 });
-router.post('/SelectHealthNotificationByID', function (req, res) {
-    db.SelectHealthNotificationByID(req.body.notificationID).then(data => {
+router.post('/SelectMeasurementForToday', function (req, res) {
+    db.SelectMeasurementForToday(req.body.userId, req.body.type).then(data => {
         try { res.send(JSON.stringify(data)); } catch { res.send('Unable to parse json'); }
     });
 });
