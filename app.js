@@ -186,11 +186,11 @@ app.get("/callback", (req, res) => {
             var time = JSON.parse(json);
 
             var date = new Date();
-            date.setDate(date.getDate()-15);
-
-            var d = new Date(time[0].timeStamp);
+            date.setDate(date.getDate()-29);
 
             if(Object.keys(time).length > 0){
+
+                var d = new Date(time[0].timeStamp);
                 if(date < d){
                     date = d;
                 }
@@ -202,11 +202,9 @@ app.get("/callback", (req, res) => {
                 fitbitCalories = Object.values(results[0])[0];
             }).then(data=>{
 
-                fitbitCalories.forEach(element=>{
-                    syncDataFromFitBit(userId,element.value,'Calories', element.dateTime).then(data =>{
-                        console.log("Success sync");
-                    });
-                })
+                for (let i = 0, p = Promise.resolve(); i < fitbitCalories.length; i++) {
+                    p = p.then(_ => syncDataFromFitBit(userId,fitbitCalories[i].value,'Calories', fitbitCalories[i].dateTime));
+                }
             });
         });
 
@@ -226,15 +224,12 @@ app.get("/callback", (req, res) => {
 
             var path = "/activities/activityCalories/date/" + date.toISOString().slice(0,10) + "/" + endDate + ".json";
 
-            var fitbitCalories = client.get(path, result.access_token).then(results => {
-                fitbitCalories = Object.values(results[0])[0];
+            var fitbitBurnt = client.get(path, result.access_token).then(results => {
+                fitbitBurnt = Object.values(results[0])[0];
             }).then(data=>{
-
-                fitbitCalories.forEach(element=>{
-                    syncDataFromFitBit(userId,element.value,'Calories Burned', element.dateTime).then(data=>{
-                        console.log("Success sync");
-                    });
-                })
+                for (let i = 0, p = Promise.resolve(); i < fitbitBurnt.length; i++) {
+                    p = p.then(_ => syncDataFromFitBit(userId,fitbitBurnt[i].value,'Calories Burned', fitbitBurnt[i].dateTime));
+                }
             });
         });
 

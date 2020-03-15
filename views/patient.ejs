@@ -38,7 +38,7 @@
     <div>
         <div id="top">
             <h1 id="patientName"> <%= userData[0].name %> </h1>
-            <a id="autosync" type="button" href="/authorize/<%= userData[0].userId %>" class="btn btn-primary"> Connect Fitbit </a>
+            <a id="autosync" type="button" href="/authorize/<%= userData[0].userId %>" class="btn btn-primary"> Auto-Sync </a>
             <button id="manualEntry" type="button" class="btn btn-primary" data-toggle="modal"
                     data-target="#paramEntry">Manual Data Entry
             </button>
@@ -104,7 +104,6 @@
                 <button id="updateProfileButton" type="button" class="btn btn-primary" data-toggle="modal"
                         data-target="#updateModal">Update Profile
                 </button>
-                <a id="logoutFitbit" name="logoutFitbit" href="/logout"> Logout Fitbit</a>
             </div>
         </div>
 
@@ -113,13 +112,11 @@
 
 
             <div class="row my-2">
-
-
                 <div class="col-md-2">
-                    <div class="card text-center  border-warning h-65">
+                    <div class="card text-center  border-primary h-65">
                         <div class="card-block">
                             <h4 class="card-title">Heart Rate</h4>
-                            <h2><i class="fa fa-heartbeat fa-2x" style="color:#ffaf00"></i></h2>
+                            <h2><i class="fa fa-child fa-2x" style="color:blue"></i></h2>
                         </div>
                         <h3 id="latestHeart"></h3>
                     </div>
@@ -144,7 +141,6 @@
                         <h3>100</h3>
                     </div>
                 </div>
-
 
                 <div class="col-md-2">
                     <div class="card text-center  border-success h-65">
@@ -549,7 +545,7 @@
 
             $.ajax(settings).done(function (response) {
                 var latestH = JSON.parse(response);
-                if(latestH[0].reading === undefined){
+                if(latestH.length < 1){
                     $('#latestHeart').text(0);
                 }else { $('#latestHeart').text(latestH[0].reading)}
 
@@ -584,7 +580,8 @@
 
             $.ajax(settings).done(function (response) {
                 var latestB = JSON.parse(response);
-                if(latestB[0].reading===undefined){
+
+                if(latestB.length < 1){
                     $('#latestBlood').text(0)
                 }else {$('#latestBlood').text(latestB[0].reading)}
                 ;
@@ -618,10 +615,9 @@
 
             $.ajax(settings).done(function (response) {
                 var latestB = JSON.parse(response);
-                console.log(latestB[0].reading);
-                if(latestB[0].reading === undefined || latestB[0].reading === null){
+                if(latestB.length < 1 || latestB[0].reading === null){
                     $('#cal').text("0")
-                }else {$('#calories').text(latestB[0].reading)}
+                }else {$('#cal').text(latestB[0].reading)}
                 ;
             })
         }
