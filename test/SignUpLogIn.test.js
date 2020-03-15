@@ -83,29 +83,6 @@ describe('Log in Processes', function () {
 
 });
 
-describe('User logs into the GP page', function () {
-    const browser = new Browser();
-    before(function () {
-        return browser.visit('/');
-    });
-
-    it('should show the login form', function (done) {
-        browser.assert.status(200);
-        browser.assert.text('title', "Login");
-        done();
-    });
-
-    it('GP has logged in', function (done) {
-        browser.fill('#username', 'w')
-            .then(() => browser.fill('password', 'w'))
-            .then(() => browser.pressButton('#loginButton'))
-            .then(() => browser.wait(10000).then(function () {
-                browser.assert.status(200);
-                browser.assert.text('title', "GP");
-            }).then(done, done));
-    });
-});
-
 describe('Sign up for GP', function () {
     const browser = new Browser();
     before(function () {
