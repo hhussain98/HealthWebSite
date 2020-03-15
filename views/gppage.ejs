@@ -15,6 +15,12 @@
     <title>GP</title>
 </head>
 
+<style>
+    tr[data-href]{
+        cursor: pointer;
+    }
+</style>
+
 <body>
 <div id="page-content-wrapper">
     <nav class="navbar navbar-expand-sm navbar-dark bg-primary">
@@ -54,7 +60,7 @@
             </form>
             <table class="table" id="patientList">
                 <thead>
-                <tr>
+                <tr class='clickable-row' data-href='url://singlePatient'>
                     <th data-field="name" scope="col">Full Name</th>
                     <th data-field="email" scope="col">Email</th>
                     <th data-field="phone" scope="col">Contact Number</th>
@@ -72,6 +78,8 @@
      aria-labelledby="mySmallModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-sm" role="document">
         <div class="modal-content">
+            <form action="/update/<%= userData[0].userId %>?_method=PUT" method="post">
+
             <div class="modal-header">
                 <h4 class="modal-title w-100 text-center" id="exampleModalLongTitle">Update Profile</h4>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -79,34 +87,32 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form>
                     <div class="form-group">
                         <p>Full Name:</p>
                         <input id="fName" name="fName" type="text" class="form-control" placeholder="John Smith" required="required"
-                               maxlength="30">
+                               maxlength="30" value="<%= userData[0].name %>">
                     </div>
                     <div class="form-group">
                         <p>Email:</p>
-                        <input id="email" type="email" class="form-control" placeholder="example@example.com"
-                               required="required">
+                        <input id="email" type="email" name="emailAddress" class="form-control" placeholder="example@example.com"
+                               required="required" value="<%= userData[0].email %>">
                     </div>
                     <div class="form-group">
                         <p>Phone number:</p>
                         <input type="tel" id="phone" class="form-control" name="phone" required="required"
-                               placeholder="1234567890" maxlength="11">
+                               placeholder="1234567890" maxlength="11" value="<%= userData[0].phone %>">
                     </div>
                     <div class="form-group">
                         <p>Address:</p>
                         <input id="address" name="address" type="text" class="form-control" placeholder="address"
-                               required="required" maxlength="50">
+                               required="required" maxlength="50" value="<%= userData[0].address %>">
                     </div>
-                </form>
             </div>
             <div class="modal-footer">
                 <button id="close" type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button id="save" type="button" class="btn btn-primary">Save changes</button>
+                <button id="save" type="submit" class="btn btn-primary">Save changes</button>
             </div>
-
+            </form>
         </div>
 
     </div>
@@ -159,9 +165,23 @@
                 $('#patientList').bootstrapTable("load", data);
 
                 $('.fixed-table-loading').hide();
+
+                $("#patientList tr").each(function(){
+                    console.log();
+                    $(this).attr('class','clickable-row')
+                        .attr("data-href", '/singlePatient/'+ data[$(this).index()].accountID);
+                });
             });
         }
     )
+</script>
+
+<script>
+    $(document).ready(function () {
+        $(document.body).on("click", "tr[data-href]", function () {
+            window.location.href = this.dataset.href;
+        })
+    })
 </script>
 </body>
 

@@ -109,6 +109,7 @@ app.put("/update/:id", function (req, res) {
 
     var height;
     var weight;
+    var gp;
 
     if (req.body.height === undefined){
         height = 0;
@@ -123,7 +124,14 @@ app.put("/update/:id", function (req, res) {
         weight = req.body.weight;
     }
 
-    db.UpdateProfile(userid, req.body.emailAddress, req.body.fName, req.body.selectedGP,req.body.address,
+    if(req.body.selectedGP === undefined){
+        gp = 0;
+    }
+    else {
+        gp = req.body.selectedGP;
+    }
+
+    db.UpdateProfile(userid, req.body.emailAddress, req.body.fName, gp,req.body.address,
         req.body.phone, height, weight).then(
     ).then(
         data=>{
@@ -138,6 +146,13 @@ app.put("/update/:id", function (req, res) {
         }
     )
 });
+
+app.get("/singlePatient/:id", function (req, res) {
+    var userid = req.params.id;
+    getUserById(userid).then(data =>{
+        res.render("singlepatient", {userData : data});
+    })
+})
 
 async function getUserById(userid){
     let data = await db.SelectAccountByID(userid);

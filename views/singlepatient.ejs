@@ -72,7 +72,7 @@
                             <h4 class="card-title">Calories</h4>
                             <h2><i class="fa fa-cutlery fa-2x" style="color:#9cff25"></i></h2>
                         </div>
-                        <h3>100</h3>
+                        <h3 id="cal"></h3>
                     </div>
                 </div>
 
@@ -108,12 +108,12 @@
                        aria-selected="false">Blood Pressure</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" id="contact-tab" data-toggle="tab" href="#contact" role="tab"
-                       aria-controls="contact" aria-selected="false">----</a>
+                    <a class="nav-link" id="calories-tab" data-toggle="tab" href="#calories" role="tab"
+                       aria-controls="calories" aria-selected="false">Calories</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" id="contact-tab" data-toggle="tab" href="#contact" role="tab"
-                       aria-controls="contact" aria-selected="false">----</a>
+                    <a class="nav-link" id="caloriesBurned-tab" data-toggle="tab" href="#caloriesBurned" role="tab"
+                       aria-controls="caloriesBurned" aria-selected="false">Calories Burned</a>
                 </li>
             </ul>
             <div class="tab-content" id="myTabContent">
@@ -140,8 +140,30 @@
                         </tr>
                         </thead>
                         <tbody>
-
-
+                        </tbody>
+                    </table>
+                </div>
+                <div class="tab-pane fade" id="calories" role="tabpanel" aria-labelledby="calories-tab">
+                    <table class="table" id="caloriesTable">
+                        <thead>
+                        <tr>
+                            <th data-field="DATE(timeStamp)" scope="col">Date</th>
+                            <th data-field="reading" scope="col">Value</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="tab-pane fade" id="caloriesBurned" role="tabpanel" aria-labelledby="caloriesBurned-tab">
+                    <table class="table" id="caloriesBurnTable">
+                        <thead>
+                        <tr>
+                            <th data-field="DATE(timeStamp)" scope="col">Date</th>
+                            <th data-field="reading" scope="col">Value</th>
+                        </tr>
+                        </thead>
+                        <tbody>
                         </tbody>
                     </table>
                 </div>
@@ -172,9 +194,6 @@
         $("#wrapper").toggleClass("toggled");
     });
 </script>
-
-
-
 
 <script>
     $('#heartRateTable').bootstrapTable({});
@@ -242,44 +261,16 @@
         }
     )
 </script>
-<script>
-    $('#formOfAdd').submit(
-        function (e) {
-            e.preventDefault()
-            var settings = {
-
-                "url": "/addMeasurement",
-
-                "method": "POST",
-
-                "timeout": 0,
-
-                "headers": {
-
-                    "Content-Type": "application/json"
-                },
-
-                "data": JSON.stringify({
-                    "userId": "<%= userData[0].accountID %>",
-                    "measurementType": $('#measurement').text(),
-                    "reading": $('#paramVal').val(),
-                    "date": $('#measurementDate').val()
-                }),
-            };
-
-            $.ajax(settings).done(function () {
-                location.reload();
-            })
-        }
-    )
-</script>
 
 <script>
-    $('#selectGP').ready(
+    $('#caloriesTable').bootstrapTable({});
+    $('#caloriesTable').ready(
         function () {
+            var userID = "<%= userData[0].accountID %>";
+
             var settings = {
 
-                "url": "/api/SelectGPList",
+                "url": "/api/SelectMeasurementsByID",
 
                 "method": "POST",
 
@@ -291,16 +282,47 @@
 
                 },
 
-                "data": JSON.stringify({}),
+                "data": JSON.stringify({"userId": userID, "measurementType": "Calories"}),
+
             };
 
             $.ajax(settings).done(function (response) {
-                var gpList = JSON.parse(response);
+                var data = JSON.parse(response);
+                $('#caloriesTable').bootstrapTable("load", data);
+                $('.fixed-table-loading').hide();
+            });
+        }
+    )
+</script>
+<script>
+    $('#caloriesBurnTable').bootstrapTable({});
+    $('#caloriesBurnTable').ready(
+        function () {
+            var userID = "<%= userData[0].accountID %>";
 
-                $.each(gpList, function (index, name) {
-                    $('<option value= ' + name.gpID + '>' + name.name + '</option>').appendTo('#selectGP');
-                })
-            })
+            var settings = {
+
+                "url": "/api/SelectMeasurementsByID",
+
+                "method": "POST",
+
+                "timeout": 0,
+
+                "headers": {
+
+                    "Content-Type": "application/json"
+
+                },
+
+                "data": JSON.stringify({"userId": userID, "measurementType": "Calories Burned"}),
+
+            };
+
+            $.ajax(settings).done(function (response) {
+                var data = JSON.parse(response);
+                $('#caloriesBurnTable').bootstrapTable("load", data);
+                $('.fixed-table-loading').hide();
+            });
         }
     )
 </script>
@@ -330,7 +352,9 @@
 
             $.ajax(settings).done(function (response) {
                 var latestH = JSON.parse(response);
-                $('#latestHeart').text(latestH[0].reading) ;
+                if(latestH[0].reading === undefined){
+                    $('#latestHeart').text(0);
+                }else { $('#latestHeart').text(latestH[0].reading)};
             })
         }
     )
@@ -361,7 +385,44 @@
 
             $.ajax(settings).done(function (response) {
                 var latestB = JSON.parse(response);
-                $('#latestBlood').text(latestB[0].reading) ;
+                if(latestB[0].reading===undefined){
+                    $('#latestBlood').text(0)
+                }else {$('#latestBlood').text(latestB[0].reading)}
+                ;
+            })
+        }
+    )
+</script>
+
+<script>
+    $('#cal').ready(
+        function () {
+
+            var settings = {
+
+                "url": "/api/SelectMeasurementForToday",
+
+                "method": "POST",
+
+                "timeout": 0,
+
+                "headers": {
+
+                    "Content-Type": "application/json"
+
+                },
+
+                "data": JSON.stringify({
+                    "userId": "<%= userData[0].accountID %>",
+                    "type": "Calories"}),
+            };
+
+            $.ajax(settings).done(function (response) {
+                var latestB = JSON.parse(response);
+                if(latestB[0].reading === undefined || latestB[0].reading === null){
+                    $('#cal').text("0")
+                }else {$('#cal').text(latestB[0].reading)}
+                 ;
             })
         }
     )
