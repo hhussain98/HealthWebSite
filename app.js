@@ -1,3 +1,4 @@
+
 //include necessary components for website
 const express = require('express');
 const app = express();
@@ -227,77 +228,85 @@ app.get("/callback", (req, res) => {
         // use the access token to fetch the user's profile information
 
         ///set sync date range of last date
-        var endDate = new Date().toISOString().slice(0, 10);
+        var endDate = new Date().toISOString().slice(0,10);
         var fitbitCalories;
         var fitbitBurnt;
 
         //check when is the last time sync calories intake data from fitbit
-        db.SelectLatestMeasurementDateByID(userId, "Calories Intake").then(data => {
+        db.SelectLatestMeasurementDateByID(userId, "Calories Intake").then(data=>{
             var json = JSON.stringify(data);
             var time = JSON.parse(json);
 
             //set sync date range of start date for calories intake
             var date = new Date();
-            date.setDate(date.getDate() - 29);
-            if (Object.keys(time).length > 0) {
+            date.setDate(date.getDate()-29);
+            if(Object.keys(time).length > 0){
 
                 var d = new Date(time[0].timeStamp);
-                if (date < d) {
+                if(date < d){
                     date = d;
                 }
             }
 
             //get calories intake data from fitbit depend on the date range
-            var path = "/activities/calories/date/" + date.toISOString().slice(0, 10) + "/" + endDate + ".json";
+            var path = "/activities/calories/date/" + date.toISOString().slice(0,10) + "/" + endDate + ".json";
 
-            fitbitCalories = client.get(path, result.access_token).then(results => {
+             fitbitCalories = client.get(path, result.access_token).then(results => {
                 fitbitCalories = Object.values(results[0])[0];
             })
-        }).then(data => {
+        }).then(data=>{
             //check when is the last time sync calories burnt data from fitbit
-            db.SelectLatestMeasurementDateByID(userId, "Calories Burnt").then(data => {
+            db.SelectLatestMeasurementDateByID(userId,"Calories Burnt").then(data=>{
                 var json = JSON.stringify(data);
                 var time = JSON.parse(json);
 
                 //set sync date range of start date for calories intake
                 var date = new Date();
-                date.setDate(date.getDate() - 30);
-                if (Object.keys(time).length > 0) {
+                date.setDate(date.getDate()-30);
+                if(Object.keys(time).length > 0){
                     var d = new Date(time[0].timeStamp);
-                    if (date < d) {
+                    if(date < d){
                         date = d;
                     }
                 }
 
                 //get calories burnt data from fitbit depend on the date range
-                var path = "/activities/activityCalories/date/" + date.toISOString().slice(0, 10) + "/" + endDate + ".json";
+                var path = "/activities/activityCalories/date/" + date.toISOString().slice(0,10) + "/" + endDate + ".json";
 
-                fitbitBurnt = client.get(path, result.access_token).then(results => {
+                 fitbitBurnt = client.get(path, result.access_token).then(results => {
                     fitbitBurnt = Object.values(results[0])[0];
 
                     //add calories intake data into database
-                    [...Array(fitbitCalories.length)].reduce((p, _, i) =>
-                            p.then(_ => syncDataFromFitBit(userId, fitbitCalories[i].value, 'Calories Intake', fitbitCalories[i].dateTime))
-                        , Promise.resolve()).then(
-                        //add calories burnt data into database
-                        data => {
-                            [...Array(fitbitBurnt.length)].reduce((p, _, i) =>
-                                    p.then(_ => syncDataFromFitBit(userId, fitbitBurnt[i].value, 'Calories Burnt', fitbitBurnt[i].dateTime))
-                                , Promise.resolve()).then(
-                                //re-render patient page after data has been add into database
-                                data => {
-                                    getUserById(userId).then(data => {
-                                        res.render("patient", {userData: data});
-                                    })
-                                })
-                        }
-                    );
+                     [...Array(fitbitCalories.length)].reduce( (p, _, i) =>
+                             p.then(_ => syncDataFromFitBit(userId,fitbitCalories[i].value,'Calories Intake', fitbitCalories[i].dateTime))
+                         , Promise.resolve()).then(
+                             //add calories burnt data into database
+                             data=>{
+                         [...Array(fitbitBurnt.length)].reduce( (p, _, i) =>
+                                 p.then(_ => syncDataFromFitBit(userId,fitbitBurnt[i].value,'Calories Burnt', fitbitBurnt[i].dateTime))
+                             , Promise.resolve()).then(
+                                 //re-render patient page after data has been add into database
+                                 data=>{
+                             getUserById(userId).then(data=>{
+                                     res.render("patient", { userData: data});
+                             })
+                         })
+                         }
+                     );
                 })
             })
         });
     }).catch(err => {
         res.status(err.status).send(err);
     });
+});
+
+//handle request of log out
+app.get("/logout", function (req, res) {
+        req.session.authorized = false;
+        req.session.access_token = null;
+        req.session.save();
+        res.redirect("/");
 });
 
 

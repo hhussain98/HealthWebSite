@@ -169,9 +169,9 @@ module.exports = function () {
     // this.SelectMeasurementTypeByID = function (int_measurementTypeID) {
     //     return this._sequelize.query(`CALL SelectMeasurementTypeByID (${int_measurementTypeID})`);
     // };
-    this.SelectMeasurementsByAccountID = async function (int_accountID, str_type) {
-        return await this._sequelize.query(`CALL SelectMeasurementsByAccountID (${int_accountID}, '${str_type}')`);
-    };
+    // this.SelectMeasurementsByAccountID = async function (int_accountID, str_type) {
+    //     return await this._sequelize.query(`CALL SelectMeasurementsByAccountID (${int_accountID}, '${str_type}')`);
+    // };
     // this.SelectMeasurementsByAccountIDBetweenDates = function (int_accountID, date_startDatetime, date_endDatetime) {
     //     return this._sequelize.query(`CALL SelectMeasurementsByAccountIDBetweenDates (${int_accountID}; '${date_startDatetime}', '${date_endDatetime}')`);
     // };

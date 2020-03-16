@@ -558,6 +558,9 @@
                 <!-- once get all gp's name data from back end successful, add it to select box-->
                 $.each(gpList, function (index, name) {
                     $('<option value= ' + name.gpID + '>' + name.name + '</option>').appendTo('#selectGP');
+                    if(name.gpID === "<%= userData[0].assignedGP %>"){
+                        $('#gpName').val(name.name);
+                    }
                 })
             })
         }

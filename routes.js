@@ -199,11 +199,11 @@ router.post('/SelectMeasurementForToday', function (req, res) {
 //         try { res.send(JSON.stringify(data)); } catch { res.send('Unable to parse json'); }
 //     });
 // });
-router.post('/SelectMeasurementsByAccountID', function (req, res) {
-    db.SelectMeasurementsByAccountID(req.body.accountID).then(data => {
-        try { res.send(JSON.stringify(data)); } catch { res.send('Unable to parse json'); }
-    });
-});
+// router.post('/SelectMeasurementsByAccountID', function (req, res) {
+//     db.SelectMeasurementsByAccountID(req.body.accountID).then(data => {
+//         try { res.send(JSON.stringify(data)); } catch { res.send('Unable to parse json'); }
+//     });
+// });
 // router.post('/SelectMeasurementsByAccountIDBetweenDates', function (req, res) {
 //     db.SelectMeasurementsByAccountIDBetweenDates(req.body.accountID, req.body.startDatetime, req.body.endDatetime).then(data => {
 //         try { res.send(JSON.stringify(data)); } catch { res.send('Unable to parse json'); }
