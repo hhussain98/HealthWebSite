@@ -60,11 +60,7 @@ describe('Update Profile Information', function () {
                 }))
                 .then(done, done)
         });
-
-
     });
-
-
 });
 
 describe('Verify Updated profile information', function () {

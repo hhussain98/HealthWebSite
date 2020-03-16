@@ -1,0 +1,21 @@
+{
+  "id": "b35f703a-1b1b-494d-a42e-355e4c38a805",
+  "version": "2.0",
+  "name": "Ehealth",
+  "url": "",
+  "tests": [{
+    "id": "5ba3d3fb-0e32-4d6d-9ab4-f2920eadfb04",
+    "name": "Untitled",
+    "commands": []
+  }],
+  "suites": [{
+    "id": "438b1429-664e-429c-99d9-39a2fb462193",
+    "name": "Default Suite",
+    "persistSession": false,
+    "parallel": false,
+    "timeout": 300,
+    "tests": ["5ba3d3fb-0e32-4d6d-9ab4-f2920eadfb04"]
+  }],
+  "urls": [],
+  "plugins": []
+}

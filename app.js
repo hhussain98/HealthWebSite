@@ -291,14 +291,6 @@ app.get("/callback", (req, res) => {
     });
 });
 
-//handle request of log out
-app.get("/logout", function (req, res) {
-        req.session.authorized = false;
-        req.session.access_token = null;
-        req.session.save();
-        res.redirect("/");
-});
-
 
 app.listen(process.env.PORT || 3000);
 

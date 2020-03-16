@@ -125,7 +125,7 @@ describe('Sign up as a duplicate user', function () {
         userName = makeid(3);
         patientName = makeid(7);
         gpId = makeidInt(4);
-        browser.fill('#username', 's')
+        browser.fill('#username', 'hamza')
             .then(() => browser.fill('password', 'h'))
             .then(() => browser.fill('#email', 'hamza@gmail.com'))
             .then(() => browser.fill('phone', '011424544'))
