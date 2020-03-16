@@ -28,15 +28,59 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <div class="navbar-nav">
-                <a id="logout" class="nav-link" href="/gp/ + <%= gpId%>" >Home</a>
+                <a id="logout" class="nav-link" href="/gp/ + <%= gpId %>">Home</a>
             </div>
         </div>
     </nav>
-        <div id="top">
-            <h1 id="patientName">  </h1>
-            <h1 id="patientName"> Data for patient: <%= userData[0].name %> </h1>
+    <div id="top">
+        <h1 id="patientName"></h1>
+        <h1 id="patientName"> Data for patient: <%= userData[0].name %> </h1>
+    </div>
+
+    <div class="modal fade bd-example-modal-sm" id="updateModal" tabindex="-1" role="dialog"
+         aria-labelledby="mySmallModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-sm" role="document">
+            <div class="modal-content">
+                <form id="sendEmail" action="/sendEmail" method="post">
+                    <div class="modal-header">
+                        <h4 class="modal-title w-100 text-center" id="exampleModalLongTitle">Update Profile</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <p>Email From:</p>
+                            <input id="emailFrom" type="email" name="emailFrom" class="form-control"
+                                   placeholder="example@example.com" required="required">
+                        </div>
+                        <div class="form-group">
+                            <p>Email To:</p>
+                            <input id="emailTo" type="email" name="emailTo" class="form-control"
+                                   placeholder="example@example.com" required="required"
+                                   value="<%= userData[0].email %>">
+                        </div>
+
+                        <div class="form-group">
+                            <p>Subject:</p>
+                            <input id="subjectHeading" type="text" name="subjectHeading" class="form-control"
+                                   required="required">
+                        </div>
+                        <div class="form-group">
+                            <p>Message:</p>
+                            <textarea id="messageEmail" type="textarea" name="messageEmail" class="form-control"
+                                      required="required"> </textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button id="close" type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button id="save" type="submit" class="btn btn-primary">Save changes</button>
+                    </div>
+                </form>
+            </div>
 
         </div>
+    </div>
 
 
     <div class="d-flex" id="wrapper">
@@ -49,7 +93,9 @@
                 <a id="patientPhone"
                    class="list-group-item list-group-item-action bg-light">  <%= userData[0].phone %></a>
                 <a id="address" class="list-group-item list-group-item-action bg-light">  <%= userData[0].address %></a>
-
+                <button id="sendemail" type="button" class="btn btn-primary" data-toggle="modal"
+                        data-target="#updateModal">Send Email
+                </button>
             </div>
         </div>
 
@@ -200,7 +246,38 @@
         $("#wrapper").toggleClass("toggled");
     });
 </script>
+<!-- send request to add new measurement data for patient-->
+<script>
+    $('#sendEmail').submit(
+        function (e) {
+            e.preventDefault()
+            var settings = {
 
+                "url": "/",
+
+                "method": "POST",
+
+                "timeout": 0,
+
+                "headers": {
+
+                    "Content-Type": "application/json"
+                },
+
+                "data": JSON.stringify({
+                    "emailFrom": $('#emailFrom').val(),
+                    "emailTo": $('#emailTo').val(),
+                    "subjectHeading": $('#subjectHeading').val(),
+                    "messageEmail": $('#messageEmail').val()
+                }),
+            };
+
+            $.ajax(settings).done(function () {
+               console.log("THIS IS DONE DIONE DONE ")
+            })
+        }
+    )
+</script>
 <script>
     $('#heartRateTable').bootstrapTable({});
 
@@ -227,7 +304,6 @@
             };
 
             $.ajax(settings).done(function (response) {
-
                 var data = JSON.parse(response);
                 <!-- once get heart rate data from back end successful, show data as a table-->
                 $('#heartRateTable').bootstrapTable("load", data);
@@ -273,6 +349,7 @@
         }
     )
 </script>
+
 
 <script>
     $('#caloriesTable').bootstrapTable({});
@@ -366,16 +443,19 @@
 
                 "data": JSON.stringify({
                     "accountID": "<%= userData[0].accountID %>",
-                    "measurementType": "Heart Rate"}),
+                    "measurementType": "Heart Rate"
+                }),
             };
 
             $.ajax(settings).done(function (response) {
                 var latestH = JSON.parse(response);
                 <!-- once get data from back end successful, show as text in the page-->
-                if(latestH.length < 1){
+                if (latestH.length < 1) {
                     $('#latestHeart').text(0);
+                } else {
+                    $('#latestHeart').text(latestH[0].reading)
                 }
-                else { $('#latestHeart').text(latestH[0].reading)};
+                ;
             })
         }
     )
@@ -402,16 +482,18 @@
 
                 "data": JSON.stringify({
                     "accountID": "<%= userData[0].accountID %>",
-                    "measurementType": "Blood Pressure"}),
+                    "measurementType": "Blood Pressure"
+                }),
             };
 
             $.ajax(settings).done(function (response) {
                 var latestB = JSON.parse(response);
                 <!-- once get data from back end successful, show as text in the page-->
-                if(latestB.length < 1){
+                if (latestB.length < 1) {
                     $('#latestBlood').text(0)
+                } else {
+                    $('#latestBlood').text(latestB[0].reading)
                 }
-                else {$('#latestBlood').text(latestB[0].reading)}
                 ;
             })
         }
@@ -439,16 +521,18 @@
 
                 "data": JSON.stringify({
                     "userId": "<%= userData[0].accountID %>",
-                    "type": "Calories Intake"}),
+                    "type": "Calories Intake"
+                }),
             };
 
             $.ajax(settings).done(function (response) {
                 var latestB = JSON.parse(response);
                 <!-- once get data from back end successful, show as text in the page-->
-                if(latestB.length < 1 || latestB[0].reading === null){
+                if (latestB.length < 1 || latestB[0].reading === null) {
                     $('#cal').text("0")
+                } else {
+                    $('#cal').text(latestB[0].reading)
                 }
-                else {$('#cal').text(latestB[0].reading)}
                 ;
             })
         }
@@ -476,15 +560,18 @@
 
                 "data": JSON.stringify({
                     "userId": "<%= userData[0].accountID %>",
-                    "type": "Calories Burnt"}),
+                    "type": "Calories Burnt"
+                }),
             };
 
             $.ajax(settings).done(function (response) {
                 var latestB = JSON.parse(response);
                 <!-- once get data from back end successful, show as text in the page-->
-                if(latestB.length < 1 || latestB[0].reading === null){
+                if (latestB.length < 1 || latestB[0].reading === null) {
                     $('#calb').text("0")
-                }else {$('#calb').text(latestB[0].reading)}
+                } else {
+                    $('#calb').text(latestB[0].reading)
+                }
                 ;
             })
         }

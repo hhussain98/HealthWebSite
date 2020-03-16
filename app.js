@@ -1,25 +1,27 @@
-
 //include necessary components for website
 const express = require('express');
 const app = express();
-const  cookieParser = require('cookie-parser');
+const cookieParser = require('cookie-parser');
 const session = require('express-session');
 const methodOverride = require('method-override');
-const  bodyParser = require('body-parser');
+const bodyParser = require('body-parser');
 const databaseRoutes = require('./routes');
 const _db = require('./database-driver');
 const db = new _db();
 
+const sgMail = require('@sendgrid/mail');
+
 //middleware
 app.use(express.static("public"));
-app.use(bodyParser.urlencoded({extended:true}));
+app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 app.use(cookieParser('secret'));
-app.use(session({cookie:{maxAge:null}}));
+app.use(session({cookie: {maxAge: null}}));
 app.use('/api', databaseRoutes);
 app.use(methodOverride("_method"));
 //all our templates will be ejs
-app.set("view engine","ejs");
+app.set("view engine", "ejs");
+sgMail.setApiKey("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");
 
 // initialize the Fitbit API client
 const FitbitApiClient = require("fitbit-node");
@@ -32,6 +34,22 @@ const client = new FitbitApiClient({
 //render login page to front end
 app.get("/", function (req, res) {
     res.render("login");
+
+});
+
+//render page when user want to creat account
+app.post("/sendEmail", function (req, res) {
+    console.log(req.body.emailFrom);
+    console.log(req.body.emailTo);
+    console.log(req.body.subjectHeading);
+    console.log(req.body.messageEmail);
+    const msg = {
+        to: req.body.emailFrom,
+        from: req.body.emailTo,
+        subject: req.body.subjectHeading,
+        html: req.body.messageEmail,
+    };
+    sgMail.send(msg);
 });
 
 
@@ -51,21 +69,19 @@ app.post("/home", function (req, res) {
         user = JSON.parse(data);
 
     }).then(data => {
-        if(user.length <= 0){
-        console.log("wrong account or password");
-        res.redirect("/")
-    }
+        if (user.length <= 0) {
+            console.log("wrong account or password");
+            res.redirect("/")
+        } else {
 
-    else {
-
-        //render patient page if user's role is Patient
-        if(user[0].role === "Patient"){
-            res.render("patient", { userData: user});
-        }
-        //else render gp page to front end
-        else {
-            res.render("gppage", { userData: user});
-        }
+            //render patient page if user's role is Patient
+            if (user[0].role === "Patient") {
+                res.render("patient", {userData: user});
+            }
+            //else render gp page to front end
+            else {
+                res.render("gppage", {userData: user});
+            }
         }
     });
 });
@@ -76,10 +92,9 @@ app.post("/register", function (req, res) {
     var role = req.body.isGP;
     var gpId = req.body.gpID;
 
-    if(role == "on"){
+    if (role == "on") {
         role = "GP";
-    }
-    else {
+    } else {
         role = "Patient";
         gpId = 0;
     }
@@ -91,9 +106,10 @@ app.post("/register", function (req, res) {
         var json = JSON.parse(data);
 
         //redirect to sign up when username duplicate
-        if(json.length > 0){
-            if(json[0].username === req.body.username){console.log("duplicate user");}
-            else {
+        if (json.length > 0) {
+            if (json[0].username === req.body.username) {
+                console.log("duplicate user");
+            } else {
                 console.log("duplicate GP");
             }
             res.redirect("/signup")
@@ -114,21 +130,21 @@ app.post("/register", function (req, res) {
 
 //Handle request of add new measurement data for patient
 app.post("/addMeasurement", function (req, res) {
-    db.InsertMeasurements(req.body.userId, req.body.reading, req.body.measurementType, req.body.date).then(data=>{
+    db.InsertMeasurements(req.body.userId, req.body.reading, req.body.measurementType, req.body.date).then(data => {
         res.send("Success Updated");
     });
 });
 
 //render to patient page by id
 app.get("/patient/:id", function (req, res) {
-    getUserById(req.params.id).then(data=>{
+    getUserById(req.params.id).then(data => {
         res.render("patient", {userData: data});
     })
 })
 
 //render gp page by id
 app.get("/gp/:id", function (req, res) {
-    getUserById(req.params.id).then(data=>{
+    getUserById(req.params.id).then(data => {
         res.render("gppage", {userData: data});
     })
 })
@@ -143,39 +159,35 @@ app.put("/update/:id", function (req, res) {
     var gp;
 
     //check user give valid details
-    if (req.body.height === undefined){
+    if (req.body.height === undefined) {
         height = 0;
-    }else {
+    } else {
         height = req.body.height;
     }
 
-    if (req.body.weight === undefined){
+    if (req.body.weight === undefined) {
         weight = 0;
-    }
-    else {
+    } else {
         weight = req.body.weight;
     }
 
-    if(req.body.selectedGP === undefined){
+    if (req.body.selectedGP === undefined) {
         gp = 0;
-    }
-    else {
+    } else {
         gp = req.body.selectedGP;
     }
 
     //update user profile on database
-    db.UpdateProfile(userid, req.body.emailAddress, req.body.fName, gp,req.body.address,
+    db.UpdateProfile(userid, req.body.emailAddress, req.body.fName, gp, req.body.address,
         req.body.phone, height, weight).then(
     ).then(
-        data=>{
-
+        data => {
             //re-render page after user profile updated depend on user's role
-            getUserById(userid).then(data=>{
-                if(data[0].role === "GP"){
-                    res.render("gppage", { userData: data});
-                }
-                else {
-                    res.render("patient", { userData: data});
+            getUserById(userid).then(data => {
+                if (data[0].role === "GP") {
+                    res.render("gppage", {userData: data});
+                } else {
+                    res.render("patient", {userData: data});
                 }
             });
         }
@@ -185,21 +197,21 @@ app.put("/update/:id", function (req, res) {
 //Handle request of gp view patient's details
 app.get("/singlePatient/:id/:gpId", function (req, res) {
     var userid = req.params.id;
-    getUserById(userid).then(data =>{
-        res.render("singlepatient", {userData : data, gpId : req.params.gpId});
+    getUserById(userid).then(data => {
+        res.render("singlepatient", {userData: data, gpId: req.params.gpId});
     })
 })
 
 //function to get account details from database by user id
-async function getUserById(userid){
+async function getUserById(userid) {
     let data = await db.SelectAccountByID(userid);
     var json = JSON.stringify(data);
     return JSON.parse(json);
 }
 
 //function to add measurement data for user that from fitbit
-async function syncDataFromFitBit(userId, reading, type, time){
-    let data = await db.InsertMeasurementFromFitBit(userId, reading,type, time);
+async function syncDataFromFitBit(userId, reading, type, time) {
+    let data = await db.InsertMeasurementFromFitBit(userId, reading, type, time);
 }
 
 // redirect the user to the Fitbit authorization page
@@ -218,71 +230,71 @@ app.get("/callback", (req, res) => {
         // use the access token to fetch the user's profile information
 
         ///set sync date range of last date
-        var endDate = new Date().toISOString().slice(0,10);
+        var endDate = new Date().toISOString().slice(0, 10);
         var fitbitCalories;
         var fitbitBurnt;
 
         //check when is the last time sync calories intake data from fitbit
-        db.SelectLatestMeasurementDateByID(userId, "Calories Intake").then(data=>{
+        db.SelectLatestMeasurementDateByID(userId, "Calories Intake").then(data => {
             var json = JSON.stringify(data);
             var time = JSON.parse(json);
 
             //set sync date range of start date for calories intake
             var date = new Date();
-            date.setDate(date.getDate()-29);
-            if(Object.keys(time).length > 0){
+            date.setDate(date.getDate() - 29);
+            if (Object.keys(time).length > 0) {
 
                 var d = new Date(time[0].timeStamp);
-                if(date < d){
+                if (date < d) {
                     date = d;
                 }
             }
 
             //get calories intake data from fitbit depend on the date range
-            var path = "/activities/calories/date/" + date.toISOString().slice(0,10) + "/" + endDate + ".json";
+            var path = "/activities/calories/date/" + date.toISOString().slice(0, 10) + "/" + endDate + ".json";
 
-             fitbitCalories = client.get(path, result.access_token).then(results => {
+            fitbitCalories = client.get(path, result.access_token).then(results => {
                 fitbitCalories = Object.values(results[0])[0];
             })
-        }).then(data=>{
+        }).then(data => {
             //check when is the last time sync calories burnt data from fitbit
-            db.SelectLatestMeasurementDateByID(userId,"Calories Burnt").then(data=>{
+            db.SelectLatestMeasurementDateByID(userId, "Calories Burnt").then(data => {
                 var json = JSON.stringify(data);
                 var time = JSON.parse(json);
 
                 //set sync date range of start date for calories intake
                 var date = new Date();
-                date.setDate(date.getDate()-30);
-                if(Object.keys(time).length > 0){
+                date.setDate(date.getDate() - 30);
+                if (Object.keys(time).length > 0) {
                     var d = new Date(time[0].timeStamp);
-                    if(date < d){
+                    if (date < d) {
                         date = d;
                     }
                 }
 
                 //get calories burnt data from fitbit depend on the date range
-                var path = "/activities/activityCalories/date/" + date.toISOString().slice(0,10) + "/" + endDate + ".json";
+                var path = "/activities/activityCalories/date/" + date.toISOString().slice(0, 10) + "/" + endDate + ".json";
 
-                 fitbitBurnt = client.get(path, result.access_token).then(results => {
+                fitbitBurnt = client.get(path, result.access_token).then(results => {
                     fitbitBurnt = Object.values(results[0])[0];
 
                     //add calories intake data into database
-                     [...Array(fitbitCalories.length)].reduce( (p, _, i) =>
-                             p.then(_ => syncDataFromFitBit(userId,fitbitCalories[i].value,'Calories Intake', fitbitCalories[i].dateTime))
-                         , Promise.resolve()).then(
-                             //add calories burnt data into database
-                             data=>{
-                         [...Array(fitbitBurnt.length)].reduce( (p, _, i) =>
-                                 p.then(_ => syncDataFromFitBit(userId,fitbitBurnt[i].value,'Calories Burnt', fitbitBurnt[i].dateTime))
-                             , Promise.resolve()).then(
-                                 //re-render patient page after data has been add into database
-                                 data=>{
-                             getUserById(userId).then(data=>{
-                                     res.render("patient", { userData: data});
-                             })
-                         })
-                         }
-                     );
+                    [...Array(fitbitCalories.length)].reduce((p, _, i) =>
+                            p.then(_ => syncDataFromFitBit(userId, fitbitCalories[i].value, 'Calories Intake', fitbitCalories[i].dateTime))
+                        , Promise.resolve()).then(
+                        //add calories burnt data into database
+                        data => {
+                            [...Array(fitbitBurnt.length)].reduce((p, _, i) =>
+                                    p.then(_ => syncDataFromFitBit(userId, fitbitBurnt[i].value, 'Calories Burnt', fitbitBurnt[i].dateTime))
+                                , Promise.resolve()).then(
+                                //re-render patient page after data has been add into database
+                                data => {
+                                    getUserById(userId).then(data => {
+                                        res.render("patient", {userData: data});
+                                    })
+                                })
+                        }
+                    );
                 })
             })
         });
