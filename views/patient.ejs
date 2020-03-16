@@ -31,14 +31,15 @@
 
             </div>
             <div class="navbar-nav">
-                <a id="logout" class="nav-link" onclick="location.href = '/'" >Sign Out</a>
+                <a id="logout" class="nav-link" onclick="location.href = '/'">Sign Out</a>
             </div>
         </div>
     </nav>
     <div>
         <div id="top">
             <h1 id="patientName"> <%= userData[0].name %> </h1>
-            <a id="autosync" type="button" href="/authorize/<%= userData[0].userId %>" class="btn btn-primary"> Connect to Fitbit </a>
+            <a id="autosync" type="button" href="/authorize/<%= userData[0].userId %>" class="btn btn-primary"> Connect
+                to Fitbit </a>
             <button id="manualEntry" type="button" class="btn btn-primary" data-toggle="modal"
                     data-target="#paramEntry">Enter Data
             </button>
@@ -60,7 +61,8 @@
 
                         <div class="modal-body">
                             <div class="btn-group">
-                                <a id="measurement" class="btn btn-light dropdown-toggle" data-toggle="dropdown">Blood Pressure<span class="caret"></span></a>
+                                <a id="measurement" class="btn btn-light dropdown-toggle" data-toggle="dropdown">Blood
+                                    Pressure<span class="caret"></span></a>
                                 <ul class="dropdown-menu" id="measurementType">
                                     <li class="dropdown-item px-2"><a href="#">Blood Pressure</a></li>
                                     <li class="dropdown-item px-2"><a href="#">Heart Rate</a></li>
@@ -156,11 +158,13 @@
 
             </div>
             <div class="md-form active-cyan active-cyan-2 mb-3">
-                <input id="searchBar" class="form-control" type="search" placeholder="Search for records by date" aria-label="Search">
+                <input id="searchBar" class="form-control" type="search" placeholder="Search for records by date"
+                       aria-label="Search">
             </div>
             <ul class="nav nav-tabs" id="myTab" role="tablist">
                 <li class="nav-item">
-                    <a class="nav-link active" id="hr-tab" data-toggle="tab" href="#hr" role="tab" aria-controls="heartRate"
+                    <a class="nav-link active" id="hr-tab" data-toggle="tab" href="#hr" role="tab"
+                       aria-controls="heartRate"
                        aria-selected="true">Heart Rate</a>
                 </li>
                 <li class="nav-item">
@@ -279,11 +283,18 @@
                         <input type="text" id="fName" name="fName" class="form-control" required="required"
                                maxlength="30" value="<%= userData[0].name %>">
                     </div>
+
                     <div class="form-group">
                         <div class="btn-group">
-                            <a  id="gpPicker" class="btn btn-light" data-toggle="dropdown">Select a GP <span class="caret"></span></a>
-                            <select id="selectGP" name="selectedGP">
+                            <span class="label label-default">GP: </span>
+                            <input type="text"  disabled="disabled" id="gpName" >
+                        </div>
+                    </div>
 
+                    <div class="form-group">
+                        <div class="btn-group">
+                            <span class="label label-default">Select a GP: </span>
+                            <select id="selectGP" name="selectedGP">
                             </select>
                         </div>
                     </div>
@@ -503,17 +514,17 @@
 
             $.ajax(settings).done(function () {
                 <!-- reload page once measurement add successfule-->
-                location.href = "/patient/" + "<%= userData[0].accountID%>";
+                location.href = "/patient/" + "<%= userData[0].accountID %>";
             })
         }
     )
 </script>
 
 <script>
-    $(document).ready(function(){
-        $("#searchBar").on("keyup", function() {
+    $(document).ready(function () {
+        $("#searchBar").on("keyup", function () {
             var value = $(this).val().toLowerCase();
-            $("#myTabContent tr").filter(function() {
+            $("#myTabContent tr").filter(function () {
                 $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
             });
         });
@@ -574,17 +585,19 @@
 
                 "data": JSON.stringify({
                     "accountID": "<%= userData[0].accountID %>",
-                    "measurementType": "Heart Rate"}),
+                    "measurementType": "Heart Rate"
+                }),
             };
 
             $.ajax(settings).done(function (response) {
                 var latestH = JSON.parse(response);
 
                 <!-- once get data from back end successful, show as text in the page-->
-                if(latestH.length < 1){
+                if (latestH.length < 1) {
                     $('#latestHeart').text(0);
+                } else {
+                    $('#latestHeart').text(latestH[0].reading)
                 }
-                else { $('#latestHeart').text(latestH[0].reading)}
                 ;
             })
         }
@@ -612,17 +625,19 @@
 
                 "data": JSON.stringify({
                     "accountID": "<%= userData[0].accountID %>",
-                    "measurementType": "Blood Pressure"}),
+                    "measurementType": "Blood Pressure"
+                }),
             };
 
             $.ajax(settings).done(function (response) {
                 var latestB = JSON.parse(response);
 
                 <!-- once get data from back end successful, show as text in the page-->
-                if(latestB.length < 1){
+                if (latestB.length < 1) {
                     $('#latestBlood').text(0)
+                } else {
+                    $('#latestBlood').text(latestB[0].reading)
                 }
-                else {$('#latestBlood').text(latestB[0].reading)}
                 ;
             })
         }
@@ -650,17 +665,19 @@
 
                 "data": JSON.stringify({
                     "userId": "<%= userData[0].accountID %>",
-                    "type": "Calories Intake"}),
+                    "type": "Calories Intake"
+                }),
             };
 
             $.ajax(settings).done(function (response) {
                 var latestB = JSON.parse(response);
 
                 <!-- once get data from back end successful, show as text in the page-->
-                if(latestB.length < 1 || latestB[0].reading === null){
+                if (latestB.length < 1 || latestB[0].reading === null) {
                     $('#cal').text("0")
+                } else {
+                    $('#cal').text(latestB[0].reading)
                 }
-                else {$('#cal').text(latestB[0].reading)}
                 ;
             })
         }
@@ -688,16 +705,19 @@
 
                 "data": JSON.stringify({
                     "userId": "<%= userData[0].accountID %>",
-                    "type": "Calories Burnt"}),
+                    "type": "Calories Burnt"
+                }),
             };
 
             $.ajax(settings).done(function (response) {
                 var latestB = JSON.parse(response);
 
                 <!-- once get data from back end successful, show as text in the page-->
-                if(latestB.length < 1 || latestB[0].reading === null){
+                if (latestB.length < 1 || latestB[0].reading === null) {
                     $('#calb').text("0")
-                }else {$('#calb').text(latestB[0].reading)}
+                } else {
+                    $('#calb').text(latestB[0].reading)
+                }
                 ;
             })
         }
