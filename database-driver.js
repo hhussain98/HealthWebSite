@@ -25,9 +25,9 @@ const Sequelize = require('sequelize');
 module.exports = function () {
 
     this.HasEstablishedConnection = false;
-    this._sequelize = new Sequelize('ehealthy', 'spUser', 'StDYTY997$$$', {
-        host: 'burchnall.ddns.net',
-        port: 3307,
+    this._sequelize = new Sequelize('ehealth', 'hamza', 'hamza12345', {
+        host: 'ehealth.camtsfvgedtu.us-west-2.rds.amazonaws.com',
+        port: 3306,
         dialect: 'mariadb',
         // dialectOptions: {
         //     timezone: 'Etc/GMT-3',
