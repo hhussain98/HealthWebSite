@@ -29,20 +29,20 @@ module.exports = function () {
         host: 'ehealth.camtsfvgedtu.us-west-2.rds.amazonaws.com',
         port: 3306,
         dialect: 'mariadb',
-        // dialectOptions: {
-        //     timezone: 'Etc/GMT-3',
-        // },
+        dialectOptions: {
+            timezone: 'Etc/GMT-3',
+        },
         pool: {
             max: 5,
             min: 0,
             acquire: 30000,
             idle: 10000
         },
-        // define: {
-        //     timestamps: false
-        // },
-        // benchmark: false,
-        // logging: true
+        define: {
+            timestamps: false
+        },
+        benchmark: false,
+        logging: true
     });
 
 // Returns a promise after creating the connection to the database
