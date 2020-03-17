@@ -40,6 +40,10 @@ app.get("/", function (req, res) {
 
 //render page when user want to creat account
 app.post("/sendEmail", function (req, res) {
+    console.log(req.body.emailFrom);
+    console.log(req.body.emailTo);
+    console.log(req.body.subjectHeading);
+    console.log(req.body.messageEmail);
     const msg = {
         to: req.body.emailFrom,
         from: req.body.emailTo,
@@ -47,7 +51,6 @@ app.post("/sendEmail", function (req, res) {
         html: req.body.messageEmail,
     };
     sgMail.send(msg);
-    res.send("Email has been sent")
 });
 
 

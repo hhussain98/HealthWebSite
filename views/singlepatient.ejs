@@ -253,7 +253,7 @@
             e.preventDefault()
             var settings = {
 
-                "url": "/sendEmail",
+                "url": "/",
 
                 "method": "POST",
 
@@ -263,6 +263,7 @@
 
                     "Content-Type": "application/json"
                 },
+
                 "data": JSON.stringify({
                     "emailFrom": $('#emailFrom').val(),
                     "emailTo": $('#emailTo').val(),
@@ -271,8 +272,8 @@
                 }),
             };
 
-            $.ajax(settings).done(function (response) {
-                location.reload();
+            $.ajax(settings).done(function () {
+               console.log("THIS IS DONE DIONE DONE ")
             })
         }
     )
@@ -297,7 +298,9 @@
                     "Content-Type": "application/json"
 
                 },
+
                 "data": JSON.stringify({"userId": userID, "measurementType": "Heart Rate"}),
+
             };
 
             $.ajax(settings).done(function (response) {
