@@ -25,10 +25,6 @@ p {
     font-weight: bold;
     margin-left: 20px;
 }
-#wrapper div{
-    height: 100%;
-    width: 100%;
-}
 
 #menu-toggle {
     color: white;
