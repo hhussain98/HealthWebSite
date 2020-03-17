@@ -2,27 +2,24 @@
 //include necessary components for website
 const express = require('express');
 const app = express();
-const cookieParser = require('cookie-parser');
+const  cookieParser = require('cookie-parser');
 const session = require('express-session');
 const methodOverride = require('method-override');
-const bodyParser = require('body-parser');
+const  bodyParser = require('body-parser');
 const databaseRoutes = require('./routes');
 const _db = require('./database-driver');
 const db = new _db();
 
-const sgMail = require('@sendgrid/mail');
-
 //middleware
 app.use(express.static("public"));
-app.use(bodyParser.urlencoded({extended: true}));
+app.use(bodyParser.urlencoded({extended:true}));
 app.use(bodyParser.json());
 app.use(cookieParser('secret'));
-app.use(session({cookie: {maxAge: null}}));
+app.use(session({cookie:{maxAge:null}}));
 app.use('/api', databaseRoutes);
 app.use(methodOverride("_method"));
 //all our templates will be ejs
-app.set("view engine", "ejs");
-sgMail.setApiKey("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");
+app.set("view engine","ejs");
 
 // initialize the Fitbit API client
 const FitbitApiClient = require("fitbit-node");
@@ -35,22 +32,6 @@ const client = new FitbitApiClient({
 //render login page to front end
 app.get("/", function (req, res) {
     res.render("login");
-
-});
-
-//render page when user want to creat account
-app.post("/sendEmail", function (req, res) {
-    console.log(req.body.emailFrom);
-    console.log(req.body.emailTo);
-    console.log(req.body.subjectHeading);
-    console.log(req.body.messageEmail);
-    const msg = {
-        to: req.body.emailFrom,
-        from: req.body.emailTo,
-        subject: req.body.subjectHeading,
-        html: req.body.messageEmail,
-    };
-    sgMail.send(msg);
 });
 
 
@@ -70,19 +51,21 @@ app.post("/home", function (req, res) {
         user = JSON.parse(data);
 
     }).then(data => {
-        if (user.length <= 0) {
-            console.log("wrong account or password");
-            res.redirect("/")
-        } else {
+        if(user.length <= 0){
+        console.log("wrong account or password");
+        res.redirect("/")
+    }
 
-            //render patient page if user's role is Patient
-            if (user[0].role === "Patient") {
-                res.render("patient", {userData: user});
-            }
-            //else render gp page to front end
-            else {
-                res.render("gppage", {userData: user});
-            }
+    else {
+
+        //render patient page if user's role is Patient
+        if(user[0].role === "Patient"){
+            res.render("patient", { userData: user});
+        }
+        //else render gp page to front end
+        else {
+            res.render("gppage", { userData: user});
+        }
         }
     });
 });
@@ -93,9 +76,10 @@ app.post("/register", function (req, res) {
     var role = req.body.isGP;
     var gpId = req.body.gpID;
 
-    if (role == "on") {
+    if(role == "on"){
         role = "GP";
-    } else {
+    }
+    else {
         role = "Patient";
         gpId = 0;
     }
@@ -107,10 +91,9 @@ app.post("/register", function (req, res) {
         var json = JSON.parse(data);
 
         //redirect to sign up when username duplicate
-        if (json.length > 0) {
-            if (json[0].username === req.body.username) {
-                console.log("duplicate user");
-            } else {
+        if(json.length > 0){
+            if(json[0].username === req.body.username){console.log("duplicate user");}
+            else {
                 console.log("duplicate GP");
             }
             res.redirect("/signup")
@@ -131,21 +114,21 @@ app.post("/register", function (req, res) {
 
 //Handle request of add new measurement data for patient
 app.post("/addMeasurement", function (req, res) {
-    db.InsertMeasurements(req.body.userId, req.body.reading, req.body.measurementType, req.body.date).then(data => {
+    db.InsertMeasurements(req.body.userId, req.body.reading, req.body.measurementType, req.body.date).then(data=>{
         res.send("Success Updated");
     });
 });
 
 //render to patient page by id
 app.get("/patient/:id", function (req, res) {
-    getUserById(req.params.id).then(data => {
+    getUserById(req.params.id).then(data=>{
         res.render("patient", {userData: data});
     })
 })
 
 //render gp page by id
 app.get("/gp/:id", function (req, res) {
-    getUserById(req.params.id).then(data => {
+    getUserById(req.params.id).then(data=>{
         res.render("gppage", {userData: data});
     })
 })
@@ -160,35 +143,39 @@ app.put("/update/:id", function (req, res) {
     var gp;
 
     //check user give valid details
-    if (req.body.height === undefined) {
+    if (req.body.height === undefined){
         height = 0;
-    } else {
+    }else {
         height = req.body.height;
     }
 
-    if (req.body.weight === undefined) {
+    if (req.body.weight === undefined){
         weight = 0;
-    } else {
+    }
+    else {
         weight = req.body.weight;
     }
 
-    if (req.body.selectedGP === undefined) {
+    if(req.body.selectedGP === undefined){
         gp = 0;
-    } else {
+    }
+    else {
         gp = req.body.selectedGP;
     }
 
     //update user profile on database
-    db.UpdateProfile(userid, req.body.emailAddress, req.body.fName, gp, req.body.address,
+    db.UpdateProfile(userid, req.body.emailAddress, req.body.fName, gp,req.body.address,
         req.body.phone, height, weight).then(
     ).then(
-        data => {
+        data=>{
+
             //re-render page after user profile updated depend on user's role
-            getUserById(userid).then(data => {
-                if (data[0].role === "GP") {
-                    res.render("gppage", {userData: data});
-                } else {
-                    res.render("patient", {userData: data});
+            getUserById(userid).then(data=>{
+                if(data[0].role === "GP"){
+                    res.render("gppage", { userData: data});
+                }
+                else {
+                    res.render("patient", { userData: data});
                 }
             });
         }
@@ -198,21 +185,21 @@ app.put("/update/:id", function (req, res) {
 //Handle request of gp view patient's details
 app.get("/singlePatient/:id/:gpId", function (req, res) {
     var userid = req.params.id;
-    getUserById(userid).then(data => {
-        res.render("singlepatient", {userData: data, gpId: req.params.gpId});
+    getUserById(userid).then(data =>{
+        res.render("singlepatient", {userData : data, gpId : req.params.gpId});
     })
 })
 
 //function to get account details from database by user id
-async function getUserById(userid) {
+async function getUserById(userid){
     let data = await db.SelectAccountByID(userid);
     var json = JSON.stringify(data);
     return JSON.parse(json);
 }
 
 //function to add measurement data for user that from fitbit
-async function syncDataFromFitBit(userId, reading, type, time) {
-    let data = await db.InsertMeasurementFromFitBit(userId, reading, type, time);
+async function syncDataFromFitBit(userId, reading, type, time){
+    let data = await db.InsertMeasurementFromFitBit(userId, reading,type, time);
 }
 
 // redirect the user to the Fitbit authorization page
