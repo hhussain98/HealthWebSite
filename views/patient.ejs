@@ -12,15 +12,81 @@
           crossorigin="anonymous">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 
-    <link href="/simple-sidebar.css" rel="stylesheet" type="text/css">
     <link href="/patientPage.css" rel="stylesheet" type="text/css">
     <title>Patient</title>
+    <style>
+        body {
+            font-family: "Lato", sans-serif;
+        }
+
+        .sidepanel  {
+            width: 0;
+            position: fixed;
+            z-index: 1;
+            height: 700px;
+            top: 0;
+            left: 0;
+            background-color: #fcfffa;
+            overflow-x: hidden;
+            transition: 0.5s;
+            padding-top: 60px;
+        }
+
+        .sidepanel a {
+            padding: 32px;
+            text-decoration: none;
+            font-size: 25px;
+            display: block;
+            transition: 0.3s;
+        }
+        .sidepanel a.closebtn{
+            padding: 8px;
+        }
+        .sidepanel button{
+            margin: 15px;
+        }
+
+        .sidepanel a:hover {
+            color: #f1f1f1;
+        }
+
+        .sidepanel .closebtn {
+            position: absolute;
+            top: 0;
+            right: 25px;
+            font-size: 36px;
+        }
+
+
+
+
+        .openbtn:hover {
+            background-color:#444;
+        }
+    </style>
 </head>
 
 <body>
-<div id="page-content-wrapper">
+
+<div id="page-content-wrapper" >
     <nav class="navbar navbar-expand-sm navbar-dark bg-primary">
-        <button class="btn btn-primary" id="menu-toggle" name="ehealthButton">Profile</button>
+        <div class="sidepanel" id="mySidepanel">
+            <div class="list-group list-group-flush" id="profile">
+                <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</a>
+                <img id="patientImage" src="/stockPhoto.png" alt="Alternative Text">
+                <a id="pName" class="list-group-item list-group-item-action bg-light">  <%= userData[0].name %></a>
+                <a id="patientEmail"
+                   class="list-group-item list-group-item-action bg-light">  <%= userData[0].email %></a>
+                <a id="patientPhone"
+                   class="list-group-item list-group-item-action bg-light">  <%= userData[0].phone %></a>
+                <a id="address" class="list-group-item list-group-item-action bg-light">  <%= userData[0].address %></a>
+                <button id="updateProfileButton" type="button" class="btn btn-primary" data-toggle="modal"
+                        data-target="#updateModal">Update Profile
+                </button>
+            </div>
+        </div>
+
+        <button class="btn btn-primary" onclick="openNav()">☰ Profile</button>
         <button id="miniMenu" class="navbar-toggler" type="button" data-toggle="collapse"
                 data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
                 aria-label="Toggle navigation">
@@ -36,13 +102,11 @@
         </div>
     </nav>
     <div>
-        <div id="top">
-            <h1 id="patientName"> <%= userData[0].name %> </h1>
+        <div id="top" >
+           <h1 id="patientName" class="d-none d-md-block"> <%= userData[0].name %></h1>
             <a id="autosync" type="button" href="/authorize/<%= userData[0].userId %>" class="btn btn-primary"> Connect
                 to Fitbit </a>
-            <button id="manualEntry" type="button" class="btn btn-primary" data-toggle="modal"
-                    data-target="#paramEntry">Enter Data
-            </button>
+            <button id="manualEntry" type="button" class="btn btn-primary" data-toggle="modal" data-target="#paramEntry">Enter Data</button>
         </div>
 
         <!-- Modal -->
@@ -93,52 +157,33 @@
             </div>
         </div>
     </div>
-    <div class="d-flex" id="wrapper">
-        <div class="bg-light border-right" id="sidebar-wrapper">
-            <div class="list-group list-group-flush" id="profile">
-                <img id="patientImage" src="/stockPhoto.png" alt="Alternative Text">
-                <a id="pName" class="list-group-item list-group-item-action bg-light">  <%= userData[0].name %></a>
-                <a id="patientEmail"
-                   class="list-group-item list-group-item-action bg-light">  <%= userData[0].email %></a>
-                <a id="patientPhone"
-                   class="list-group-item list-group-item-action bg-light">  <%= userData[0].phone %></a>
-                <a id="address" class="list-group-item list-group-item-action bg-light">  <%= userData[0].address %></a>
-                <button id="updateProfileButton" type="button" class="btn btn-primary" data-toggle="modal"
-                        data-target="#updateModal">Update Profile
-                </button>
-            </div>
-        </div>
-
-
+    <div id="wrapper" >
         <div class="container-fluid">
-
-
-            <div class="row my-2">
-
-                <div class="col-md-2">
+            <div class="row my-2 d-flex flex-md-row flex-xs-col">
+                <div class="col-md-2 m-xs-5">
                     <div class="card text-center  border-warning h-65">
                         <div class="card-block">
-                            <h4 class="card-title">Heart Rate</h4>
+                            <h4 class="card-title">Heart <br> Rate</h4>
                             <h2><i class="fa fa-heartbeat fa-2x" style="color:#ffaf00"></i></h2>
                         </div>
                         <h3 id="latestHeart"></h3>
                     </div>
                 </div>
 
-                <div class="col-md-2">
+                <div class="col-md-2 m-xs-5">
                     <div class="card text-center  border-info h-65">
                         <div class="card-block">
-                            <h4 class="card-title">Blood Pressure</h4>
+                            <h4 class="card-title">Blood <br>Pressure</h4>
                             <h2><i class="fa fa-heart fa-2x" style="color:blue"></i></h2>
                         </div>
                         <h3 id="latestBlood"></h3>
                     </div>
                 </div>
 
-                <div class="col-md-2">
+                <div class="col-md-2 m-xs-5">
                     <div class="card text-center  border-primary h-65">
                         <div class="card-block">
-                            <h4 class="card-title">Calories Burnt</h4>
+                            <h4 class="card-title">Calories<br> Burnt</h4>
                             <h2><i class="fa fa-child fa-2x" style="color:blue"></i></h2>
                         </div>
                         <h3 id="calb"></h3>
@@ -146,10 +191,10 @@
                 </div>
 
 
-                <div class="col-md-2">
+                <div class="col-md-2 m-xs-5">
                     <div class="card text-center  border-success h-65">
                         <div class="card-block">
-                            <h4 class="card-title">Calories Intake</h4>
+                            <h4 class="card-title">Calories <br>Intake</h4>
                             <h2><i class="fa fa-cutlery fa-2x" style="color:#9cff25"></i></h2>
                         </div>
                         <h3 id="cal"></h3>
@@ -281,14 +326,7 @@
                     <div class="form-group">
                         <p>Full Name:</p>
                         <input type="text" id="fName" name="fName" class="form-control" required="required"
-                               maxlength="30" value="<%= userData[0].name %>">
-                    </div>
-
-                    <div class="form-group">
-                        <div class="btn-group">
-                            <span class="label label-default">GP: </span>
-                            <input type="text"  disabled="disabled" id="gpName" >
-                        </div>
+                               maxlength="25" value="<%= userData[0].name %>">
                     </div>
 
                     <div class="form-group">
@@ -324,9 +362,14 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.8.1/bootstrap-table.js"></script>
 
 <script>
-    $("#menu-toggle").click(function (e) {
-        e.preventDefault();
-        $("#wrapper").toggleClass("toggled");
+    $("#menu-toggle").click(function () {
+        if ($("#sidebar-wrapper").is(":hidden")){
+            $("#sidebar-wrapper").show();
+        }
+        else{
+            $("#sidebar-wrapper").hide();
+        }
+
     });
 </script>
 
@@ -726,7 +769,15 @@
         }
     )
 </script>
+<script>
+    function openNav() {
+        document.getElementById("mySidepanel").style.width = "250px";
+    }
 
+    function closeNav() {
+        document.getElementById("mySidepanel").style.width = "0";
+    }
+</script>
 </body>
 
 </html>
