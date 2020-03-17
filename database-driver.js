@@ -42,7 +42,7 @@ module.exports = function () {
             timestamps: false
         },
         benchmark: false,
-        logging: true
+        logging: false
     });
 
 // Returns a promise after creating the connection to the database
