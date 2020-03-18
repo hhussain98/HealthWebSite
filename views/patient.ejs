@@ -251,8 +251,7 @@
 
                     <div class="modal-body">
                         <div class="btn-group">
-                            <a id="measurement" class="btn btn-light dropdown-toggle" data-toggle="dropdown">Blood
-                                Pressure<span class="caret"></span></a>
+                            <a id="measurement" class="btn btn-light dropdown-toggle" data-toggle="dropdown">Select Measurement:<span class="caret"></span></a>
                             <ul class="dropdown-menu" id="measurementType">
                                 <li class="dropdown-item px-2"><a href="#">Blood Pressure</a></li>
                                 <li class="dropdown-item px-2"><a href="#">Heart Rate</a></li>
@@ -322,6 +321,7 @@
                         <input type="text" id="addressInput" name="address" class="form-control" required="required"
                                maxlength="40" value="<%= userData[0].address %>">
                     </div>
+
                     <div class="form-group">
                         <p>Full Name:</p>
                         <input type="text" id="fName" name="fName" class="form-control" required="required"
@@ -330,10 +330,19 @@
 
                     <div class="form-group">
                         <div class="btn-group">
+                            <span class="label label-default">GP: </span>
+                            <input type="text"  disabled="disabled" id="gpName" >
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="btn-group">
                             <span class="label label-default">Select a GP: </span>
                             <select id="selectGP" name="selectedGP">
                             </select>
                         </div>
+
+
                     </div>
                 </div>
                 <div class="modal-footer">
