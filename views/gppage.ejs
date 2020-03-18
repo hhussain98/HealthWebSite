@@ -10,7 +10,6 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
           integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
           crossorigin="anonymous">
-    <link href="/simple-sidebar.css" rel="stylesheet" type="text/css">
     <link href="/gpPage.css" rel="stylesheet" type="text/css">
     <title>GP</title>
 </head>
@@ -19,13 +18,76 @@
     tr[data-href]{
         cursor: pointer;
     }
+
+    body {
+        font-family: "Lato", sans-serif;
+    }
+
+    .sidepanel  {
+        width: 0;
+        position: fixed;
+        z-index: 1;
+        height: 700px;
+        top: 0;
+        left: 0;
+        background-color: #fcfffa;
+        overflow-x: hidden;
+        transition: 0.5s;
+        padding-top: 60px;
+    }
+
+    .sidepanel a {
+        padding: 32px;
+        text-decoration: none;
+        font-size: 25px;
+        display: block;
+        transition: 0.3s;
+    }
+    .sidepanel a.closebtn{
+        padding: 8px;
+    }
+    .sidepanel button{
+        margin: 15px;
+    }
+
+    .sidepanel a:hover {
+        color: #f1f1f1;
+    }
+
+    .sidepanel .closebtn {
+        position: absolute;
+        top: 0;
+        right: 25px;
+        font-size: 36px;
+    }
+
+
+
+
+    .openbtn:hover {
+        background-color:#444;
+    }
 </style>
 
 <body>
 <div id="page-content-wrapper">
     <nav class="navbar navbar-expand-sm navbar-dark bg-primary">
-        <button class="btn btn-primary" id="menu-toggle">Profile</button>
-
+        <div class="sidepanel" id="mySidepanel">
+            <div class="list-group list-group-flush" id="profile">
+                <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</a>
+                <img id="patientImage" src="/stockPhoto.png" alt="Alternative Text">
+                <a id="pName" class="list-group-item list-group-item-action bg-light">  <%= userData[0].name %></a>
+                <a id="patientEmail"
+                   class="list-group-item list-group-item-action bg-light">  <%= userData[0].email %></a>
+                <a id="patientPhone"
+                   class="list-group-item list-group-item-action bg-light">  <%= userData[0].phone %></a>
+                <a id="address" class="list-group-item list-group-item-action bg-light">  <%= userData[0].address %></a>
+                <button id="updateProfileButton" type="button" class="btn btn-primary" data-toggle="modal"
+                        data-target="#updateModal">Update Profile
+                </button>
+            </div>
+        </div>
+        <button class="btn btn-primary" onclick="openNav()">☰ Profile</button>
         <button id="miniMenu" class="navbar-toggler" type="button" data-toggle="collapse"
                 data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
                 aria-label="Toggle navigation">
@@ -45,24 +107,8 @@
 
     <div class="d-flex" id="wrapper">
 
-        <div class="bg-light border-right" id="sidebar-wrapper">
-            <div class="list-group list-group-flush">
-                <img  id="gpImage" src="/stockPhoto.png" alt="No Image">
-                <a id="gpName" class="list-group-item list-group-item-action bg-light"> <%= userData[0].name %></a>
-                <a id="gpEmail" class="list-group-item list-group-item-action bg-light"> <%= userData[0].email %></a>
-                <a id="gpPhone" class="list-group-item list-group-item-action bg-light"> <%= userData[0].phone %></a>
-                <a id="gpAddress" class="list-group-item list-group-item-action bg-light"> <%= userData[0].address %></a>
-                <button id="updateProfileButton" type="button" class="btn btn-primary" data-toggle="modal" data-target="#updateModal">Update Profile</button>
-            </div>
-        </div>
 
         <div class="container-fluid">
-
-            <div class="container">
-                <div class="alert alert-primary" role="alert">
-                    <%= message %>
-                </div>
-            </div>
             <div class="md-form active-cyan active-cyan-2 mb-3">
                 <input id="searchBar" class="form-control" type="search" placeholder="Search for patients" aria-label="Search">
             </div>
@@ -206,6 +252,18 @@
             window.location.href = this.dataset.href;
         })
     })
+</script>
+
+
+
+<script>
+    function openNav() {
+        document.getElementById("mySidepanel").style.width = "250px";
+    }
+
+    function closeNav() {
+        document.getElementById("mySidepanel").style.width = "0";
+    }
 </script>
 </body>
 

@@ -56,10 +56,6 @@
             right: 25px;
             font-size: 36px;
         }
-
-
-
-
         .openbtn:hover {
             background-color:#444;
         }
@@ -100,92 +96,44 @@
             </div>
         </div>
     </nav>
-    <div>
-        <div id="top" >
-           <h1 id="patientName" class="d-none d-md-block"> <%= userData[0].name %></h1>
-            <a id="autosync" type="button" href="/authorize/<%= userData[0].userId %>" class="btn btn-primary"> Connect
-                to Fitbit </a>
-            <button id="manualEntry" type="button" class="btn btn-primary" data-toggle="modal"
-                    data-target="#paramEntry">Enter Data
-            </button>
-        </div>
-
-        <!-- Modal -->
-        <div class="modal fade bd-example-modal-sm" id="paramEntry" tabindex="-1" role="dialog"
-             aria-labelledby="mySmallModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-sm" role="document">
-
-                <div class="modal-content">
-                    <form id="formOfAdd">
-                        <div class="modal-header">
-                            <h5 class="modal-title w-100 text-center" id="measuremnetTitle">Enter Data</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-
-                        <div class="modal-body">
-                            <div class="btn-group">
-                                <a id="measurement" class="btn btn-light dropdown-toggle" data-toggle="dropdown">Blood
-                                    Pressure<span class="caret"></span></a>
-                                <ul class="dropdown-menu" id="measurementType">
-                                    <li class="dropdown-item px-2"><a href="#">Blood Pressure</a></li>
-                                    <li class="dropdown-item px-2"><a href="#">Heart Rate</a></li>
-                                    <li class="dropdown-item px-2"><a href="#">Calories Burnt</a></li>
-                                    <li class="dropdown-item px-2"><a href="#">Calories Intake</a></li>
-                                </ul>
-                            </div>
-                            <div class="form-group">
-                                <label>Value: </label>
-                                <input id="paramVal" name="reading" class="form-control" type="number" maxlength="3"
-                                       required="required">
-                            </div>
-
-                            <div class="form-group">
-                                <label>Date: </label>
-                                <input type="Date" id="measurementDate" name="date" class="form-control"
-                                       required="required">
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button id="close" type="button" class="btn btn-secondary" data-dismiss="modal">Close
-                            </button>
-                            <button id="addMeasurement" type="submit" class="btn btn-primary">Save changes</button>
-                        </div>
-                    </form>
-
-                </div>
-            </div>
-        </div>
+    <div class="container" >
+    <div id="top" >
+        <h1 id="patientName" class="d-none d-md-block"> <%= userData[0].name %></h1>
+        <a id="autosync" type="button" href="/authorize/<%= userData[0].userId %>" class="btn btn-primary"> Connect
+            to Fitbit </a>
+        <button id="manualEntry" type="button" class="btn btn-primary" data-toggle="modal"
+                data-target="#paramEntry">Enter Data
+        </button>
     </div>
-    <div id="wrapper" >
 
+
+    <div id="wrapper" >
         <div class="container-fluid">
-            <div class="row my-2 d-flex flex-md-row flex-xs-col">
-                <div class="col-md-2 m-xs-5">
+            <div class="row my-2">
+                <div class="col-md-2">
                     <div class="card text-center  border-warning h-65">
                         <div class="card-block">
-                            <h4 class="card-title">Heart <br> Rate</h4>
+                            <h4 class="card-title">Heart Rate</h4>
                             <h2><i class="fa fa-heartbeat fa-2x" style="color:#ffaf00"></i></h2>
                         </div>
                         <h3 id="latestHeart"></h3>
                     </div>
                 </div>
 
-                <div class="col-md-2 m-xs-5">
+                <div class="col-md-2">
                     <div class="card text-center  border-info h-65">
                         <div class="card-block">
-                            <h4 class="card-title">Blood <br>Pressure</h4>
+                            <h4 class="card-title">Blood Pressure</h4>
                             <h2><i class="fa fa-heart fa-2x" style="color:blue"></i></h2>
                         </div>
                         <h3 id="latestBlood"></h3>
                     </div>
                 </div>
 
-                <div class="col-md-2 m-xs-5">
+                <div class="col-md-2">
                     <div class="card text-center  border-primary h-65">
                         <div class="card-block">
-                            <h4 class="card-title">Calories<br> Burnt</h4>
+                            <h4 class="card-title">Calories Burnt</h4>
                             <h2><i class="fa fa-child fa-2x" style="color:blue"></i></h2>
                         </div>
                         <h3 id="calb"></h3>
@@ -193,10 +141,10 @@
                 </div>
 
 
-                <div class="col-md-2 m-xs-5">
+                <div class="col-md-2">
                     <div class="card text-center  border-success h-65">
                         <div class="card-block">
-                            <h4 class="card-title">Calories <br>Intake</h4>
+                            <h4 class="card-title">Calories Intake</h4>
                             <h2><i class="fa fa-cutlery fa-2x" style="color:#9cff25"></i></h2>
                         </div>
                         <h3 id="cal"></h3>
@@ -204,6 +152,8 @@
                 </div>
 
             </div>
+
+
             <div class="md-form active-cyan active-cyan-2 mb-3">
                 <input id="searchBar" class="form-control" type="search" placeholder="Search for records by date"
                        aria-label="Search">
@@ -284,6 +234,7 @@
             </div>
         </div>
     </div>
+
 </div>
 
 <div class="modal fade bd-example-modal-sm" id="updateModal" tabindex="-1" role="dialog"
@@ -347,6 +298,56 @@
         </div>
 
     </div>
+
+    <!-- Modal -->
+    <div class="modal fade bd-example-modal-sm" id="paramEntry" tabindex="-1" role="dialog"
+         aria-labelledby="mySmallModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-sm" role="document">
+
+            <div class="modal-content">
+                <form id="formOfAdd">
+                    <div class="modal-header">
+                        <h5 class="modal-title w-100 text-center" id="measuremnetTitle">Enter Data</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+
+                    <div class="modal-body">
+                        <div class="btn-group">
+                            <a id="measurement" class="btn btn-light dropdown-toggle" data-toggle="dropdown">Blood
+                                Pressure<span class="caret"></span></a>
+                            <ul class="dropdown-menu" id="measurementType">
+                                <li class="dropdown-item px-2"><a href="#">Blood Pressure</a></li>
+                                <li class="dropdown-item px-2"><a href="#">Heart Rate</a></li>
+                                <li class="dropdown-item px-2"><a href="#">Calories Burnt</a></li>
+                                <li class="dropdown-item px-2"><a href="#">Calories Intake</a></li>
+                            </ul>
+                        </div>
+                        <div class="form-group">
+                            <label>Value: </label>
+                            <input id="paramVal" name="reading" class="form-control" type="number" maxlength="3"
+                                   required="required">
+                        </div>
+                        <div class="form-group">
+                            <label>Date: </label>
+                            <input type="Date" id="measurementDate" name="date" class="form-control"
+                                   required="required">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button id="close" type="button" class="btn btn-secondary" data-dismiss="modal">Close
+                        </button>
+                        <button id="addMeasurement" type="submit" class="btn btn-primary">Save changes</button>
+                    </div>
+                </form>
+            </div>
+            </div>
+        </div>
+    </div>
+
+
+
 </div>
 <!-- Optional JavaScript -->
 <!-- jQuery first, then Popper.js, then Bootstrap JS -->
@@ -371,7 +372,6 @@
         else{
             $("#sidebar-wrapper").hide();
         }
-
     });
 </script>
 
