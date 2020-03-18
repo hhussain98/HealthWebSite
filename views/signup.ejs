@@ -31,6 +31,19 @@
 </head>
 <body>
 <div class="login-form">
+
+    <div class="container">
+        <% if(error && error.length >0){ %>
+            <div class="alert alert-danger" role="alert">
+                <%= error %>
+            </div>
+        <% } %>
+        <% if(success && success.length >0){ %>
+            <div class="alert alert-danger" role="alert">
+                <%= success %>
+            </div>
+        <% } %>
+    </div>
     <form action="/register" method="post">
         <h2 class="text-center">Sign up</h2>
         <div class="form-group">

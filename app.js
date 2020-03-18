@@ -2,6 +2,7 @@
 //include necessary components for website
 const express = require('express');
 const app = express();
+var flash = require('connect-flash');
 const  cookieParser = require('cookie-parser');
 const session = require('express-session');
 const methodOverride = require('method-override');
@@ -15,9 +16,14 @@ app.use(express.static("public"));
 app.use(bodyParser.urlencoded({extended:true}));
 app.use(bodyParser.json());
 app.use(cookieParser('secret'));
-app.use(session({cookie:{maxAge:null}}));
+app.use(session({cookie:{maxAge:60000}}));
+app.use(flash());
 app.use('/api', databaseRoutes);
 app.use(methodOverride("_method"));
+
+
+
+
 //all our templates will be ejs
 app.set("view engine","ejs");
 
@@ -32,12 +38,13 @@ const client = new FitbitApiClient({
 //render login page to front end
 app.get("/", function (req, res) {
     res.render("login");
+
 });
 
-
-//render page when user want to creat account
+//render page when user want to create account
 app.get("/signup", function (req, res) {
     res.render("signup");
+
 });
 
 //Handle log in request
@@ -53,7 +60,8 @@ app.post("/home", function (req, res) {
     }).then(data => {
         if(user.length <= 0){
         console.log("wrong account or password");
-        res.redirect("/")
+        req.flash("error", "Login Failed");
+        res.redirect("/");
     }
 
     else {
@@ -92,11 +100,17 @@ app.post("/register", function (req, res) {
 
         //redirect to sign up when username duplicate
         if(json.length > 0){
-            if(json[0].username === req.body.username){console.log("duplicate user");}
+            if(json[0].username === req.body.username){
+                console.log("duplicate user");
+                req.flash("error", "Username Taken");
+                res.redirect("/signup");
+            }
             else {
                 console.log("duplicate GP");
+                req.flash("error", "GP number in use");
+                res.redirect("/signup");
             }
-            res.redirect("/signup")
+
         } else {
 
             //add new user account to database and redirect to log in page
@@ -166,8 +180,7 @@ app.put("/update/:id", function (req, res) {
     //update user profile on database
     db.UpdateProfile(userid, req.body.emailAddress, req.body.fName, gp,req.body.address,
         req.body.phone, height, weight).then(
-    ).then(
-        data=>{
+    ).then(data=>{
 
             //re-render page after user profile updated depend on user's role
             getUserById(userid).then(data=>{
