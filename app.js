@@ -78,7 +78,6 @@ app.post("/home", function (req, res) {
     }).then(data => {
         if(user.length <= 0){
         console.log("wrong account or password");
-        req.flash("error", "Login Failed");
         res.redirect("/");
     }
 
@@ -86,7 +85,6 @@ app.post("/home", function (req, res) {
 
             //render patient page if user's role is Patient
             if (user[0].role === "Patient") {
-
                 res.render("patient", {userData: user, message: req.flash('hello world')});
             }
             //else render gp page to front end
