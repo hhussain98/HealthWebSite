@@ -30,9 +30,6 @@ app.use(function(req,res,next){
 
 
 
-
-
-
 //all our templates will be ejs
 app.set("view engine", "ejs");
 sgMail.setApiKey("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");
