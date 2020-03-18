@@ -21,6 +21,7 @@
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.12.1",
     "body-parser": "^1.19.0",
+    "@sendgrid/mail": "^6.5.4",
     "chai": "^4.2.0",
     "cookie-parser": "^1.4.5",
     "debug": "^4.1.1",

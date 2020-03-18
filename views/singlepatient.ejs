@@ -15,78 +15,12 @@
     <link href="/simple-sidebar.css" rel="stylesheet" type="text/css">
     <link href="/patientPage.css" rel="stylesheet" type="text/css">
     <title>Single Patient</title>
-    <style>
-        body {
-            font-family: "Lato", sans-serif;
-        }
-
-        .sidepanel  {
-            width: 0;
-            position: fixed;
-            z-index: 1;
-            height: 700px;
-            top: 0;
-            left: 0;
-            background-color: #fcfffa;
-            overflow-x: hidden;
-            transition: 0.5s;
-            padding-top: 60px;
-        }
-
-        .sidepanel a {
-            padding: 32px;
-            text-decoration: none;
-            font-size: 25px;
-            display: block;
-            transition: 0.3s;
-        }
-        .sidepanel a.closebtn{
-            padding: 8px;
-        }
-        .sidepanel button{
-            margin: 15px;
-        }
-
-        .sidepanel a:hover {
-            color: #f1f1f1;
-        }
-
-        .sidepanel .closebtn {
-            position: absolute;
-            top: 0;
-            right: 25px;
-            font-size: 36px;
-        }
-
-
-
-
-        .openbtn:hover {
-            background-color:#444;
-        }
-    </style>
 </head>
-
 <body>
+
 <div id="page-content-wrapper">
     <nav class="navbar navbar-expand-sm navbar-dark bg-primary">
-        <div class="sidepanel" id="mySidepanel">
-            <div class="list-group list-group-flush" id="profile">
-                <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</a>
-                <img id="patientImage" src="/stockPhoto.png" alt="Alternative Text">
-                <a id="pName" class="list-group-item list-group-item-action bg-light">  <%= userData[0].name %></a>
-                <a id="patientEmail"
-                   class="list-group-item list-group-item-action bg-light">  <%= userData[0].email %></a>
-                <a id="patientPhone"
-                   class="list-group-item list-group-item-action bg-light">  <%= userData[0].phone %></a>
-                <a id="address" class="list-group-item list-group-item-action bg-light">  <%= userData[0].address %></a>
-                <button id="sendemail" type="button" class="btn btn-primary" data-toggle="modal"
-                        data-target="#updateModal">Send Email
-                </button>
-            </div>
-        </div>
-
-        <button class="btn btn-primary" onclick="openNav()">☰ Patient Profile</button>
+        <button class="btn btn-primary" id="menu-toggle" name="ehealthButton">Patient Profile</button>
         <button id="miniMenu" class="navbar-toggler" type="button" data-toggle="collapse"
                 data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
                 aria-label="Toggle navigation">
@@ -94,22 +28,21 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <div class="navbar-nav">
-                <a id="logout" class="nav-link" href="/gp/ + <%= gpId%>" >Home</a>
+                <a id="logout" class="nav-link" href="/gp/ + <%= gpId %>">Home</a>
             </div>
         </div>
     </nav>
     <div id="top">
         <h1 id="patientName"></h1>
-        <h1 id="patientName" class="d-none d-md-block"> Data for patient: <%= userData[0].name %> </h1>
+        <h1 id="patientName"> Data for patient: <%= userData[0].name %> </h1>
     </div>
-
     <div class="modal fade bd-example-modal-sm" id="updateModal" tabindex="-1" role="dialog"
          aria-labelledby="mySmallModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-sm" role="document">
             <div class="modal-content">
                 <form id="sendEmail" action="/sendEmail" method="post">
                     <div class="modal-header">
-                        <h4 class="modal-title w-100 text-center" id="exampleModalLongTitle">Send Email</h4>
+                        <h4 class="modal-title w-100 text-center" id="exampleModalLongTitle">Update Profile</h4>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -140,14 +73,13 @@
                     </div>
                     <div class="modal-footer">
                         <button id="close" type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button id="save" type="submit" class="btn btn-primary">Send Email</button>
+                        <button id="save" type="submit" class="btn btn-primary">Send</button>
                     </div>
                 </form>
             </div>
 
         </div>
     </div>
-
 
     <div class="d-flex" id="wrapper">
         <div class="bg-light border-right" id="sidebar-wrapper">
@@ -159,52 +91,60 @@
                 <a id="patientPhone"
                    class="list-group-item list-group-item-action bg-light">  <%= userData[0].phone %></a>
                 <a id="address" class="list-group-item list-group-item-action bg-light">  <%= userData[0].address %></a>
-
+                <button id="sendemail" type="button" class="btn btn-primary" data-toggle="modal"
+                        data-target="#updateModal">Send Email
+                </button>
             </div>
         </div>
 
         <div class="container-fluid">
-            <div class="row my-2 d-flex flex-md-row flex-xs-col">
-                <div class="col-md-2 m-xs-5">
+            <div class="row my-2">
+                <div class="col-md-2">
                     <div class="card text-center  border-warning h-65">
                         <div class="card-block">
-                            <h4 class="card-title">Heart <br> Rate</h4>
+                            <h4 class="card-title">Heart Rate</h4>
                             <h2><i class="fa fa-heartbeat fa-2x" style="color:#ffaf00"></i></h2>
                         </div>
                         <h3 id="latestHeart"></h3>
                     </div>
                 </div>
 
-                <div class="col-md-2 m-xs-5">
+                <div class="col-md-2">
                     <div class="card text-center  border-info h-65">
                         <div class="card-block">
-                            <h4 class="card-title">Blood <br>Pressure</h4>
+                            <h4 class="card-title">Blood Pressure</h4>
                             <h2><i class="fa fa-heart fa-2x" style="color:blue"></i></h2>
                         </div>
                         <h3 id="latestBlood"></h3>
                     </div>
                 </div>
 
-                <div class="col-md-2 m-xs-5">
+                <div class="col-md-2">
                     <div class="card text-center  border-primary h-65">
                         <div class="card-block">
-                            <h4 class="card-title">Calories<br> Burnt</h4>
+                            <h4 class="card-title">Calories Burnt</h4>
                             <h2><i class="fa fa-child fa-2x" style="color:blue"></i></h2>
                         </div>
                         <h3 id="calb"></h3>
                     </div>
                 </div>
-                <div class="col-md-2 m-xs-5">
+
+
+                <div class="col-md-2">
                     <div class="card text-center  border-success h-65">
                         <div class="card-block">
-                            <h4 class="card-title">Calories <br>Intake</h4>
+                            <h4 class="card-title">Calories Intake</h4>
                             <h2><i class="fa fa-cutlery fa-2x" style="color:#9cff25"></i></h2>
                         </div>
                         <h3 id="cal"></h3>
                     </div>
                 </div>
-            </div>
 
+            </div>
+            <div class="md-form active-cyan active-cyan-2 mb-3">
+                <input id="searchBar" class="form-control" type="search" placeholder="Search for records by date"
+                       aria-label="Search">
+            </div>
             <ul class="nav nav-tabs" id="myTab" role="tablist">
                 <li class="nav-item">
                     <a class="nav-link active" id="hr-tab" data-toggle="tab" href="#hr" role="tab" aria-controls="home"
@@ -234,7 +174,6 @@
                         </tr>
                         </thead>
                         <tbody>
-
 
                         </tbody>
                     </table>
@@ -279,6 +218,111 @@
                     </table>
                 </div>
             </div>
+            <div id="right-panel"></div>
+            <div id="map"></div>
+            <div id="alertM" class="alert alert-danger" role="alert">
+            </div>
+            <script>
+                var pos, zoomLevel = 8, foundLocation = false;
+                getLocation();
+                var geocoder;
+                var address = " <%= userData[0].address %>"
+
+                function initMap() {
+                    var directionsService = new google.maps.DirectionsService();
+                    var directionsRenderer = new google.maps.DirectionsRenderer();
+                    var map = new google.maps.Map(document.getElementById('map'), {
+                        zoom: zoomLevel,
+                        center: {lat: 41.85, lng: -87.65}
+                    });
+                    if (foundLocation) {
+                        directionsRenderer.setMap(map);
+                        directionsRenderer.setPanel(document.getElementById('right-panel'));
+                        calculateAndDisplayRoute(directionsService, directionsRenderer);
+                    } else {
+                        geocoder = new google.maps.Geocoder();
+                        codeAddress(geocoder, map);
+                    }
+                }
+
+                function calculateAndDisplayRoute(directionsService, directionsRenderer) {
+                    directionsService.route(
+                        {
+                            origin: pos,
+                            destination: "<%= userData[0].address %>",
+                            travelMode: 'DRIVING'
+                        },
+                        function (response, status) {
+                            if (status === 'OK') {
+                                directionsRenderer.setDirections(response);
+                            } else if (status === "NOT_FOUND") {
+                                window.alert('Directions unavailable due to invalid patient address');
+
+                            } else {
+
+                                window.alert('Directions request failed due to ' + status);
+
+                            }
+                        });
+                }
+
+                function codeAddress(geocoder, map) {
+                    geocoder.geocode({'address': address}, function (results, status) {
+                        if (status === 'OK') {
+                            map.setCenter(results[0].geometry.location);
+                            var marker = new google.maps.Marker({
+                                map: map,
+                                draggable: true,
+                                animation: google.maps.Animation.DROP,
+                                title: "<%= userData[0].address %>",
+                                position: results[0].geometry.location
+                            });
+                            marker.addListener('click', toggleBounce);
+                        } else {
+                            alert('Geocode was not successful for the following reason: ' + status);
+                        }
+                    });
+                }
+
+                function getLocation() {
+                    if (navigator.geolocation) {
+                        navigator.geolocation.getCurrentPosition(getPosition, mapError);
+                    } else {
+                        foundLocation = false;
+                    }
+                }
+
+                function mapError() {
+                    $("#alertM").text("Location is unknown, unable to find directions");
+                    zoomLevel = 18;
+                    initMap();
+                }
+
+                function getPosition(position) {
+                    $("#alertM").slideUp();
+
+                    zoomLevel = 12;
+                    pos = {
+                        lat: position.coords.latitude,
+                        lng: position.coords.longitude
+                    };
+                    foundLocation = true;
+                    initMap();
+                }
+
+                function toggleBounce() {
+                    if (marker.getAnimation() !== null) {
+                        marker.setAnimation(null);
+                    } else {
+                        marker.setAnimation(google.maps.Animation.BOUNCE);
+                    }
+                }
+            </script>
+            <script async defer
+                    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBUOhKpYyYA4F-ArS6lDPshVugEDJEfXMI&callback=getLocation">
+            </script>
+
+
         </div>
     </div>
 </div>
@@ -298,6 +342,46 @@
         integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
         crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.8.1/bootstrap-table.js"></script>
+<script>
+    $('#sendEmail').submit(
+        function (e) {
+            e.preventDefault()
+            var settings = {
+
+                "url": "/sendEmail",
+
+                "method": "POST",
+
+                "timeout": 0,
+
+                "headers": {
+
+                    "Content-Type": "application/json"
+                },
+                "data": JSON.stringify({
+                    "emailFrom": $('#emailFrom').val(),
+                    "emailTo": $('#emailTo').val(),
+                    "subjectHeading": $('#subjectHeading').val(),
+                    "messageEmail": $('#messageEmail').val()
+                }),
+            };
+
+            $.ajax(settings).done(function (response) {
+                location.reload();
+            })
+        }
+    )
+</script>
+<script>
+    $(document).ready(function () {
+        $("#searchBar").on("keyup", function () {
+            var value = $(this).val().toLowerCase();
+            $("#myTabContent tr").filter(function () {
+                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+            });
+        });
+    });
+</script>
 
 <script>
     $("#menu-toggle").click(function (e) {
@@ -471,16 +555,19 @@
 
                 "data": JSON.stringify({
                     "accountID": "<%= userData[0].accountID %>",
-                    "measurementType": "Heart Rate"}),
+                    "measurementType": "Heart Rate"
+                }),
             };
 
             $.ajax(settings).done(function (response) {
                 var latestH = JSON.parse(response);
                 <!-- once get data from back end successful, show as text in the page-->
-                if(latestH.length < 1){
+                if (latestH.length < 1) {
                     $('#latestHeart').text(0);
+                } else {
+                    $('#latestHeart').text(latestH[0].reading)
                 }
-                else { $('#latestHeart').text(latestH[0].reading)};
+                ;
             })
         }
     )
@@ -507,16 +594,18 @@
 
                 "data": JSON.stringify({
                     "accountID": "<%= userData[0].accountID %>",
-                    "measurementType": "Blood Pressure"}),
+                    "measurementType": "Blood Pressure"
+                }),
             };
 
             $.ajax(settings).done(function (response) {
                 var latestB = JSON.parse(response);
                 <!-- once get data from back end successful, show as text in the page-->
-                if(latestB.length < 1){
+                if (latestB.length < 1) {
                     $('#latestBlood').text(0)
+                } else {
+                    $('#latestBlood').text(latestB[0].reading)
                 }
-                else {$('#latestBlood').text(latestB[0].reading)}
                 ;
             })
         }
@@ -544,16 +633,18 @@
 
                 "data": JSON.stringify({
                     "userId": "<%= userData[0].accountID %>",
-                    "type": "Calories Intake"}),
+                    "type": "Calories Intake"
+                }),
             };
 
             $.ajax(settings).done(function (response) {
                 var latestB = JSON.parse(response);
                 <!-- once get data from back end successful, show as text in the page-->
-                if(latestB.length < 1 || latestB[0].reading === null){
+                if (latestB.length < 1 || latestB[0].reading === null) {
                     $('#cal').text("0")
+                } else {
+                    $('#cal').text(latestB[0].reading)
                 }
-                else {$('#cal').text(latestB[0].reading)}
                 ;
             })
         }
@@ -581,30 +672,24 @@
 
                 "data": JSON.stringify({
                     "userId": "<%= userData[0].accountID %>",
-                    "type": "Calories Burnt"}),
+                    "type": "Calories Burnt"
+                }),
             };
 
             $.ajax(settings).done(function (response) {
                 var latestB = JSON.parse(response);
                 <!-- once get data from back end successful, show as text in the page-->
-                if(latestB.length < 1 || latestB[0].reading === null){
+                if (latestB.length < 1 || latestB[0].reading === null) {
                     $('#calb').text("0")
-                }else {$('#calb').text(latestB[0].reading)}
+                } else {
+                    $('#calb').text(latestB[0].reading)
+                }
                 ;
             })
         }
     )
 </script>
 
-<script>
-    function openNav() {
-        document.getElementById("mySidepanel").style.width = "250px";
-    }
-
-    function closeNav() {
-        document.getElementById("mySidepanel").style.width = "0";
-    }
-</script>
 </body>
 
 </html>

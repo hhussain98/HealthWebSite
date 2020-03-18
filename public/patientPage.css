@@ -25,10 +25,6 @@ p {
     font-weight: bold;
     margin-left: 20px;
 }
-#wrapper div{
-    height: 100%;
-    width: 100%;
-}
 
 #menu-toggle {
     color: white;
@@ -65,4 +61,44 @@ h3 {
 .active-cyan-2 input[type=search]:focus:not([readonly]) {
     border-bottom: 1px solid #4dd0e1;
     box-shadow: 0 1px 0 0 #4dd0e1;
+}
+
+@media print {
+    #map, #alertM {
+        width: 40%;
+        margin-left: 500px;
+    }
+    #right-panel {
+        float: none;
+
+    }
+}
+
+#map {
+    margin-top: 80px;
+    height: 35%;
+
+}
+#alertM{
+    text-align: center;
+}
+#right-panel {
+    font-family: 'Roboto', 'sans-serif';
+    line-height: 30px;
+    padding-left: 10px;
+}
+
+#right-panel select, #right-panel input {
+    font-size: 15px;
+}
+#right-panel select {
+    width: 100%;
+}
+
+#right-panel i {
+    font-size: 12px;
+}
+#right-panel {
+    margin-top: 80px;
+    float: right;
 }
