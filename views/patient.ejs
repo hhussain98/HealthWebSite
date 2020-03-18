@@ -12,15 +12,76 @@
           crossorigin="anonymous">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 
-    <link href="/simple-sidebar.css" rel="stylesheet" type="text/css">
     <link href="/patientPage.css" rel="stylesheet" type="text/css">
     <title>Patient</title>
+    <style>
+        body {
+            font-family: "Lato", sans-serif;
+        }
+
+        .sidepanel  {
+            width: 0;
+            position: fixed;
+            z-index: 1;
+            height: 700px;
+            top: 0;
+            left: 0;
+            background-color: #fcfffa;
+            overflow-x: hidden;
+            transition: 0.5s;
+            padding-top: 60px;
+        }
+
+        .sidepanel a {
+            padding: 32px;
+            text-decoration: none;
+            font-size: 25px;
+            display: block;
+            transition: 0.3s;
+        }
+        .sidepanel a.closebtn{
+            padding: 8px;
+        }
+        .sidepanel button{
+            margin: 15px;
+        }
+
+        .sidepanel a:hover {
+            color: #f1f1f1;
+        }
+
+        .sidepanel .closebtn {
+            position: absolute;
+            top: 0;
+            right: 25px;
+            font-size: 36px;
+        }
+        .openbtn:hover {
+            background-color:#444;
+        }
+    </style>
 </head>
 
 <body>
 <div id="page-content-wrapper">
     <nav class="navbar navbar-expand-sm navbar-dark bg-primary">
-        <button class="btn btn-primary" id="menu-toggle" name="ehealthButton">Profile</button>
+        <div class="sidepanel" id="mySidepanel">
+            <div class="list-group list-group-flush" id="profile">
+                <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</a>
+                <img id="patientImage" src="/stockPhoto.png" alt="Alternative Text">
+                <a id="pName" class="list-group-item list-group-item-action bg-light">  <%= userData[0].name %></a>
+                <a id="patientEmail"
+                   class="list-group-item list-group-item-action bg-light">  <%= userData[0].email %></a>
+                <a id="patientPhone"
+                   class="list-group-item list-group-item-action bg-light">  <%= userData[0].phone %></a>
+                <a id="address" class="list-group-item list-group-item-action bg-light">  <%= userData[0].address %></a>
+                <button id="updateProfileButton" type="button" class="btn btn-primary" data-toggle="modal"
+                        data-target="#updateModal">Update Profile
+                </button>
+            </div>
+        </div>
+
+        <button class="btn btn-primary" onclick="openNav()">☰ Profile</button>
         <button id="miniMenu" class="navbar-toggler" type="button" data-toggle="collapse"
                 data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
                 aria-label="Toggle navigation">
@@ -35,86 +96,20 @@
             </div>
         </div>
     </nav>
-    <div>
-        <div id="top">
-            <h1 id="patientName"> <%= userData[0].name %> </h1>
-            <a id="autosync" type="button" href="/authorize/<%= userData[0].userId %>" class="btn btn-primary"> Connect
-                to Fitbit </a>
-            <button id="manualEntry" type="button" class="btn btn-primary" data-toggle="modal"
-                    data-target="#paramEntry">Enter Data
-            </button>
-        </div>
-
-        <!-- Modal -->
-        <div class="modal fade bd-example-modal-sm" id="paramEntry" tabindex="-1" role="dialog"
-             aria-labelledby="mySmallModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-sm" role="document">
-
-                <div class="modal-content">
-                    <form id="formOfAdd">
-                        <div class="modal-header">
-                            <h5 class="modal-title w-100 text-center" id="measuremnetTitle">Enter Data</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-
-                        <div class="modal-body">
-                            <div class="btn-group">
-                                <a id="measurement" class="btn btn-light dropdown-toggle" data-toggle="dropdown">Blood
-                                    Pressure<span class="caret"></span></a>
-                                <ul class="dropdown-menu" id="measurementType">
-                                    <li class="dropdown-item px-2"><a href="#">Blood Pressure</a></li>
-                                    <li class="dropdown-item px-2"><a href="#">Heart Rate</a></li>
-                                    <li class="dropdown-item px-2"><a href="#">Calories Burnt</a></li>
-                                    <li class="dropdown-item px-2"><a href="#">Calories Intake</a></li>
-                                </ul>
-                            </div>
-                            <div class="form-group">
-                                <label>Value: </label>
-                                <input id="paramVal" name="reading" class="form-control" type="number" maxlength="3"
-                                       required="required">
-                            </div>
-
-                            <div class="form-group">
-                                <label>Date: </label>
-                                <input type="Date" id="measurementDate" name="date" class="form-control"
-                                       required="required">
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button id="close" type="button" class="btn btn-secondary" data-dismiss="modal">Close
-                            </button>
-                            <button id="addMeasurement" type="submit" class="btn btn-primary">Save changes</button>
-                        </div>
-                    </form>
-
-                </div>
-            </div>
-        </div>
+    <div class="container" >
+    <div id="top" >
+        <h1 id="patientName" class="d-none d-md-block"> <%= userData[0].name %></h1>
+        <a id="autosync" type="button" href="/authorize/<%= userData[0].userId %>" class="btn btn-primary"> Connect
+            to Fitbit </a>
+        <button id="manualEntry" type="button" class="btn btn-primary" data-toggle="modal"
+                data-target="#paramEntry">Enter Data
+        </button>
     </div>
-    <div class="d-flex" id="wrapper">
-        <div class="bg-light border-right" id="sidebar-wrapper">
-            <div class="list-group list-group-flush" id="profile">
-                <img id="patientImage" src="/stockPhoto.png" alt="Alternative Text">
-                <a id="pName" class="list-group-item list-group-item-action bg-light">  <%= userData[0].name %></a>
-                <a id="patientEmail"
-                   class="list-group-item list-group-item-action bg-light">  <%= userData[0].email %></a>
-                <a id="patientPhone"
-                   class="list-group-item list-group-item-action bg-light">  <%= userData[0].phone %></a>
-                <a id="address" class="list-group-item list-group-item-action bg-light">  <%= userData[0].address %></a>
-                <button id="updateProfileButton" type="button" class="btn btn-primary" data-toggle="modal"
-                        data-target="#updateModal">Update Profile
-                </button>
-            </div>
-        </div>
 
 
+    <div id="wrapper" >
         <div class="container-fluid">
-
-
             <div class="row my-2">
-
                 <div class="col-md-2">
                     <div class="card text-center  border-warning h-65">
                         <div class="card-block">
@@ -157,6 +152,8 @@
                 </div>
 
             </div>
+
+
             <div class="md-form active-cyan active-cyan-2 mb-3">
                 <input id="searchBar" class="form-control" type="search" placeholder="Search for records by date"
                        aria-label="Search">
@@ -237,6 +234,7 @@
             </div>
         </div>
     </div>
+
 </div>
 
 <div class="modal fade bd-example-modal-sm" id="updateModal" tabindex="-1" role="dialog"
@@ -281,14 +279,7 @@
                     <div class="form-group">
                         <p>Full Name:</p>
                         <input type="text" id="fName" name="fName" class="form-control" required="required"
-                               maxlength="30" value="<%= userData[0].name %>">
-                    </div>
-
-                    <div class="form-group">
-                        <div class="btn-group">
-                            <span class="label label-default">GP: </span>
-                            <input type="text"  disabled="disabled" id="gpName" >
-                        </div>
+                               maxlength="25" value="<%= userData[0].name %>">
                     </div>
 
                     <div class="form-group">
@@ -307,6 +298,56 @@
         </div>
 
     </div>
+
+    <!-- Modal -->
+    <div class="modal fade bd-example-modal-sm" id="paramEntry" tabindex="-1" role="dialog"
+         aria-labelledby="mySmallModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-sm" role="document">
+
+            <div class="modal-content">
+                <form id="formOfAdd">
+                    <div class="modal-header">
+                        <h5 class="modal-title w-100 text-center" id="measuremnetTitle">Enter Data</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+
+                    <div class="modal-body">
+                        <div class="btn-group">
+                            <a id="measurement" class="btn btn-light dropdown-toggle" data-toggle="dropdown">Blood
+                                Pressure<span class="caret"></span></a>
+                            <ul class="dropdown-menu" id="measurementType">
+                                <li class="dropdown-item px-2"><a href="#">Blood Pressure</a></li>
+                                <li class="dropdown-item px-2"><a href="#">Heart Rate</a></li>
+                                <li class="dropdown-item px-2"><a href="#">Calories Burnt</a></li>
+                                <li class="dropdown-item px-2"><a href="#">Calories Intake</a></li>
+                            </ul>
+                        </div>
+                        <div class="form-group">
+                            <label>Value: </label>
+                            <input id="paramVal" name="reading" class="form-control" type="number" maxlength="3"
+                                   required="required">
+                        </div>
+                        <div class="form-group">
+                            <label>Date: </label>
+                            <input type="Date" id="measurementDate" name="date" class="form-control"
+                                   required="required">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button id="close" type="button" class="btn btn-secondary" data-dismiss="modal">Close
+                        </button>
+                        <button id="addMeasurement" type="submit" class="btn btn-primary">Save changes</button>
+                    </div>
+                </form>
+            </div>
+            </div>
+        </div>
+    </div>
+
+
+
 </div>
 <!-- Optional JavaScript -->
 <!-- jQuery first, then Popper.js, then Bootstrap JS -->
@@ -324,9 +365,13 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.8.1/bootstrap-table.js"></script>
 
 <script>
-    $("#menu-toggle").click(function (e) {
-        e.preventDefault();
-        $("#wrapper").toggleClass("toggled");
+    $("#menu-toggle").click(function () {
+        if ($("#sidebar-wrapper").is(":hidden")){
+            $("#sidebar-wrapper").show();
+        }
+        else{
+            $("#sidebar-wrapper").hide();
+        }
     });
 </script>
 
@@ -726,7 +771,15 @@
         }
     )
 </script>
+<script>
+    function openNav() {
+        document.getElementById("mySidepanel").style.width = "250px";
+    }
 
+    function closeNav() {
+        document.getElementById("mySidepanel").style.width = "0";
+    }
+</script>
 </body>
 
 </html>
