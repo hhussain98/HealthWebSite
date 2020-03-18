@@ -96,7 +96,8 @@
             </div>
         </div>
     </nav>
-    <div class="container" >
+
+        <div >
     <div id="top" >
         <h1 id="patientName" class="d-none d-md-block"> <%= userData[0].name %></h1>
         <a id="autosync" type="button" href="/authorize/<%= userData[0].userId %>" class="btn btn-primary"> Connect
@@ -105,7 +106,6 @@
                 data-target="#paramEntry">Enter Data
         </button>
     </div>
-
 
     <div id="wrapper" >
         <div class="container-fluid">
@@ -150,10 +150,8 @@
                         <h3 id="cal"></h3>
                     </div>
                 </div>
-
             </div>
-
-
+        </div>
             <div class="md-form active-cyan active-cyan-2 mb-3">
                 <input id="searchBar" class="form-control" type="search" placeholder="Search for records by date"
                        aria-label="Search">
@@ -232,10 +230,58 @@
                     </table>
                 </div>
             </div>
-        </div>
+
     </div>
 
 </div>
+
+    <!-- Modal -->
+    <div class="modal fade bd-example-modal-sm" id="paramEntry" tabindex="-1" role="dialog"
+         aria-labelledby="mySmallModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-sm" role="document">
+
+            <div class="modal-content">
+                <form id="formOfAdd">
+                    <div class="modal-header">
+                        <h5 class="modal-title w-100 text-center" id="measuremnetTitle">Enter Data</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+
+                    <div class="modal-body">
+                        <div class="btn-group">
+                            <a id="measurement" class="btn btn-light dropdown-toggle" data-toggle="dropdown">Blood
+                                Pressure<span class="caret"></span></a>
+                            <ul class="dropdown-menu" id="measurementType">
+                                <li class="dropdown-item px-2"><a href="#">Blood Pressure</a></li>
+                                <li class="dropdown-item px-2"><a href="#">Heart Rate</a></li>
+                                <li class="dropdown-item px-2"><a href="#">Calories Burnt</a></li>
+                                <li class="dropdown-item px-2"><a href="#">Calories Intake</a></li>
+                            </ul>
+                        </div>
+                        <div class="form-group">
+                            <label>Value: </label>
+                            <input id="paramVal" name="reading" class="form-control" type="number" maxlength="3"
+                                   required="required">
+                        </div>
+                        <div class="form-group">
+                            <label>Date: </label>
+                            <input type="Date" id="measurementDate" name="date" class="form-control"
+                                   required="required">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button id="close" type="button" class="btn btn-secondary" data-dismiss="modal">Close
+                        </button>
+                        <button id="addMeasurement" type="submit" class="btn btn-primary">Save changes</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
 
 <div class="modal fade bd-example-modal-sm" id="updateModal" tabindex="-1" role="dialog"
      aria-labelledby="mySmallModalLabel" aria-hidden="true">
@@ -299,51 +345,7 @@
 
     </div>
 
-    <!-- Modal -->
-    <div class="modal fade bd-example-modal-sm" id="paramEntry" tabindex="-1" role="dialog"
-         aria-labelledby="mySmallModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-sm" role="document">
 
-            <div class="modal-content">
-                <form id="formOfAdd">
-                    <div class="modal-header">
-                        <h5 class="modal-title w-100 text-center" id="measuremnetTitle">Enter Data</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-
-                    <div class="modal-body">
-                        <div class="btn-group">
-                            <a id="measurement" class="btn btn-light dropdown-toggle" data-toggle="dropdown">Blood
-                                Pressure<span class="caret"></span></a>
-                            <ul class="dropdown-menu" id="measurementType">
-                                <li class="dropdown-item px-2"><a href="#">Blood Pressure</a></li>
-                                <li class="dropdown-item px-2"><a href="#">Heart Rate</a></li>
-                                <li class="dropdown-item px-2"><a href="#">Calories Burnt</a></li>
-                                <li class="dropdown-item px-2"><a href="#">Calories Intake</a></li>
-                            </ul>
-                        </div>
-                        <div class="form-group">
-                            <label>Value: </label>
-                            <input id="paramVal" name="reading" class="form-control" type="number" maxlength="3"
-                                   required="required">
-                        </div>
-                        <div class="form-group">
-                            <label>Date: </label>
-                            <input type="Date" id="measurementDate" name="date" class="form-control"
-                                   required="required">
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button id="close" type="button" class="btn btn-secondary" data-dismiss="modal">Close
-                        </button>
-                        <button id="addMeasurement" type="submit" class="btn btn-primary">Save changes</button>
-                    </div>
-                </form>
-            </div>
-            </div>
-        </div>
     </div>
 
 
