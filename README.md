@@ -63,7 +63,7 @@ Contributions, issues and feature requests are welcome!<br />Feel free to check 
 This allows the user to search for records or gp to search for patient in real time.
 
 Reason: The tables will be filled with a lot of data thus allowing the gp or the patient to easily filter and view the information they require.
-![GitHub Logo](screenShots/search1.png)
+![Search Bar](screenShots/search1.png)
 
 2.Send Email
  
@@ -71,7 +71,7 @@ This allows the gp to send email to its patient. The patient email field is pref
  
 Reason: The gp may want to contact the patient to ask for some details or ask them to book a appointment with the hospital
 
-![GitHub Logo](screenShots/sendEmail.png)
+![Email](screenShots/sendEmail.png)
 
 3.Map
 
@@ -79,4 +79,4 @@ The function shows the gp a map with direction to the patient location and how l
 
 Reason: The gp will make home visit especially to older patient thus making it easy for them to view the direction and the time it will take to visit the patient thus can prepare.
 
-![GitHub Logo](screenShots/mapp1.png)
+![Map](screenShots/mapp1.png)
