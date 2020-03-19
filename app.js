@@ -23,8 +23,8 @@ app.use('/api', databaseRoutes);
 app.use(methodOverride("_method"));
 
 app.use(function(req,res,next){
-    res.locals.success = req.flash("success");
     res.locals.error = req.flash("error");
+    res.locals.success = req.flash("success");
     next()
 })
 
@@ -75,7 +75,6 @@ app.post("/home", function (req, res) {
     }).then(data => {
         if(user.length <= 0){
         console.log("wrong account or password");
-        req.flash('error', "Login failed")
         res.redirect("/");
     }
 
@@ -83,12 +82,10 @@ app.post("/home", function (req, res) {
 
             //render patient page if user's role is Patient
             if (user[0].role === "Patient") {
-                req.flash('error', "Login success")
-                res.render("patient", {message: req.flash('error'), userData: user});
+                res.render("patient", {userData: user, message: req.flash('hello world')});
             }
             //else render gp page to front end
             else {
-                req.flash('error', "Login success")
                 res.render("gppage", {userData: user});
             }
         }
@@ -133,7 +130,6 @@ app.post("/register", function (req, res) {
             db.InsertAccount(req.body.username, req.body.password, role, req.body.gpID,
                 req.body.fName, req.body.emailAddress, req.body.phone, req.body.birthday).then(data => {
                 try {
-                    req.flash('success', "Account Created!")
                     res.redirect("/");
                 } catch {
                     res.send('Unable to parse json');
@@ -324,7 +320,6 @@ app.get("/logout", function (req, res) {
         req.session.authorized = false;
         req.session.access_token = null;
         req.session.save();
-        req.flash('success', "Logout successful!")
         res.redirect("/");
 });
 

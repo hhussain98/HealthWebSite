@@ -8,7 +8,16 @@ h1 {
 p {
     color: black;
 }
-
+#sidebar-wrapper img{
+    height: 200px;
+    padding: 30px
+}
+#sidebar-wrapper a{
+    padding:30px;
+}
+#sidebar-wrapper button {
+    margin: 20px;
+}
 #navbarSupportedContent a {
     color: white;
     font-weight: bold;
