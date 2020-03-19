@@ -21,7 +21,7 @@
             font-family: "Lato", sans-serif;
         }
 
-        .sidepanel  {
+        .sidepanel {
             width: 0;
             position: fixed;
             z-index: 1;
@@ -41,10 +41,12 @@
             display: block;
             transition: 0.3s;
         }
-        .sidepanel a.closebtn{
+
+        .sidepanel a.closebtn {
             padding: 8px;
         }
-        .sidepanel button{
+
+        .sidepanel button {
             margin: 15px;
         }
 
@@ -60,10 +62,8 @@
         }
 
 
-
-
         .openbtn:hover {
-            background-color:#444;
+            background-color: #444;
         }
     </style>
 </head>
@@ -280,6 +280,7 @@
                 var geocoder;
                 var address = " <%= userData[0].address %>"
 
+                //initialize the map by retrieving the apikey
                 function initMap() {
                     var directionsService = new google.maps.DirectionsService();
                     var directionsRenderer = new google.maps.DirectionsRenderer();
@@ -287,16 +288,20 @@
                         zoom: zoomLevel,
                         center: {lat: 41.85, lng: -87.65}
                     });
+                    //if the location is valid then look for direction
                     if (foundLocation) {
                         directionsRenderer.setMap(map);
                         directionsRenderer.setPanel(document.getElementById('right-panel'));
                         calculateAndDisplayRoute(directionsService, directionsRenderer);
-                    } else {
+                    }
+                    //otherwise just show the location of the patient on the map and hide the right panel
+                    else {
                         geocoder = new google.maps.Geocoder();
                         codeAddress(geocoder, map);
                     }
                 }
 
+                //the map api calculates the distance depending on the variables retrieved
                 function calculateAndDisplayRoute(directionsService, directionsRenderer) {
                     directionsService.route(
                         {
@@ -318,6 +323,7 @@
                         });
                 }
 
+                //if the address is not found then just show the address of the patient on the map
                 function codeAddress(geocoder, map) {
                     geocoder.geocode({'address': address}, function (results, status) {
                         if (status === 'OK') {
@@ -336,6 +342,7 @@
                     });
                 }
 
+                //search for the users current location by using geoloaction
                 function getLocation() {
                     if (navigator.geolocation) {
                         navigator.geolocation.getCurrentPosition(getPosition, mapError);
@@ -344,12 +351,14 @@
                     }
                 }
 
+                //handle any errors and change the zoom level
                 function mapError() {
                     $("#alertM").text("Location is unknown, unable to find directions");
                     zoomLevel = 18;
                     initMap();
                 }
 
+                //return the found postion to the pos object
                 function getPosition(position) {
                     $("#alertM").slideUp();
 
@@ -362,6 +371,7 @@
                     initMap();
                 }
 
+                //animated the pin drop
                 function toggleBounce() {
                     if (marker.getAnimation() !== null) {
                         marker.setAnimation(null);

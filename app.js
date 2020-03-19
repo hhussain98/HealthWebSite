@@ -46,6 +46,9 @@ app.get("/", function (req, res) {
     res.render("login");
 });
 
+//uses the sendgrid package to send the email
+//can have different options for the msg object
+//the are retrieve via jquery
 app.post("/sendEmail", function (req, res) {
     const msg = {
         to: req.body.emailTo,
